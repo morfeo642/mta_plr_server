@@ -21,12 +21,16 @@ function getModule(moduleName)
 	return code;
 end;
 
+local __modules = {};
 
 function loadModule(moduleName, environment)
-	if not environment then 
-		environment = _G;
+	if not __modules[moduleName] then 
+		if not environment then 
+			environment = _G;
+		end;
+		local code = getModule(moduleName);
+		local chunk = assert(loadstring(code, nil, "t", environment));
+		chunk();
+		__modules[moduleName] = true;
 	end;
-	local code = getModule(moduleName);
-	local chunk = assert(loadstring(code, nil, "t", environment));
-	chunk();
 end;
