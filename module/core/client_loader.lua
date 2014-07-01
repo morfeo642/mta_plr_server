@@ -10,3 +10,4 @@
 
 
 loadModule("core/share");
+loadModule("core/client_net_share");
