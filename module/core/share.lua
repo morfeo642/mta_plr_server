@@ -34,14 +34,15 @@ end;
 function __get(index)
 	assert(index);
 	local value = __export[index];
-	if not value then 
+	if value == nil then 
 		value = __share[index]; 
 	end;
 	return type(value), value;
 end;
 
 function __call(funcName, ...)
-	return __get(funcName)(...);
+	local _, func = __get(funcName);
+	return func(...);
 end;
 
 --[[ Como accedemos a las variables globales de otros recursos ? ]]
@@ -60,10 +61,10 @@ setmetatable(_G,
 								function(t, index)
 									-- obtener la variable.
 									local valueType, value = call(resource, "__get", index);
-									if type(valueType) == "function" then 
+									if valueType == "function" then 
 										-- es una función, y devolvemos una función que 
 										-- invoque a la función del recurso.
-										return function(...) return call(resource, "__call", ...); end; 
+										return function(...) return call(resource, "__call", index, ...); end; 
 									end;
 									return value;
 								end,

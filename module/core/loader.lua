@@ -10,4 +10,3 @@
 
 
 loadModule("core/share");
-

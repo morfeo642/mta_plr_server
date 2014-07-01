@@ -10,7 +10,7 @@ function loadModule(modulePath, environment)
 	if not environment then 
 		environment = _G;
 	end;
-	local code = call(getResourceFromName("module"), modulePath);
+	local code = call(getResourceFromName("module"), "getModule", modulePath);
 	local chunk = load(code, nil, "t", environment);
 	chunk();
 end;
