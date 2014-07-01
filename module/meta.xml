@@ -1,0 +1,19 @@
+<meta>
+	<info name="module" author="platypus" version="1.0.0" description="Permite trabajar con módulos para reutilizar código" />
+	
+	<script src="export.lua" type="server" />
+	<script src="export.lua" type="client" />
+	
+	<script src="core/loader.lua" type="server" />
+	<script src="core/loader.lua" type="client" />
+	
+	<!-- Funciones exportadas -->
+	<!-- Devuelve el código del módulo. (Se pasa como argumento a la función, la ruta del módulo, relativa al directorio donde
+	se encuentra este fichero) -->
+	<export function="getModule" />
+	
+	<export function="__set" />
+	<export function="__get" />
+	<export function="__call" />
+</meta>
+
