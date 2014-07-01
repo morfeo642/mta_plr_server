@@ -16,4 +16,4 @@ function loadModule(modulePath, environment)
 end;
 
 -- Ejecutamos los scripts esenciales.
-loadModule("core/loader");
+loadModule("core/server_loader");
