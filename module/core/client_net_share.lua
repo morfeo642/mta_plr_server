@@ -26,11 +26,15 @@ setmetatable(__server,
 	
 	
 --[[! La tabla __remote accede a las variables de clientes remotos.El índice es el cliente.
-__remote[thisClient] = __client ]]
+__remote[thisClient] = __client
+]]
 
 __remote = {};
 setmetatable(__remote,
 	{
 		__metatable = false
 	});
+	
+	
+
 	

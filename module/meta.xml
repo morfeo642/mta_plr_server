@@ -11,7 +11,8 @@
 	<!-- Devuelve el código del módulo. (Se pasa como argumento a la función, la ruta del módulo, relativa al directorio donde
 	se encuentra este fichero) -->
 	<export function="getModule" />
-	
+
+	<!-- Funciones necesarias para que el módulo core/share funcione -->
 	<export function="__set" />
 	<export function="__get" />
 	<export function="__call" />
