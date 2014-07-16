@@ -6,7 +6,7 @@
 
 
 --[[!
-@param moduleName Es el nombre del módulo a cargar.
+@param moduleName Es el nombre del módulo a cargar. 
 @return Devuelve el código del móudulo en formato de cadena de caracteres (string) y no
 en formato binario. 
 @note Lanza una excepción si el nombre del módulo no es válido (no es un string o contiene
@@ -15,6 +15,7 @@ caracteres no válidos, o bien si el módulo no existe)
 function getModule(moduleName)
 	-- comprobar que se intenta acceder realmente al código de un módulo.
 	assert((type(moduleName) == "string") and (moduleName:len() > 0) and (not moduleName:match("[^0-9,a-z,A-Z,/,_]+")));
+
 	local file = assert(fileOpen(moduleName .. ".lua"));
 	-- leer el código.
 	local code = fileRead(file, fileGetSize(file));
