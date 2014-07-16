@@ -34,8 +34,9 @@ function loadModule(moduleName, environment)
 		end;
 		local code = getModule(moduleName);
 		local chunk = assert(loadstring(code, nil, "t", environment));
-		chunk();
+		
 		__modules[moduleName] = true;
+		chunk();
 	end;
 end;
 
