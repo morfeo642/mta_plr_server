@@ -22,5 +22,7 @@ function loadModule(modulePath, environment)
 	end;
 end;
 
+importModule = loadModule;
+
 -- Ejecutamos los scripts esenciales.
 loadModule("core/client_loader");

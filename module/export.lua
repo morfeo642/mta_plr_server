@@ -7,7 +7,10 @@
 
 --[[!
 @param moduleName Es el nombre del módulo a cargar.
-@param 
+@return Devuelve el código del móudulo en formato de cadena de caracteres (string) y no
+en formato binario. 
+@note Lanza una excepción si el nombre del módulo no es válido (no es un string o contiene
+caracteres no válidos, o bien si el módulo no existe)
 ]]
 function getModule(moduleName)
 	-- comprobar que se intenta acceder realmente al código de un módulo.
@@ -34,3 +37,5 @@ function loadModule(moduleName, environment)
 		__modules[moduleName] = true;
 	end;
 end;
+
+importModule = loadModule;
