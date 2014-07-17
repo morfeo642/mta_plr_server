@@ -34,7 +34,6 @@ echo "<!-- Este es un recurso para el juego MTA:SA -->" > meta.xml
 echo "<meta>" >> meta.xml
 echo "	<info name=\""$RESOURCE_NAME"\" author=\""$AUTHOR"\" version=\"1.0.0\" description=\""$RESOURCE_DESCRIPTION"\" />" >> meta.xml
 echo "  <!-- Todos los recursos dependerán del recurso module -->" >> meta.xml
-echo "  <include resource=\"module\" />" >> meta.xml
 echo "	<!-- Scripts comunes para todos los recursos -->" >> meta.xml
 echo "  <script src=\"common/server.lua\" type=\"server\" />" >> meta.xml
 echo "	<script src=\"common/client.lua\" type=\"client\" />" >> meta.xml
