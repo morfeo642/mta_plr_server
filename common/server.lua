@@ -18,7 +18,8 @@ function loadModule(modulePath, environment)
 		local chunk = loadstring(code, nil, "t", environment);
 		
 		__modules[modulePath] = true; 
-		chunk();
+		local success, msg = pcall(chunk);
+		if not success then error("Error loading module \"" .. modulePath .. "\":" .. msg); end;
 	end;
 end;
 
@@ -26,4 +27,9 @@ importModule = loadModule;
 
 
 -- Ejecutamos los scripts esenciales.
-loadModule("core/server_loader");
+addEventHandler("onResourceStart", resourceRoot,
+	function(resource)
+		if resource == getResourceFromName("module") then 
+			loadModule("core/server_loader");
+		end;
+	end, true, "high");
