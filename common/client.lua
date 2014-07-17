@@ -16,9 +16,9 @@ function loadModule(modulePath, environment)
 		end;
 		local code = call(getResourceFromName("module"), "getModule", modulePath);
 		local chunk = loadstring(code, nil, "t", environment);
-		chunk();
 		
 		__modules[modulePath] = true; 
+		chunk();
 	end;
 end;
 
