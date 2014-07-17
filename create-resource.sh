@@ -38,9 +38,12 @@ echo "  <script src=\"common/server.lua\" type=\"server\" />" >> meta.xml
 echo "	<script src=\"common/client.lua\" type=\"client\" />" >> meta.xml
 echo "	<!-- Funciones que deben ser exportadas explicitamente para que todos los " >> meta.xml
 echo "	modulos funcionen -->" >> meta.xml
-echo "	<export function=\"__set\"/>" >> meta.xml
-echo "	<export function=\"__get\"/>" >> meta.xml
-echo "	<export function=\"__call\"/>" >> meta.xml
+echo "	<export function=\"__set\" type=\"server\"/>" >> meta.xml
+echo "	<export function=\"__get\" type=\"server\"/>" >> meta.xml
+echo "	<export function=\"__call\" type=\"server\"/>" >> meta.xml
+echo "	<export function=\"__set\" type=\"client\"/>" >> meta.xml
+echo "	<export function=\"__get\" type=\"client\"/>" >> meta.xml
+echo "	<export function=\"__call\" type=\"client\"/>" >> meta.xml
 echo "</meta>" >> meta.xml
 
 
