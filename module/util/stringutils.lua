@@ -1,7 +1,7 @@
 
 
 -- require 'tableutils';
-getModule("utils/tableutils");
+loadModule("util/tableutils");
 
 --[[!
 	\file
