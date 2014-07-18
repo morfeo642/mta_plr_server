@@ -10,5 +10,6 @@
 
 
 loadModule("core/share");
-loadModule("core/server_net_share");
+loadModule("core/server_utils");
+
 
