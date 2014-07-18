@@ -10,7 +10,8 @@
 	<!-- Funciones exportadas -->
 	<!-- Devuelve el código del módulo. (Se pasa como argumento a la función, la ruta del módulo, relativa al directorio donde
 	se encuentra este fichero) -->
-	<export function="getModule" />
+	<export function="getModule" type="server" />
+	<export function="getModule" type="client" />
 
 	<!-- Funciones necesarias para que el módulo core/share funcione -->
 	<export function="__set" />
@@ -18,8 +19,8 @@
 	<export function="__call" />
 
 	<!-- Scripts para los clientes -->
-	<file src="core/client_loader.lua" />
 	<file src="core/client_utils.lua" />
+	<file src="core/share.lua" />
 
 	<file src="util/class.lua" />
 	<file src="util/stringutils.lua" />
