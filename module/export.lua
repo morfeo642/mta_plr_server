@@ -16,7 +16,7 @@ function getModule(moduleName)
 	-- comprobar que se intenta acceder realmente al código de un módulo.
 	assert((type(moduleName) == "string") and (moduleName:len() > 0) and (not moduleName:match("[^0-9,a-z,A-Z,/,_]+")));
 
-	local file = assert(fileOpen(moduleName .. ".lua"));
+	local file = assert(fileOpen(moduleName .. ".lua"), "Module \"" .. moduleName .. "\" not exists");
 	-- leer el código.
 	local code = fileRead(file, fileGetSize(file));
 	
@@ -32,11 +32,16 @@ function loadModule(moduleName, environment)
 		if not environment then 
 			environment = _G;
 		end;
+		
 		local code = getModule(moduleName);
-		local chunk = assert(loadstring(code, nil, "t", environment));
+		local success, chunk = pcall(loadstring, code, nil, "t", environment);
+		if not success then error("Failed to load script \"" .. moduleName .. ".lua\": " .. chunk); end;
 		
 		__modules[moduleName] = true;
-		chunk();
+		
+		local msg;
+		success, msg = pcall(chunk);
+		if not success then error("Failed to load module \"" .. moduleName .. "\": " .. msg); end;
 	end;
 end;
 

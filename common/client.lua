@@ -15,11 +15,14 @@ function loadModule(modulePath, environment)
 			environment = _G;
 		end;
 		local code = call(getResourceFromName("module"), "getModule", modulePath);
-		local chunk = loadstring(code, nil, "t", environment);
+		local success, chunk = pcall(loadstring, code, nil, "t", environment);
+		if not success then error("Failed to load script \"" .. modulePath .. ".lua\": " .. chunk); end;
 		
-		__modules[modulePath] = true; 
-		local success, msg = pcall(chunk);
-		if not success then error("Error loading module \"" .. modulePath .. "\":" .. msg); end;
+		__modules[modulePath] = true;
+		
+		local msg;
+		success, msg = pcall(chunk);
+		if not success then error("Failed to load module \"" .. modulePath .. "\": " .. msg); end;
 	end;
 end;
 
