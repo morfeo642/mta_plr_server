@@ -9,7 +9,27 @@ __client = {};
 
 
 --[[ Guardaremos los callbacks en una tabla auxiliar ]]
-local __client_callbacks = {};
+local __client_callbacks = {__callback={}, __count={}};
+setmetatable(__client_callbacks, 
+	{
+		__newindex = 
+			function(t, index, value) 
+				if not t.__count[index] then 
+					t.__count[index] = 1;
+					t.__callback[index] = value;
+				else 
+					t.__count[index] = t.__count[index] + 1;
+				end;
+			end,
+		__index =
+			function(t, index)
+				-- "usamos" el callback una vez.
+				t.__count[index] = t.__count[index] - 1; 
+				local callback = t.__callback[index];
+				if t.__count[index] == 0 then t.__count[index] = nil; t.__callback[index] = nil; end;
+				return callback;
+			end
+	});
 
 --[[! Esta tabla sirver para invocar un método del servidor. 
 __server.func_name. Para invocar la función, la sintaxis es: __server.func_name(callback, ...)
@@ -74,6 +94,4 @@ addEvent("onClientCallServerFunctionResponse", true);
 addEventHandler("onClientCallServerFunctionResponse", root,
 	function(funcCallback, ...) 
 		__client_callbacks[funcCallback](...);
-		__client_callbacks[funcCallback] = nil;
 	end);
-	

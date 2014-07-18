@@ -11,7 +11,27 @@ __server = {};
 
 
 --[[ Tabla auxiliar para los callbacks del servidor ]]
-local __server_callbacks = {};
+local __server_callbacks = {__callback = {}, __count = {}};
+setmetatable(__server_callbacks, 
+	{
+		__newindex = 
+			function(t, index, value) 
+				if not t.__count[index] then 
+					t.__count[index] = 1;
+					t.__callback[index] = value;
+				else 
+					t.__count[index] = t.__count[index] + 1;
+				end;
+			end,
+		__index =
+			function(t, index)
+				-- "usamos" el callback una vez.
+				t.__count[index] = t.__count[index] - 1; 
+				local callback = t.__callback[index];
+				if t.__count[index] == 0 then t.__count[index] = nil; t.__callback[index] = nil; end;
+				return callback;
+			end
+	});
 
 
 --[[! Esta es una tabla que usará el servidor para invocar remotamente funciones de los clientes ]]
@@ -85,7 +105,7 @@ addEventHandler("onServerCallClientFunctionResponse", root,
 	function(funcCallback, ...) 
 		if client then 
 			__server_callbacks[funcCallback](...);
-			__server_callbacks[funcCallback] = nil;
 		end;
 	end);
+
 
