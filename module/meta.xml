@@ -1,4 +1,4 @@
-<meta>
+﻿<meta>
 	<info name="module" author="platypus" version="1.0.0" description="Permite trabajar con módulos para reutilizar código" />
 	
 	<script src="export.lua" type="server" />
@@ -16,5 +16,16 @@
 	<export function="__set" />
 	<export function="__get" />
 	<export function="__call" />
+
+	<!-- Scripts para los clientes -->
+	<file src="core/client_loader.lua" />
+	<file src="core/client_utils.lua" />
+
+	<file src="util/class.lua" />
+	<file src="util/stringutils.lua" />
+	<file src="util/tableutils.lua" />
+	
+	<file src="util/math/vec2.lua" />
+	<file src="util/math/vec3.lua" />
 </meta>
 
