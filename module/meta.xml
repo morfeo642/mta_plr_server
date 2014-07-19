@@ -25,6 +25,7 @@
 	<file src="util/class.lua" />
 	<file src="util/stringutils.lua" />
 	<file src="util/tableutils.lua" />
+	<file src="util/print.lua" />
 	
 	<file src="util/math/vec2.lua" />
 	<file src="util/math/vec3.lua" />
