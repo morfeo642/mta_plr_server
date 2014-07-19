@@ -10,7 +10,8 @@ puedan acceder a cualquier función del servidor: __server = _G ]]
 __server = {};
 
 
---[[ Tabla auxiliar para los callbacks del servidor ]]
+--[[ Tabla auxiliar para los callbacks del servidor
+ ]]
 local __server_callbacks = {__callback = {}, __count = {}};
 setmetatable(__server_callbacks, 
 	{
@@ -34,11 +35,16 @@ setmetatable(__server_callbacks,
 	});
 
 
---[[! Esta es una tabla que usará el servidor para invocar remotamente funciones de los clientes ]]
+--[[! Esta es una tabla que usará el servidor para invocar remotamente funciones de los clientes.
+__client[cliente].nombre_de_la_funcion(callback, ...) Donde ... son los argumentos a pasar a la función del 
+cliente. cliente, es el cliente y callback es una función que será invocada en respuesta a la ejecución de la
+función del cliente (se le pasará como argumentos los valores de retorno de la función)
+ ]]
 __client = {};
 setmetatable(__client,
 	{
 		__metatable = false,
+		__newindex = function() end,
 		__index = 
 			function(t, index)
 				assert(isElement(index) and (getElementType(index) == "player"));
@@ -53,15 +59,42 @@ setmetatable(__client,
 								function(t, index)
 									return 
 										function(funcCallback, ...)
-											assert(type(funcCallback) == "function");
+											assert((type(funcCallback) == "function") or (funcCallback == nil));
 											-- Registramos el callback.
-											__server_callbacks[tostring(funcCallback)] = funcCallback;
-											triggerClientEvent(client, "onServerCallClientFunction", root, index, tostring(funcCallback), ...);
+											if not funcCallback then 
+												triggerClientEvent(client, "onServerCallClientFunction", root, index, nil, ...);
+											else 
+												__server_callbacks[tostring(funcCallback)] = funcCallback;
+												triggerClientEvent(client, "onServerCallClientFunction", root, index, tostring(funcCallback), ...);
+											end;
 										end;
 								end
 						});
 			end
 	});
+	
+--[[! Tabla que permite invocar un método especifíco en todos los clientes simultaneamente. ]]
+__all_clients = {};
+setmetatable(__all_clients, 
+	{
+		__metatable = false,
+		__newindex = function() end,
+		__index = 
+			function(t, index) 
+				return
+					function(funcCallback, ...)
+						assert((type(funcCallback) == "function") or (funcCallback == nil));
+						if not funcCallback then 
+							triggerClientEvent(root, "onServerCallClientFunction", root, index, nil, ...);
+						else 
+							-- Necesitamos registrar el callback tantas veces como jugadores haya.
+							for i=1,#getElementsByType("player", root),1 do __server_callbacks[tostring(funcCallback)] = funcCallback; end;
+							triggerClientEvent(root, "onServerCallClientFunction", root, index, tostring(funcCallback), ...);
+						end;
+					end;
+			end
+	});
+
 
 --[[ Esta tabla nos permite acceder únicamente a las funciones incluidas en la tabla
 __server ]]
@@ -86,15 +119,19 @@ local function call_func(funcName, ...)
 end;
 
 
-
 --[[ Que hacemos cuando el cliente quiere invocar una de los métodos del servidor ? ]]
 addEvent("onClientCallServerFunction", true);
 addEventHandler("onClientCallServerFunction", root,
 	function(func, funcCallback, ...)
 		-- El evento fue invocado por un cliente ? ...
 		if client then 
-			-- invocar el método y devolver una respuesta.
-			triggerClientEvent(client, "onClientCallServerFunctionResponse", root, funcCallback, pcall(call_func, func, ...));
+			if not funcCallback then 
+				-- invocar el método.
+				pcall(call_func, func, ...);
+			else 
+				-- invocar el método y devolver una respuesta.
+				triggerClientEvent(client, "onClientCallServerFunctionResponse", root, funcCallback, pcall(call_func, func, ...));
+			end;
 		end;
 	end);
 
@@ -104,8 +141,23 @@ addEvent("onServerCallClientFunctionResponse", true);
 addEventHandler("onServerCallClientFunctionResponse", root,
 	function(funcCallback, ...) 
 		if client then 
-			__server_callbacks[funcCallback](...);
+			__server_callbacks[funcCallback](client, ...);
 		end;
 	end);
 
-
+--[[ Que hacemos cuando el cliente quiere invocar una función de otro cliente... ]]
+addEvent("onClientCallRemoteClientFunction", true);
+addEventHandler("onClientCallRemoteClientFunction", root,
+	function(remoteClient, func, funcCallback, ...)
+		if not client then return; end;
+		local sourceClient = client;
+		
+		if not funcCallback then
+			__client[remoteClient][func](nil, ...);
+		else 
+			__client[remoteClient][func](
+				function(remoteClient, ...)
+					triggerClientEvent(sourceClient, "onClientCallRemoteClientFunctionResponse", root, remoteClient, funcCallback, ...);
+				end, ...);
+		end;
+	end);

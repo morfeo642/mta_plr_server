@@ -31,7 +31,7 @@ setmetatable(__client_callbacks,
 			end
 	});
 
---[[! Esta tabla sirver para invocar un método del servidor. 
+--[[! Esta tabla sirve para invocar un método del servidor. 
 __server.func_name. Para invocar la función, la sintaxis es: __server.func_name(callback, ...)
 Donde ... son los argumentos que se pasarán a la función del servidor.
 Callback, en caso de error (si la función no existe o bién se lanzó una asercción en el cuerpo de la función en la
@@ -49,14 +49,56 @@ setmetatable(__server,
 				local serverFunc = index;
 				return 
 					function(funcCallback, ...)
-						assert(type(funcCallback) == "function");
-						-- Registrar el callback para la respuesta del servidor.
-						__client_callbacks[tostring(funcCallback)] = funcCallback;
-						-- invocar método del servidor.
-						triggerServerEvent("onClientCallServerFunction", localPlayer, serverFunc, tostring(funcCallback), ...);
+						assert((type(funcCallback) == "function") or (funcCallback == nil));
+						if not funcCallback then 
+							-- invocar método del servidor.
+							triggerServerEvent("onClientCallServerFunction", localPlayer, serverFunc, nil, ...);
+						else 
+							-- Registrar el callback para la respuesta del servidor.
+							__client_callbacks[tostring(funcCallback)] = funcCallback;
+							-- invocar método del servidor.
+							triggerServerEvent("onClientCallServerFunction", localPlayer, serverFunc, tostring(funcCallback), ...);
+						end;
 					end;
 			end
 	});
+	
+
+--[[!Es una tabla que permite invocar un método de un cliente remoto. ]] 
+__remote_client = {};
+setmetatable(__remote_client, 
+	{
+		__metatable = false,
+		__newindex = function() end,
+		__index = 
+			function(t, index)
+				assert(isElement(index) and (getElementType(index) == "player") and (index ~= localPlayer));
+				local remoteClient = index;
+				return 
+					setmetatable({},
+						{
+							__metatable = false,
+							__newindex = function() end,
+							__index = 
+								function(t, index)
+									local remoteClientFunc = index;
+									return 
+										function(funcCallback, ...)
+											assert((type(funcCallback) == "function") or (funcCallback == nil));
+											if not funcCallback then 
+												triggerServerEvent("onClientCallRemoteClientFunction", localPlayer, remoteClient, remoteClientFunc, nil, ...);
+											else 
+												-- Registrar callback
+												__client_callbacks[tostring(funcCallback)] = funcCallback;
+												triggerServerEvent("onClientCallRemoteClientFunction", localPlayer, remoteClient, remoteClientFunc, tostring(funcCallback), ...);
+											end;
+										end;
+								end
+						});
+			end
+	});
+	
+	
 	
 --[[ Esta es una tabla auxiliar que accede solamente a las funciones y elementos invocables de la tabla
 __client ]]
@@ -86,7 +128,11 @@ end;
 addEvent("onServerCallClientFunction", true);
 addEventHandler("onServerCallClientFunction", root,
 	function(func, funcCallback, ...) 
-		triggerServerEvent("onServerCallClientFunctionResponse", localPlayer, funcCallback, pcall(call_func, func, ...));
+		if not funcCallback then 
+			pcall(call_func, func, ...);
+		else 
+			triggerServerEvent("onServerCallClientFunctionResponse", localPlayer, funcCallback, pcall(call_func, func, ...));
+		end;
 	end);
 
 --[[ Que hacemos cuando recibimos la respuesta del servidor ? ]]
@@ -95,3 +141,13 @@ addEventHandler("onClientCallServerFunctionResponse", root,
 	function(funcCallback, ...) 
 		__client_callbacks[funcCallback](...);
 	end);
+	
+
+--[[ Que hacemos cuando recibimos la respuesta del servidor de la ejecución de una función de un cliente remoto ? ]]
+addEvent("onClientCallRemoteClientFunctionResponse", true);
+addEventHandler("onClientCallRemoteClientFunctionResponse", root,
+	function(remoteClient, funcCallback, ...)
+		__client_callbacks[funcCallback](remoteClient, ...);
+	end);
+
+	
