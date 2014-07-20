@@ -20,6 +20,8 @@
 
 	<!-- Scripts para los clientes -->
 	<file src="core/client_net_utils.lua" />
+	<file src="core/client_loader.lua" />
+	<file src="core/gui.lua" />
 	<file src="core/share.lua" />
 
 	<file src="util/class.lua" />

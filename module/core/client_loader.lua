@@ -11,3 +11,4 @@
 
 loadModule("core/share");
 loadModule("core/client_net_utils");
+loadModule("core/gui");
