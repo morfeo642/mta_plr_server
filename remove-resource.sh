@@ -14,3 +14,8 @@ fi
 
 
 rm -v -f -R $RESOURCE_NAME
+
+# Eliminar la documentación, si es que se ha generado.
+if [ -d docs/$RESOURCE_NAME ]; then 
+	rm -v -f -R docs/$RESOURCE_NAME
+fi
