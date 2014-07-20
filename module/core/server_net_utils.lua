@@ -2,6 +2,49 @@
 --[[!
 	\file
 	\brief Es un módulo con utilidades para el paso de mensajes cliente/servidor.
+	
+	\code
+	-- LLamar a la función foo() del cliente llamado "pepito"
+	__client[getPlayerFromName("pepito")].foo();
+	
+	-- LLamar a la función foo() del cliente llamado "juan" y pasarle como parámetros "Hola", "Que", "Tal".
+	__client[getPlayerFromName("juan")].foo(nil, "Hola", "Que", "Tal");
+	
+	-- Lo mismo de antes pero queremos recibir los valores retornados por la función, luego usamos un callback...
+	-- imprimimos los valores de retorno en la consola, cuando los recibamos...
+	__client[getPlayerFromName("juan")].foo(function(...) print(...); end, "Hola", "Que", "Tal");
+	
+	-- Como podemos comprobar si en el cuerpo de la función hubo un aserto o algún error?
+	__client[gePlayerFromName("juan")].foo(
+		function(success, ...)
+			local args = {...};
+			if success then -- La ejecución es satisfactoria.
+				-- La tabla {...} contedrá los valores de retorno de la función.
+				print(args);
+			else -- Error.  
+				-- El siguiente parámetro es un mensaje indicado la descripción del error.
+				print("Error: " .. args[1]);
+			end;
+		end,  ...);
+		
+	-- Invocar el método bar en todos los clientes conectados...
+	__all_clients.bar(nil, ...);
+	
+	-- Invocar el método bar en todos los clientes, y recibir los valores de retorno...
+	__all_clients.bar(function(...) print(...); end, ...); -- El callback será invocado cuando se reciba 
+	-- los valores de retorno de un cliente... Se ejecutará tantas veces como clientes haya.
+	
+	\endcode
+	
+	\code
+	-- Registrar una función para que pueda ser invocada remotamente por los clientes.
+	function __server.sayHello()
+		print("Hello!");
+	end;
+	
+	-- Permitir que los clientes puedan ejecutar cualquier función del servidor (es poco seguro)
+	__server = _G;
+	\endcode
 ]]
 
 --[[! Esta es una tabla que contendrá las funciones que los clientes

@@ -2,6 +2,43 @@
 --[[!
 	\file
 	\brief Es un módulo con utilidades para el paso de mensaje cliente/servidor.
+	
+	\code
+	-- Registrar un método para que pueda ser invocado por el servidor remotamente.
+	function __client.sayHello()
+		outputChatBox("Hallo!");
+	end;
+	-- Permitir que el servidor pueda ejecutar todas las funciones del cliente.
+	__client = _G;
+	\endcode
+	
+	\code
+	-- Invoca una función del servidor llamada foo() con los argumentos ...
+	__server.foo(nil, ...);
+	
+	-- Invoca la misma función pero queriendo recibir los valores de retorno de
+	la función.
+	__server.foo(function(...) outputDebugString(...); end,  ...);
+
+	-- Como podemos comprobar si en el cuerpo de la función hubo un aserto o algún error?
+	__server.foo(
+		function(success, ...)
+			local args = {...};
+			if success then -- La ejecución es satisfactoria.
+				-- La tabla {...} contedrá los valores de retorno de la función.
+				print(args);
+			else -- Error.  
+				-- El siguiente parámetro es un mensaje indicado la descripción del error.
+				print("Error: " .. args[1]);
+			end;
+		end,  ...);
+	\endcode
+	
+	\code
+	-- Por último, podemos hacer lo mismo tanto para el servidor como para un cliente remoto.
+	-- Invocar la función foo() del cliente cuyo nombre es "menguanito"
+	__remote_client[getPlayerFromName("menguanito")].foo(function(...) print(...); end, ...);
+	\endcode
 ]]
 
 --[[! Esta tabla guarda todas las funciones que puede ser llamadas por el servidor ]]
