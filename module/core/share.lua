@@ -40,9 +40,9 @@ function __get(index)
 	return type(value), value;
 end;
 
-function __call(funcName, theResource, ...)
+function __call(funcName, ...)
 	local _, func = __get(funcName);
-	return func(theResource, ...);
+	return func(...);
 end;
 
 --[[ Como accedemos a las variables globales de otros recursos ? ]]
@@ -64,7 +64,7 @@ setmetatable(_G,
 									if valueType == "function" then 
 										-- es una función, y devolvemos una función que 
 										-- invoque a la función del recurso.
-										return function(...) return call(resource, "__call", index, getThisResource(), ...); end; 
+										return function(...) return call(resource, "__call", index, ...); end; 
 									end;
 									return value;
 								end,
