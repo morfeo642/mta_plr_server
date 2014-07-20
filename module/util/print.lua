@@ -14,7 +14,7 @@ _G.print =
 				str = str .. tostring(args[i]) .. "     ";
 				i = i + 1; 
 			end; 
-			str = str .. args[#args];
+			str = str .. tostring(args[#args]);
 			outputDebugString(str);
 		else
 			outputDebugString("");
