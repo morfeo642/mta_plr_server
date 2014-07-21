@@ -41,10 +41,8 @@ echo "	<!-- Funciones que deben ser exportadas explicitamente para que todos los
 echo "	modulos funcionen -->" >> meta.xml
 echo "	<export function=\"__set\" type=\"server\"/>" >> meta.xml
 echo "	<export function=\"__get\" type=\"server\"/>" >> meta.xml
-echo "	<export function=\"__call\" type=\"server\"/>" >> meta.xml
 echo "	<export function=\"__set\" type=\"client\"/>" >> meta.xml
 echo "	<export function=\"__get\" type=\"client\"/>" >> meta.xml
-echo "	<export function=\"__call\" type=\"client\"/>" >> meta.xml
 echo "</meta>" >> meta.xml
 
 

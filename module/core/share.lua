@@ -2,29 +2,16 @@
 --[[!
 	\file 
 	\brief Este script permite establecer un protocolo entre diferentes recursos 
-	para compartir variables y exportar funciones.  
+	para compartir variables.
 ]]	
-
-
---[[! En esta tabla se pueden añadir funciones y variables que queremos exportar (solo lectura) ]]
-__export = {};
-setmetatable(__export, 
-	{
-		__metatable = false	
-	});
 
 
 --[[! En esta tabla se añaden funciones y variables que se quieren compartir (lectura y escritura), pero no pueden
 crearse nuevas variables ]]
 __share = {};
-setmetatable(__share,
-	{
-		__metatable = false	
-	});
-	
 
 --[[ Para exportar y compartir variables, hay que exportar explicitamente (indicandolo en el archivo meta.xml), las
-funciones __set, __get, __call ]]
+funciones __set y __get ]]
 
 function __set(index, value)
 	assert(index and (__share[index] ~= nil));
@@ -33,16 +20,7 @@ end;
 
 function __get(index)
 	assert(index);
-	local value = __export[index];
-	if value == nil then 
-		value = __share[index]; 
-	end;
-	return type(value), value;
-end;
-
-function __call(funcName, ...)
-	local _, func = __get(funcName);
-	return func(...);
+	return __share[index];
 end;
 
 --[[ Como accedemos a las variables globales de otros recursos ? ]]
@@ -60,13 +38,21 @@ setmetatable(_G,
 							__index = 
 								function(t, index)
 									-- obtener la variable.
-									local valueType, value = call(resource, "__get", index);
-									if valueType == "function" then 
-										-- es una función, y devolvemos una función que 
-										-- invoque a la función del recurso.
-										return function(...) return call(resource, "__call", index, ...); end; 
+									-- es una función exportada por el recurso ? 
+									local exports = getResourceExportedFunctions(resource);
+									if #exports > 0 then 
+										local i, value = next(exports);
+										while next(exports, i) and (value ~= index) do 
+											i, value = next(exports, i);
+										end;
+										if value == index then 
+											-- es una función exportada.
+											return function(...) return call(resource, index, ...); end;
+										end;
 									end;
-									return value;
+									
+									-- no es una función. comprobamos si bién es un valor.
+									return call(resource, "__get", index);
 								end,
 							__newindex = 
 								function(t, ...)

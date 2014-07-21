@@ -16,7 +16,6 @@
 	<!-- Funciones necesarias para que el módulo core/share funcione -->
 	<export function="__set" />
 	<export function="__get" />
-	<export function="__call" />
 
 	<!-- Scripts para los clientes -->
 	<file src="core/client_net_utils.lua" />
