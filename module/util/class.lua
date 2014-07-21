@@ -1,82 +1,90 @@
----- Copyright 2011 Simon Dales
---
--- This work may be distributed and/or modified under the
--- conditions of the LaTeX Project Public License, either version 1.3
--- of this license or (at your option) any later version.
--- The latest version of this license is in
---   http://www.latex-project.org/lppl.txt
---
--- This work has the LPPL maintenance status `maintained'.
--- 
--- The Current Maintainer of this work is Simon Dales.
---
 
 --[[!
-	\file	
-	\brief enables classes in lua
-	]]
+	\file
+	\brief Este es un módulo que da soporta a la orientación a objetos en lua.
+	(polimorfismo y herencia).
 	
---[[ class.lua
--- Compatible with Lua 5.1 (not 5.0).
-
-	---------------------
+	Ejemplos.
+	\code
+	-- Crear una clase foo y una instancia de esta.
+	foo = class();
+	local newInstance = foo();
+	\endcode
 	
-	]]--
---! \brief ``declare'' as class
---! 
---! use as:
---!	\code{lua}
---!	TWibble = class()
---!	function TWibble.init(instance)
---!		self.instance = instance
---!		-- more stuff here
---!	end
---! \endcode
---! 	
-function class(BaseClass, ClassInitialiser)
-	local newClass = {}    -- a new class newClass
-	if not ClassInitialiser and type(BaseClass) == 'function' then
-		ClassInitialiser = BaseClass
-		BaseClass = nil
-	elseif type(BaseClass) == 'table' then
-		-- our new class is a shallow copy of the base class!
-		for i,v in pairs(BaseClass) do
-			newClass[i] = v
-		end
-		newClass.__base = BaseClass
-	end
-	-- the class will be the metatable for all its newInstanceects,
-	-- and they will look up their methods in it.
-	newClass.__index = newClass
+	\code
+	-- Lo mismo que el anterior ejemplo pero indicando un inicializador de clase...
+	foo = class();
+	function foo:init(...) print("inicializando instancia de foo con los valores " .. table.concat(...,' '); end;
+	local newInstance = foo(1, 2, 3, 4);
+	\endcode
+	
+	\code
+	-- Ahora creamos una clase bar que herede de foo.
+	-- Si no creamos un inicializador para esta clase, habrá uno por defecto que inicializará la 
+	superclase (llamará a foo.init)
+	bar = class(foo);
+	bar(); -- output: inicializando instancia de foo...
+	\endcode
+	
+	\code                                                                                 
+	-- Por último, si especificamos un inicializador de clase, tenemos que preocuparnos de inicializar la
+	-- superclase.
+	bar = class(foo);
+	function bar:init()
+		self:super(1, 2, 3, 4); -- output: inicializando instancia de foo con los valores 1  2 3 4 
+		print("inicializando instancia de bar");
+	end;
+	\endcode
+]]
 
-	-- expose a constructor which can be called by <classname>(<args>)
-	local classMetatable = {}
-	classMetatable.__call = 
-	function(class_tbl, ...)
-		local newInstance = {}
-		setmetatable(newInstance,newClass)
-		-- make sure that any stuff from the base class is initialized!
-		if BaseClass and BaseClass.init then
-			BaseClass.init(newInstance, ...)
-		end
-		-- initialize this class.
-		if class_tbl.init then
-			class_tbl.init(newInstance,...)
+function class(BaseClass)
+	assert((type(BaseClass) == "table") or (BaseClass == nil));
+	local newClass = {};
+	local newClassMetatable = {};
+	
+	newClass.__index = newClass;
+	
+	if BaseClass then  
+		newClassMetatable.__index = BaseClass;
+		newClass.__base = BaseClass;
+	end;
+	
+	-- "Constructor" de clase.
+	newClassMetatable.__call =
+		function(t, ...) 
+			local newInstance = {};
+			setmetatable(newInstance, t);
+			-- Inicializar la nueva instancia.
+			newInstance:init(...); 
+			return newInstance;
 		end;
-		return newInstance
-	end
-	newClass.init = ClassInitialiser
-	newClass.isinstanceof = 
-	function(this, class)
-		local thisMetabable = getmetatable(this)
-		while thisMetabable and (thisMetatable ~= class) do 
-			thisMetabable = thisMetabable.__base
-		end
-		return thisMetatable == class;
-	end
-	setmetatable(newClass, classMetatable)
-	return newClass
-end
+		
+	-- Inicializador de una instancia de la clase por defecto.
+	newClass.init = 
+		function(this, ...)
+			--Inicializar la superclase (si hereda de alguna)
+			pcall(newClass.super);	
+		end;
+	
+	-- Inicializador de superclase.
+	newClass.super = 
+		function(this, ...)
+			local baseClass = assert(newClass.__base);
+			baseClass.init(this, ...);
+		end;
+	
+	-- Comprobar si un objeto hereda de una clase.
+	newClass.isinstanceof =
+		function(this, otherClass)
+			assert(type(otherClass) == "table");
+			local theClass = newClass;
+			while (theClass ~= otherClass) and theClass.__base do 
+				theClass = theClass.__base;
+			end;
+			return theClass == otherClass;
+		end;
+		
+	setmetatable(newClass, newClassMetatable);
+	return newClass;
+end;
 
-
---eof
