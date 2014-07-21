@@ -9,7 +9,9 @@
 
 local dx = assert(exports.dxgui); -- dxgui debe estar en ejecución.
 
--- Shared.
+
+-- Shared. 
+
 function guiCreateRootPane(...) return dx:dxCreateRootPane(...) end
 function guiGetRootPane(...) return dx:dxGetRootPane(...) end
 function guiRefreshThemes(...) return dx:dxRefreshThemes(...) end
@@ -47,17 +49,17 @@ function guiDestroyElement(...) return dx:dxDestroyElement(...) end
 function guiDestroyElements(...) return dx:dxDestroyElements(...) end
 
 -- Button.
-function guiCreateButton(...) return dx:dxCreateButton(getThisResource(),...) end
+function guiCreateButton(...) return dx:dxCreateButton(...) end
 function guiButtonRender(...) return dx:dxButtonRender(...) end
 
 -- CheckBox
-function guiCreateCheckBox(...) return dx:dxCreateCheckBox(getThisResource(),...) end
+function guiCreateCheckBox(...) return dx:dxCreateCheckBox(...) end
 function guiCheckBoxGetSelected(...) return dx:dxCheckBoxGetSelected(...) end
 function guiCheckBoxSetSelected(...) return dx:dxCheckBoxSetSelected(...) end
 function guiCheckBoxRender(...) return dx:dxCheckBoxRender(...) end
 
 -- Label.
-function guiCreateLabel(...) return dx:dxCreateLabel(getThisResource(),...) end
+function guiCreateLabel(...) return dx:dxCreateLabel(...) end
 function guiLabelGetScale(...) return dx:dxLabelGetScale(...) end
 function guiLabelGetHorizontalAlign(...) return dx:dxLabelGetHorizontalAlign(...) end
 function guiLabelGetVerticalAlign(...) return dx:dxLabelGetVerticalAlign(...) end
@@ -67,7 +69,7 @@ function guiLabelSetVerticalAlign(...) return dx:dxLabelSetVerticalAlign(...) en
 function guiLabelRender(...) return dx:dxLabelRender(...) end
 
 -- ProgressBar
-function guiCreateProgressBar(...) return dx:dxCreateProgressBar(getThisResource(),...) end
+function guiCreateProgressBar(...) return dx:dxCreateProgressBar(...) end
 function guiProgressBarGetProgress(...) return dx:dxProgressBarGetProgress(...) end
 function guiProgressBarGetProgressPercent(...) return dx:dxProgressBarGetProgressPercent(...) end
 function guiProgressBarGetMaxProgress(...) return dx:dxProgressBarGetMaxProgress(...) end
@@ -77,7 +79,7 @@ function guiProgressBarSetMaxProgress(...) return dx:dxProgressBarSetMaxProgress
 function guiProgressBarRender(...) return dx:dxProgressBarRender(...) end
 
 -- RadioButton
-function guiCreateRadioButton(...) return dx:dxCreateRadioButton(getThisResource(),...) end
+function guiCreateRadioButton(...) return dx:dxCreateRadioButton(...) end
 function guiRadioButtonGetSelected(...) return dx:dxRadioButtonGetSelected(...) end
 function guiRadioButtonGetGroup(...) return dx:dxRadioButtonGetGroup(...) end
 function guiRadioButtonSetSelected(...) return dx:dxRadioButtonSetSelected(...) end
@@ -85,7 +87,7 @@ function guiRadioButtonSetGroup(...) return dx:dxRadioButtonSetGroup(...) end
 function guiRadioButtonRender(...) return dx:dxRadioButtonRender(...) end
 
 -- Scrollbar.
-function guiCreateScrollBar(...) return dx:dxCreateScrollBar(getThisResource(),...) end
+function guiCreateScrollBar(...) return dx:dxCreateScrollBar(...) end
 function guiScrollBarGetProgress(...) return dx:dxScrollBarGetProgress(...) end
 function guiScrollBarGetProgressPercent(...) return dx:dxScrollBarGetProgressPercent(...) end
 function guiScrollBarGetMaxProgress(...) return dx:dxScrollBarGetMaxProgress(...) end
@@ -95,7 +97,7 @@ function guiScrollBarSetMaxProgress(...) return dx:dxScrollBarSetMaxProgress(...
 function guiScrollBarRender(...) return dx:dxScrollBarRender(...) end
 
 -- Spinner.
-function guiCreateSpinner(...) return dx:dxCreateSpinner(getThisResource(),...) end
+function guiCreateSpinner(...) return dx:dxCreateSpinner(...) end
 function guiSpinnerGetPosition(...) return dx:dxSpinnerGetPosition(...) end
 function guiSpinnerGetMin(...) return dx:dxSpinnerGetMin(...) end
 function guiSpinnerGetMin(...) return dx:dxSpinnerGetMin(...) end
@@ -105,7 +107,7 @@ function guiSpinnerSetMin(...) return dx:dxSpinnerSetMin(...) end
 function guiSpinnerRender(...) return dx:dxSpinnerRender(...) end
 
 -- Static Image.
-function guiCreateStaticImage(...) return dx:dxCreateStaticImage(getThisResource(),...) end
+function guiCreateStaticImage(...) return dx:dxCreateStaticImage(...) end
 function guiCreateStaticImageSection(...) return dx:dxCreateStaticImageSection(...) end
 function guiStaticImageGetLoadedImage(...) return dx:dxStaticImageGetLoadedImage(...) end
 function guiStaticImageGetSection(...) return dx:dxStaticImageGetSection(...) end
@@ -116,7 +118,7 @@ function guiStaticImageSetRotation(...) return dx:dxStaticImageSetRotation(...) 
 function guiStaticImageRender(...) return dx:dxStaticImageRender(...) end
 
 -- Window
-function guiCreateWindow(...) return dx:dxCreateWindow(getThisResource(),...) end
+function guiCreateWindow(...) return dx:dxCreateWindow(...) end
 function guiWindowGetTitlePosition(...) return dx:dxWindowGetTitlePosition(...) end
 function guiWindowGetMovable(...) return dx:dxWindowGetMovable(...) end
 function guiWindowIsMoving(...) return dx:dxWindowIsMoving(...) end
@@ -126,12 +128,12 @@ function guiWindowSetMovable(...) return dx:dxWindowSetMovable(...) end
 function guiWindowGetTitleVisible(...) return dx:dxWindowGetTitleVisible(...) end
 function guiWindowGetPostGUI(...) return dx:dxWindowGetPostGUI(...) end
 function guiWindowSetPostGUI(...) return dx:dxWindowSetPostGUI(...) end
-function guiWindowRender(...) return dx:dxWindowRender(...) end<
+function guiWindowRender(...) return dx:dxWindowRender(...) end
 function guiWindowMoveControl(...) return dx:dxWindowMoveControl(...) end
 function guiWindowComponentRender(...) return dx:dxWindowComponentRender(...) end
 
 -- ListBox
-function guiCreateList(...) return dx:dxCreateList(getThisResource(),...) end
+function guiCreateList(...) return dx:dxCreateList(...) end
 function guiListClear(...) return dx:dxListClear(...) end
 function guiListGetSelectedItem(...) return dx:dxListGetSelectedItem(...) end
 function guiListSetSelectedItem(...) return dx:dxListSetSelectedItem(...) end
@@ -141,3 +143,4 @@ function guiListAddRow(...) return dx:dxListAddRow(...) end
 function guiListSetTitleShow(...) return dx:dxListSetTitleShow(...) end
 function guiListGetTitleShow(...) return dx:dxListGetTitleShow(...) end
 function guiListRender(...) return dx:dxListRender(...) end
+
