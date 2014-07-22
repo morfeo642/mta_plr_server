@@ -12,11 +12,29 @@
 ****************************************************************************************************************/
 ]]
 -- // Initializing
-function dxCreateList(x,y,width,height,title,parent,color,font,theme)
-	if not x or not y or not width or not height then
-		outputDebugString("dxCreateList gets wrong parameters (x,y,width,height[,title=\"\",parent=dxGetRootPane(),color=black,font=default,theme=dxGetDefaultTheme()])")
-		return
-	end
+--[[!
+	Crea una lista (componente de interfaz de usuario)
+	@param x Es la componente x de la posición de la lista (absoluto o relativo)
+	@param y Es la componente y de la posición de la lista (absoluto o relativo)
+	@param width Es la anchura de la lista
+	@param height Es la altura de la lista
+	@param title Es el titulo de la lista.
+	@param relative Valor booleano indicando si bien la posición y el tamaño de la lista son relativas al pariente.
+	@param parent Es el padre de esta lista, por defecto dxGetRootPane() 
+	@param color Es el color de la lista, por defecto white
+	@param font Es la fuente usada para renderizar texto, por defecto "default"
+	@param theme Es el estilo, por defecto, dxGetDefaultTheme()
+]]
+function dxCreateList(x,y,width,height,title,relative,parent,color,font,theme)
+	-- check arguments.
+	checkargs("dxCreateList", 1, "number", x, "number", y, "number", width, "number", height, "string", title, "boolean", relative);
+	checkoptionalargs("dxCreateList", 8, "number", color, "string", font, {"string", "dxTheme"}, theme);
+	
+	if relative then 
+		local px, py = relativeToAbsolute(x + width, y + height);
+		x, y = relativeToAbsolute(x, y);
+		width, height =  px - x, py - y;
+	end;
 	
 	if not title then
 		title = ""
@@ -42,10 +60,7 @@ function dxCreateList(x,y,width,height,title,parent,color,font,theme)
 		theme = dxGetTheme(theme)
 	end
 	
-	if not theme then
-		outputDebugString("dxCreateList didn't find the main theme.")
-		return false
-	end
+	assert(theme, "dxCreateList didn't find the main theme");
 	
 	local list = createElement("dxList")
 	setElementParent(list, parent)
@@ -74,39 +89,47 @@ function dxCreateList(x,y,width,height,title,parent,color,font,theme)
 	return list
 end
 -- // Functions
+--[[!
+Elimina todos los elementos de la lista
+]]
 function dxListClear(dxElement)
-	if not dxElement or getElementType(dxElement) ~= "dxList" then
-		outputDebugString("dxListClear gets wrong parameters.(dxList)")
-		return
-	end
+	-- check arguments.
+	checkargs("dxListClear", 1, "dxList", dxElement);
 	
 	for _,v in ipairs(getElementChildren(dxElement)) do
 		destroyElement(v)
 	end
 end
 
+--[[!
+@return Devuelve el número de elementos contenidos en la lista
+]]
 function dxListGetItemCount(dxElement)
-	if not dxElement or getElementType(dxElement) ~= "dxList" then
-		outputDebugString("dxListClear gets wrong parameters.(dxList)")
-		return
-	end
+	-- check arguments.
+	checkargs("dxListClear", 1, "dxList", dxElement);
+
 	return #getElementChildren(dxElement)
 end
 
+--[[!
+@return Devuelve el item seleccionado de la lista.
+]]
 function dxListGetSelectedItem(dxElement) 
-	if not dxElement or getElementType(dxElement) ~= "dxList" then
-		outputDebugString("dxListGetSelectedItem gets wrong parameters.(dxList)")
-		return
-	end
-	
+	-- check arguments
+	checkargs("dxListGetSelectedItem", 1, "dxList", dxElement);
+
 	return getElementData(dxElement,"selectedItem")
 end
 
+--[[!
+Establece el item seleccionado de la lista
+@param dxElement Es la lista
+@param item Es el item que se selecciona.
+]]
 function dxListSetSelectedItem(dxElement,item)
-	if not dxElement or getElementType(dxElement) ~= "dxList" or not item or getElementType(item)~="dxListItem" then
-		outputDebugString("dxListSetSelectedItem gets wrong parameters.(dxList,dxListItem)")
-		return
-	end
+	-- check arguments.
+	checkargs("dxListSetSelectedItem", 1, "dxList", dxElement, "dxListItem", item);
+
 	setElementData(dxElement,"selectedItem",item)
 	for _,w in ipairs(getElementChildren(dxElement)) do
 		setElementData(w,"clicked",false)
@@ -114,19 +137,24 @@ function dxListSetSelectedItem(dxElement,item)
 	setElementData(item,"clicked",true)
 end
 
+--[[!                                    
+	Elimina una fila de la lista.
+]]
 function dxListRemoveRow(dxElement)
-	if not dxElement or getElementType(dxElement) ~= "dxListItem" then
-		outputDebugString("dxListRemoveRow gets wrong parameters.(dxListItem)")
-		return
-	end
+	-- check arguments.
+	checkargs("dxListRemoveRow", 1, "dxListItem", dxElement);
+	
 	destroyElement(dxElement)
 end
 
+--[[!
+	Añade una fila a la lista
+]]
 function dxListAddRow(dxElement,text,color,font,colorcoded)
-	if not dxElement or getElementType(dxElement) ~= "dxList" then
-		outputDebugString("dxListAddRow gets wrong parameters.(dxList[,text=\"\",color=black,font=default,colorcoded=false])")
-		return
-	end
+	-- check arguments.
+	checkargs("dxListAddRow", 1, "dxList", dxElement);
+	checkoptionalargs("dxListAddRow", 2, "string", text, "number", color, "string", font, "boolean", colorcoded);
+
 	if not text then
 		text = ""
 	end
@@ -148,6 +176,9 @@ function dxListAddRow(dxElement,text,color,font,colorcoded)
 	return item
 end
 
+--[[!
+	@deprecated
+]]
 function dxListSetTitleShow(dxElement,titleShow)
 	dxDeprecatedFunction("dxListSetTitleShow","dxListSetTitleVisible")
 	if not dxElement or getElementType(dxElement) ~= "dxList" or titleShow==nil then
@@ -157,6 +188,9 @@ function dxListSetTitleShow(dxElement,titleShow)
 	setElementData(dxElement,"Title:show",titleShow)
 end
 
+--[[!
+	@deprecated
+]]
 function dxListGetTitleShow(dxElement)
 	dxDeprecatedFunction("dxListGetTitleShow","dxListGetTitleVisible")
 	if not dxElement or getElementType(dxElement) ~= "dxList" then
@@ -166,19 +200,25 @@ function dxListGetTitleShow(dxElement)
 	return getElementData(dxElement,"Title:show")
 end
 
+--[[!
+	Establece la visibilidad del título de la lista
+	@param dxElement Es la lista
+	@param titleShow Es un valor booleano indicando si bien el título es visible o no.
+]]
 function dxListSetTitleVisible(dxElement,titleShow)
-	if not dxElement or getElementType(dxElement) ~= "dxList" or titleShow==nil then
-		outputDebugString("dxListSetTitleShow gets wrong parameters.(dxList,titleShow)")
-		return
-	end
+	-- check arguments.
+	checkargs("dxListSetTitleVisible", 1, "dxList", dxElement, "boolean", titleShow);
+
 	setElementData(dxElement,"Title:show",titleShow)
 end
 
+--[[!
+	@return Devuelve un valor booleano indicando la visibilidad de la lista.
+]]
 function dxListGetTitleVisible(dxElement)
-	if not dxElement or getElementType(dxElement) ~= "dxList" then
-		outputDebugString("dxListGetTitleShow gets wrong parameters.(dxList)")
-		return
-	end
+	-- check arguments
+	checkargs("dxListGetTitleVisible", 1, "dxList", dxElement);
+
 	return getElementData(dxElement,"Title:show")
 end
 

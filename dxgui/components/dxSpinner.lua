@@ -12,11 +12,33 @@
 ****************************************************************************************************************/
 ]]
 -- // Initializing
-function dxCreateSpinner(x,y,width,height,parent,color,defaultPos,min_,max_,theme)
-	if not x or not y or not width or not height then
-		outputDebugString("dxCreateSpinner gets wrong parameters (x,y,width,height[parent=dxGetRootPane(),color=black,defaultPos=0,min=0,max=100,font=default,theme=dxGetDefaultTheme()])")
-		return
-	end
+--[[!
+	Crea un spinner (Una caja con un valor numérico que puede ser incrementado o reducido con dos botones hacia 
+	arriba y hacia abajo)
+	@param x Es la coordenada x (absoluta o relativa)
+	@param y Es la coordenada y (absoluta o relativa)
+	@param width Es la anchura del spinner.
+	@param height Es la altura del spinner
+	@param relative Indica si las posición del spinner y su tamaño, es relativa en función de su pariente o no.
+	@param parent Indica el pariente, por defecto: dxGetRootPane()
+	@param color El color del spinner, por defecto: white
+	@param defaultPos Es el valor inicial del spinner, por defecto 0
+	@param min Es el valor minimo del spinner, por defecto 0 
+	@param max Es el valor máximo del spinner. por defecto 0
+	@param theme Es el estilo del spinner, por defecto dxGetDefaultTheme()
+]]
+function dxCreateSpinner(x,y,width,height, relative, parent,color,defaultPos,min_,max_,theme)
+	-- check arguments.
+	checkargs("dxCreateSpinner", 1, "number",x, "number",y, "number", width, "number", height, "boolean", relative);
+	-- check optional arguments.
+	checkoptionalargs("dxCreateSpinner", 7, "number", defaultPos, "number", min_, "number", max_, {"string", "dxTheme"}, theme);
+	
+	if relative then 
+		local px, py = relativeToAbsolute(x + width, y + height);
+		x, y = relativeToAbsolute(x, y);
+		width, height =  px - x, py - y;
+	end;
+	
 	
 	if not color then
 		color = tocolor(0,0,0,255)
@@ -50,11 +72,8 @@ function dxCreateSpinner(x,y,width,height,parent,color,defaultPos,min_,max_,them
 		theme = dxGetTheme(theme)
 	end
 	
-	if not theme then
-		outputDebugString("dxCreateSpinner didn't find the main theme.")
-		return false
-	end
-	
+	assert(theme, "dxCreateSpinner didn'find the main theme");
+
 	local spinner = createElement("dxSpinner")
 	setElementParent(spinner,parent)
 	setElementData(spinner,"resource",sourceResource)
@@ -78,27 +97,27 @@ function dxCreateSpinner(x,y,width,height,parent,color,defaultPos,min_,max_,them
 	return spinner
 end
 -- // Functions
+--[[!
+	@return Devuelve el valor actual del spinner
+]]
 function dxSpinnerGetPosition(dxElement)
-	if not dxElement then
-		outputDebugString("dxSpinnerGetPosition gets wrong parameters.(dxElement)")
-		return
-	end
-	if (getElementType(dxElement)~="dxSpinner") then
-		outputDebugString("dxSpinnerGetPosition gets wrong parameters.(dxElement must be dxSpinner)")
-		return
-	end
+	-- check arguments
+	 checkargs("dxSpinnerGetPosition", 1, "dxSpinner", dxElement);
+	
 	return getElementData(dxElement,"position")
 end
 
+--[[!
+	 Establece el valor actual del spinner.
+	 @param dxElement El spinner
+	 @param pos El nuevo valor del spinner.
+	 @return Devuelve un valor booleano indicando si el valor se estableció correctamente.
+	 (si el valor está entre el valor mínimo y el valor máximo permitidos.)
+]]
 function dxSpinnerSetPosition(dxElement,pos)
-	if not dxElement or not pos then
-		outputDebugString("dxSpinnerSetMax gets wrong parameters.(dxElement,pos)")
-		return
-	end
-	if (getElementType(dxElement)~="dxSpinner") then
-		outputDebugString("dxSpinnerSetMax gets wrong parameters.(dxElement must be dxSpinner)")
-		return
-	end
+	-- check args.
+	checkargs("dxSpinnerSetPosition", 1, "dxSpinner", dxElement, "number", pos);
+	
 	if (pos <= getElementData(dxElement,"max") and pos >= getElementData(dxElement,"min")) then
 		setElementData(dxElement,"position",pos)
 		triggerEvent("onClientDXSpin",dxElement,pos)
@@ -107,27 +126,23 @@ function dxSpinnerSetPosition(dxElement,pos)
 	return false
 end
 
+--[[!
+	@return Devuelve el valor máximo de un spinner
+]]
 function dxSpinnerGetMax(dxElement)
-	if not dxElement then
-		outputDebugString("dxSpinnerGetMax gets wrong parameters.(dxElement)")
-		return
-	end
-	if (getElementType(dxElement)~="dxSpinner") then
-		outputDebugString("dxSpinnerGetMax gets wrong parameters.(dxElement must be dxSpinner)")
-		return
-	end
+	checkargs("dxSpinnerGetMax", 1, "dxSpinner", dxElement);
 	return getElementData(dxElement,"max")
 end
 
+--[[!
+	Establece el valor máximo de un spinner.
+	@note Si el valor actual del spinner es mayor que el nuevo valor máximo,
+	se establecerá el valor actual al nuevo máximo.
+]]
 function dxSpinnerSetMax(dxElement,max_)
-	if not dxElement or not max_ then
-		outputDebugString("dxSpinnerSetMax gets wrong parameters.(dxElement,max)")
-		return
-	end
-	if (getElementType(dxElement)~="dxSpinner") then
-		outputDebugString("dxSpinnerSetMax gets wrong parameters.(dxElement must be dxSpinner)")
-		return
-	end
+	-- check arguments.
+	checkargs("dxSpinnerSetMax", 1, "dxSpinner", dxElement, "number", max_);
+	
 	setElementData(dxElement,"max",max_)
 	if ( dxSpinnerGetPosition(dxElement) > max_ ) then
 		dxSpinnerSetPosition(dxElement,max_)
@@ -135,27 +150,24 @@ function dxSpinnerSetMax(dxElement,max_)
 	return true
 end
 
+--[[!
+	@return Devuelve el valor mínimo permitido en un spinner.
+]]
 function dxSpinnerGetMin(dxElement)
-	if not dxElement then
-		outputDebugString("dxSpinnerGetMin gets wrong parameters.(dxElement)")
-		return
-	end
-	if (getElementType(dxElement)~="dxSpinner") then
-		outputDebugString("dxSpinnerGetMin gets wrong parameters.(dxElement must be dxSpinner)")
-		return
-	end
+	-- check arguments.
+	checkargs("dxSpinnerGetMin", 1, "dxSpinner", dxElement);
+	
 	return getElementData(dxElement,"min")
 end
 
+--[[!
+	Establece el valor mínimo permitido en un spinner.
+	@note Si el nuevo valor mínimo es mayor que el valor actual, el valor
+	se establecerá a este nuevo mínimo.
+]]
 function dxSpinnerSetMin(dxElement,min_)
-	if not dxElement or not min_ then
-		outputDebugString("dxSpinnerSetMin gets wrong parameters.(dxElement,min)")
-		return
-	end
-	if (getElementType(dxElement)~="dxSpinner") then
-		outputDebugString("dxSpinnerSetMin gets wrong parameters.(dxElement must be dxSpinner)")
-		return
-	end
+	checkargs("dxSpinnerSetMin", 1, "dxSpinner", dxElement, "number", min_);	
+
 	setElementData(dxElement,"min",min_)
 	if ( dxSpinnerGetPosition(dxElement) < min_ ) then
 		dxSpinnerSetPosition(dxElement,min_)

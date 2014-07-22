@@ -12,31 +12,44 @@
 ****************************************************************************************************************/
 ]]
 -- // Initializing
-function dxCreateScrollBar(x,y,width,height,parent,type_,progress,max_,theme)
-	if not x or not y or not width or not height then
-		outputDebugString("dxCreateScrollBar gets wrong parameters (x,y,width,height[,parent=dxGetRootPane(),type=Vertical,scroll=0,max=100,theme=dxGetDefaultTheme()])")
-		return
-	end
+--[[!
+	Crea una barra desplazable (scrollbar)
+	@param x Es la coordenada x de la barra (absoluta o relativa)
+	@param y Es la coordenada y de la barra (absoluta o relativa)
+	@param width Es la anchura de la barra ...
+	@param height Es la altura de la barra...
+	@param horizontal Es un valor booleano indicando si la barra es bien horizontal (true), o vertical (false)
+	@param relative Es un valor booleano indicando si la posición y el tamaño es relativo al tamaño del elemento padre o
+		son coordenadas absolutas.
+	@param parent Es el pariente (por defecto, será dxGetRootPane())
+	@param progress Es la progresión inicial de la barra (Por defecto 0) Debe ser mayor o igual que 0
+	@param max_progress Es la progresión máxima de la barra (Por defecto 100) Debe ser mayor o igual que 0
+	@param theme Es el estilo (por defecto dxGetDefaultTheme())
+	
+	@note Si progress > max_progress entonces, progress será max_progress
+]]
+function dxCreateScrollBar(x,y,width,height, horizontal, relative, parent, progress,max_,theme)
+	-- check non optional args.
+	checkargs("dxCreateScrollBar", 1, "number", x, "number", y, "number", width, "number", height, "boolean", horizontal, "boolean", relative);
+	-- check optional args.
+	checkoptionalargs("dxCreateScrollBar", 8, "number", progress, "number", max_, {"string", "dxTheme"}, theme);
+	
+	if relative then 
+		local px, py = relativeToAbsolute(x + width, y + height);
+		x, y = relativeToAbsolute(x, y);
+		width, height =  px - x, py - y;
+	end;
 	
 	if not parent then
 		parent = dxGetRootPane()
 	end
 	
-	if type_ == nil then
-		type_ = "Vertical"
-	end
-	
-	if type_ ~= "Vertical" and type_ ~= "Horizontal" and type_ ~= 0 and type_~= 1 then
-		type_ = "Vertical"
-	end
-	
-	if (type_ == 0) then
-		type_ = "Vertical"
-	end
-	
-	if (type_ == 1) then
-		type_ = "Horizontal"
-	end
+	local type_;
+	if horizontal then 
+		type_ = "Horizontal";
+	else
+		type_ = "Vertical";
+	end;
 	
 	if not progress then
 		progress = 0
@@ -46,13 +59,10 @@ function dxCreateScrollBar(x,y,width,height,parent,type_,progress,max_,theme)
 		max_ = 100
 	end
 	
-	if max_ <= 0 then
-		max_ = 100
-	end
+	assert(max_ >= 0, "Max.progress of a scrollbar must be greater or equal than 0");
+	assert(progress >= 0, "Progress of a scrollbar must be non negative");
 	
-	if progress < 0 or progress > max_ then
-		progress = 0
-	end
+	if progress > max_ then progress = max_; end;
 	
 	if not color then
 		color = "segment"
@@ -66,10 +76,7 @@ function dxCreateScrollBar(x,y,width,height,parent,type_,progress,max_,theme)
 		theme = dxGetTheme(theme)
 	end
 	
-	if not theme then
-		outputDebugString("dxCreateScrollBar didn't find the main theme.")
-		return false
-	end
+	assert(theme, "dxCreateScrollBar didn't find the main theme");
 	
 	local scrollBar = createElement("dxScrollBar")
 	setElementParent(scrollBar,parent)
@@ -94,35 +101,31 @@ function dxCreateScrollBar(x,y,width,height,parent,type_,progress,max_,theme)
 	return scrollBar
 end
 -- // Functions
+
+--[[! 
+	@return Devuelve la progresión de la barra (un número entro 0 y la progresión máxima de la misma barra)
+]]
 function dxScrollBarGetScroll(dxElement)
-	if not dxElement then
-		outputDebugString("dxScrollBarGetScroll gets wrong parameters.(dxElement)")
-		return
-	end
-	if (getElementType(dxElement)~="dxScrollBar") then
-		outputDebugString("dxScrollBarGetScroll gets wrong parameters.(dxElement must be dxScrollBar)")
-		return
-	end
+	-- check args.
+	checkargs("dxScrollBarGetScroll", 1, "dxScrollBar", dxElement);
+
 	return getElementData(dxElement,"progress")
 end
 
+--[[!
+	Establece la progresión máxima de una barra desplazable. 
+	@param dxElement La barra desplazable
+	@param progress La progresión.
+	@note Si la progresión es mayor o igual que la progresión máxima, la progresión se establecerá
+	al valor de la progresión máxima.
+]]
 function dxScrollBarSetScroll(dxElement,progress)
-	if not dxElement or not progress then
-		outputDebugString("dxScrollBarSetScroll gets wrong parameters.(dxElement,progress)")
-		return
-	end
-	if (getElementType(dxElement)~="dxScrollBar") then
-		outputDebugString("dxScrollBarSetScroll gets wrong parameters.(dxElement must be dxScrollBar)")
-		return
-	end
+	-- check arguments.
+	checkargs("dxScrollBarSetScroll", 1, "dxScrollBar", dxElement, "number", progress);
+	
 	local max = getElementData(dxElement,"max")
-	if type(progress)~="number" then
-		outputDebugString("dxScrollBarSetScroll gets wrong parameters.(progress must be between 0-"..tostring(max))
-		return
-	end
-	if (progress < 0) then
-		progress = 0
-	end
+
+	assert(progress >= 0, "Scroll bar progress must be non negative");
 	
 	if (progress > max) then
 		progress = max
@@ -132,33 +135,29 @@ function dxScrollBarSetScroll(dxElement,progress)
 	triggerEvent("onClientDXScroll",dxElement,progress)
 end
 
+--[[!
+	@return Devuelve el porcentaje de progresión de una barra desplazable.
+	@note Si el porcentaje de progresión es superior a 100, este se pondrá 
+	a 100.
+]]
 function dxScrollBarGetScrollPercent(dxElement)
-	if not dxElement then
-		outputDebugString("dxScrollBarGetScrollPercent gets wrong parameters.(dxElement)")
-		return
-	end
-	if (getElementType(dxElement)~="dxScrollBar") then
-		outputDebugString("dxScrollBarGetScrollPercent gets wrong parameters.(dxElement must be dxScrollBar)")
-		return
-	end
+	-- check arguments.
+	checkargs("dxScrollBarGetScrollPercent", 1, "dxScrollBar", dxElement);
+	
 	-- max progress
 	-- 100 x
 	return (100*getElementData(dxElement,"progress")) / getElementData(dxElement,"max")
 end
 
+--[[!
+	Establece el porcentaje de progresión de una barra desplazable
+	@param dxElement La barra desplazable
+	@param progress El nuevo porcentaje de progreso de la bara.
+]]
 function dxScrollBarSetScrollPercent(dxElement,progress)
-	if not dxElement or not progress then
-		outputDebugString("dxScrollBarSetScrollPercent gets wrong parameters.(dxElement,percent)")
-		return
-	end
-	if (getElementType(dxElement)~="dxScrollBar") then
-		outputDebugString("dxScrollBarSetScrollPercent gets wrong parameters.(dxElement must be dxScrollBar)")
-		return
-	end
-	if type(progress)~="number" then
-		outputDebugString("dxScrollBarSetScrollPercent gets wrong parameters.(percent must be number)")
-		return
-	end
+	-- check arguments.
+	checkargs("dxScrollBarSetScrollPercent", 1, "dxScrollBar", dxElement, "number", progress);
+
 	if (progress > 100) then
 		progress = 100
 	end
@@ -172,27 +171,23 @@ function dxScrollBarSetScrollPercent(dxElement,progress)
 	triggerEvent("onClientDXScroll",dxElement,(getElementData(dxElement,"max")*progress)/100)
 end
 
+--[[!
+	@return Devuelve la progresión maxima de una barra desplazable
+]]
 function dxScrollBarGetMaxScroll(dxElement)
-	if not dxElement then
-		outputDebugString("dxScrollBarGetMaxScroll gets wrong parameters.(dxElement)")
-		return
-	end
-	if (getElementType(dxElement)~="dxScrollBar") then
-		outputDebugString("dxScrollBarGetMaxScroll gets wrong parameters.(dxElement must be dxScrollBar)")
-		return
-	end
+	-- check arguments.
+	checkargs("dxScrollBarGetMaxScroll", 1, "dxScrollBar", dxElement);
+	
 	return getElementData(dxElement,"max")
 end
 
+--[[!
+	Establece la progressión máxima de una barra desplazable.
+]]
 function dxScrollBarSetMaxScroll(dxElement,progress)
-	if not dxElement or not progress then
-		outputDebugString("dxScrollBarSetMaxScroll gets wrong parameters.(dxElement,maxProgress)")
-		return
-	end
-	if (getElementType(dxElement)~="dxScrollBar") then
-		outputDebugString("dxScrollBarSetMaxScroll gets wrong parameters.(dxElement must be dxScrollBar)")
-		return
-	end
+	-- check arguments.
+	checkargs("dxScrollBarSetMaxScroll", 1, "dxScrollBar", dxElement, "number", progress);
+
 	setElementData(dxElement,"max",progress)
 	triggerEvent("onClientDXPropertyChanged",dxElement,"maxScroll",progress)
 	if (getElementData(dxElement,"progress") > progress ) then

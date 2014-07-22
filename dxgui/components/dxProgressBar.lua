@@ -12,11 +12,29 @@
 ****************************************************************************************************************/
 ]]
 -- // Initalizing
-function dxCreateProgressBar(x,y,width,height,parent,progress,color,max_,theme)
-	if not x or not y or not width or not height then
-		outputDebugString("dxCreateProgressBar gets wrong parameters (x,y,width,height[,parent=dxGetRootPane(),progress=0,color=segment,max=100,theme=dxGetDefaultTheme()])")
-		return
-	end
+--[[!
+	Crea una barra de progreso.
+	@param x Es la coordenada x (absoluta o relativa)
+	@param y Es la coordenada y (absoluta o relativa)
+	@param width Es la anchura de la barra de progreso
+	@param height Es la altura de la barra de progreso.
+	@param relative Es un valor booleano indicando si bien la posición y el tamaño del mismo serán relativas al pariente
+	@param parent Es el padre de esta barra de progreso, por defecto dxGetRootPane()
+	@param progress Es el porcentaje de progresso de la barra. Este valor deberá ser un valor no negativo.
+	@param color Es el color de la barra, por defeto, "white"
+	@param max_ Es el máximo valor de progreso.
+]]
+function dxCreateProgressBar(x,y,width,height, relative, parent,progress,color,max_,theme)
+	-- check arguments.
+	checkargs("dxCreateProgressBar", 1, "number", x, "number", y, "number", width, "number", height, "boolean", relative);
+	-- check optional arguments.
+	checkoptionalargs("dxCreateProgressBar", 7, "number", progress, "number", color, "number", max_, {"string", "dxTheme"}, theme);
+	
+	if relative then 
+		local px, py = relativeToAbsolute(x + width, y + height);
+		x, y = relativeToAbsolute(x, y);
+		width, height =  px - x, py - y;
+	end;
 	
 	if not parent then
 		parent = dxGetRootPane()
@@ -30,12 +48,11 @@ function dxCreateProgressBar(x,y,width,height,parent,progress,color,max_,theme)
 		max_ = 100
 	end
 	
-	if max_ <= 0 then
-		max_ = 100
-	end
+	assert(max_ >= 0, "Maximum progress bar value must be non negative");
+	assert(progress >= 0, "Progress bar value must be non negative");
 	
-	if progress < 0 or progress > max_ then
-		progress = 0
+	if progress > max_ then
+		progress = max_;
 	end
 	
 	if not color then
@@ -50,10 +67,8 @@ function dxCreateProgressBar(x,y,width,height,parent,progress,color,max_,theme)
 		theme = dxGetTheme(theme)
 	end
 	
-	if not theme then
-		outputDebugString("dxCreateCheckBox didn't find the main theme.")
-		return false
-	end
+	assert(theme, "dxCreateCheckBox didn't find the main theme");
+
 	
 	local progressBar = createElement("dxProgressBar")
 	setElementParent(progressBar,parent)
@@ -76,27 +91,23 @@ function dxCreateProgressBar(x,y,width,height,parent,progress,color,max_,theme)
 	return progressBar
 end
 -- // Functions
+--[[!
+	@return Devuelve el valor del progreso de la barra actualmente.
+]]
 function dxProgressBarGetProgress(dxElement)
-	if not dxElement then
-		outputDebugString("dxProgressBarGetProgress gets wrong parameters.(dxElement)")
-		return
-	end
-	if (getElementType(dxElement)~="dxProgressBar") then
-		outputDebugString("dxProgressBarGetProgress gets wrong parameters.(dxElement must be dxProgressBar)")
-		return
-	end
+	checkargs("dxProgressBarGetProgress", "dxProgressBar", dxElement);	
+
 	return getElementData(dxElement,"progress")
 end
 
+--[[!
+	Establece el progreso actual de la barra de progreso.
+	@param dxElement es la barra de progreso
+	@param progress Es el nuevo valor de progreso.
+]]
 function dxProgressBarSetProgress(dxElement,progress)
-	if not dxElement or not progress then
-		outputDebugString("dxProgressBarSetProgress gets wrong parameters.(dxElement,progress)")
-		return
-	end
-	if (getElementType(dxElement)~="dxProgressBar") then
-		outputDebugString("dxProgressBarSetProgress gets wrong parameters.(dxElement must be dxProgressBar)")
-		return
-	end
+	checkargs("dxProgressBarSetProgress", 1, "dxProgressBar", dxElement, "number", progress);
+
 	local max = getElementData(dxElement,"max")
 	if type(progress)~="number" or progress < 0 or progress > max then
 		outputDebugString("dxProgressBarSetProgress gets wrong parameters.(progress must be between 0-"..tostring(max))
@@ -106,60 +117,49 @@ function dxProgressBarSetProgress(dxElement,progress)
 	triggerEvent("onClientDXPropertyChanged",dxElement,"progress",progress)
 end
 
+--[[!
+	@return Devuelve el porcentaje de progreso de esta barra de progreso.
+]]
 function dxProgressBarGetProgressPercent(dxElement)
-	if not dxElement then
-		outputDebugString("dxProgressBarGetProgressPercent gets wrong parameters.(dxElement)")
-		return
-	end
-	if (getElementType(dxElement)~="dxProgressBar") then
-		outputDebugString("dxProgressBarGetProgressPercent gets wrong parameters.(dxElement must be dxProgressBar)")
-		return
-	end
+	checkargs("dxProgressBarGetProgressPercent", 1, "dxProgressBar", dxElement);	
+
 	-- max progress
 	-- 100 x
 	return (100*getElementData(dxElement,"progress")) / getElementData(dxElement,"max")
 end
 
+--[[!
+	Establece el porcentaje de progreso de esta barra de progreso.
+	@param dxEelement Es la barra de progreso
+	@param progress Es el porcentaje de progreso (debe ser un valor no negativo) e inferior o igua a 100.
+]]
 function dxProgressBarSetProgressPercent(dxElement,progress)
-	if not dxElement or not progress then
-		outputDebugString("dxProgressBarSetProgressPercent gets wrong parameters.(dxElement,percent)")
-		return
-	end
-	if (getElementType(dxElement)~="dxProgressBar") then
-		outputDebugString("dxProgressBarSetProgressPercent gets wrong parameters.(dxElement must be dxProgressBar)")
-		return
-	end
-	if type(progress)~="number" or progress < 0 or progress > 100 then
-		outputDebugString("dxProgressBarSetProgressPercent gets wrong parameters.(percent must be between 0-100)")
-		return
-	end
+	checkargs("dxProgressBarSetProgressPercent", 1, "dxProgressBar", dxElement, "number", progress);
+	assert((progress >= 0), and (progress <= 100), "progress percentage must be a non negative value and lower or equal than 100");
+	
 	-- 100 percent
 	-- max x
 	setElementData(dxElement,"progress",(getElementData(dxElement,"max")*progress)/100)
 	triggerEvent("onClientDXPropertyChanged",dxElement,"progressPercent",progress,(getElementData(dxElement,"max")*progress)/100)
 end
 
+--[[!
+	@return Devuelve el valor máximo de progreso de una barra de progreso.
+]]
 function dxProgressBarGetMaxProgress(dxElement)
-	if not dxElement then
-		outputDebugString("dxProgressBarGetMaxProgress gets wrong parameters.(dxElement)")
-		return
-	end
-	if (getElementType(dxElement)~="dxProgressBar") then
-		outputDebugString("dxProgressBarGetMaxProgress gets wrong parameters.(dxElement must be dxProgressBar)")
-		return
-	end
+	checkargs("dxProgressBarGetMaxProgress", 1, "dxProgressBar", dxElement);
+
 	return getElementData(dxElement,"max")
 end
 
+--[[!
+	Establece la valor máximo de progreso en una barra de progreso.
+	@param dxElement Es la barra de progreso.
+	@param progress Es el nuevo valor máximo de progreso de la barra de progreso.
+]]
 function dxProgressBarSetMaxProgress(dxElement,progress)
-	if not dxElement or not progress then
-		outputDebugString("dxProgressBarSetMaxProgress gets wrong parameters.(dxElement,maxProgress)")
-		return
-	end
-	if (getElementType(dxElement)~="dxProgressBar") then
-		outputDebugString("dxProgressBarSetMaxProgress gets wrong parameters.(dxElement must be dxProgressBar)")
-		return
-	end
+	checkargs("dxProgressBarSetMaxProgress", 1, "dxProgressBar", dxElement, "number", progress);
+
 	setElementData(dxElement,"max",progress)
 	triggerEvent("onClientDXPropertyChanged",dxElement,"maxProgress",progress)
 	if (getElementData(dxElement,"progress") > progress ) then

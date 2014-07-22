@@ -161,3 +161,64 @@ function getImagePath(iResource, fileName)
 	
 	return ":"..getResourceName(iResource).."/"..fileName
 end
+
+                        
+function checkargs(funcname, firstarg, ...)
+	assert((type(funcname) == "string") and (type(firstarg) == "number") and (firstarg > 0));
+	local args = {...};
+	local i = 1;
+	while (i < #args) do 
+		assert((type(args[i]) == "string") or (type(args[i]) == "table"));
+		local expectedTypes = {};
+		if type(args[i]) == "string" then 
+			table.insert(expectedTypes, args[i]);
+		else 
+			for j=1,#args[i],1 do expectedTypes[j] = args[i][j]; end;
+		end;
+		local value = args[i+1];
+		local valueType;
+		if isElement(value) then
+			valueType = getElementType(value);
+		else 
+			valueType = type(value);
+		end;
+		-- check whatever the value has the type(s) expected.
+		local j = 1;
+		while (j < #expectedTypes) and (valueType ~= expectedTypes[j]) do 
+			j = j + 1;	
+		end;
+		
+
+		-- not founded any type that matches the argument's type. ? 
+		assert(valueType == expectedTypes[j], "Argument mismatch in function \"" .. funcname .. "\" at argument " .. 
+			tostring((i+1) / 2 + firstarg - 1) .. ": " .. table.concat(expectedTypes, " or ") .. " expected, but " .. valueType .. " found (" .. tostring(value) .. ")");
+		
+		i = i + 2;
+	end;
+end;
+
+function checkoptionalargs(funcname, firstarg, ...)
+	local args = {...};
+	for i=1,#args-1,2 do
+		if type(args[i]) ~= "table" then 
+			local aux = args[i];
+			args[i] = {};
+			table.insert(args[i], aux);
+		end;
+		table.insert(args[i], "nil");
+	end;
+	checkargs(funcname, firstarg, unpack(args)); 
+end;
+
+
+function checkvalue(valuename, value, ...)
+	local args = {...};
+	assert(#args > 0);
+	
+	local i = 1;
+	while (i < #args) and (value ~= args[i]) do 
+		i = i + 1;
+	end;
+	assert(value == args[i], valuename .. " must be set to " .. table.concat(args, " or "));
+end;
+

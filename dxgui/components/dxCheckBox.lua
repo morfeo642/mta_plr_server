@@ -12,10 +12,28 @@
 ****************************************************************************************************************/
 ]]
 -- // Initializing
-function dxCreateCheckBox(x,y,width,height,text,parent,selected,color,font,theme)
-	if not x or not y or not width or not height or not text then
-		outputDebugString("dxCreateCheckBox gets wrong parameters (x,y,width,height[,parent=dxGetRootPane(),selected=false,color=white,font=default,theme=dxGetDefaultTheme()])")
-		return
+--[[!
+	Crea un check box.
+	@param x Es la componente x de la posición del check box
+	@param y Es la componente y de la posición del check box
+	@param width Es la anchura del checkbox
+	@param height Es la altura del checkbox
+	@param text Es el texto que contendrá el checkbox
+	@param relative Indica si la posición y las dimensiones son relativas al elemento padre
+	@param Es el elemento padre, por defecto, dxGetRootPane()
+	@param selected Es un valor booleano indicando si el checkbox esta marcado inicialmente.
+	@param color Es el color, por defecto, white
+	@param font Es la fuente de texto, por defecto, "default"
+	@param theme Es el estilo, por defecto, dxGetDefaultTheme()
+]]
+function dxCreateCheckBox(x,y,width,height,text,relative,parent,selected,color,font,theme)
+	checkargs("dxCreateCheckBox", 1, "number", x, "number", y, "number", width, "number", height, "string", text, "boolean", relative);
+	checkoptionalargs("dxCreateCheckBox", 9, "boolean", selected, "number", color, "string", font, {"string", "dxTheme"}, theme);
+	
+	if relative then 
+		local px, py = relativeToAbsolute(x + width, y + height);
+		x, y = relativeToAbsolute(x, y);
+		width, height =  px - x, py - y;
 	end
 	
 	if not selected then
@@ -42,10 +60,7 @@ function dxCreateCheckBox(x,y,width,height,text,parent,selected,color,font,theme
 		theme = dxGetTheme(theme)
 	end
 	
-	if not theme then
-		outputDebugString("dxCreateCheckBox didn't find the main theme.")
-		return false
-	end
+	assert(them "dxCreateCheckBox didn't find the main theme");
 	
 	local checkbox = createElement("dxCheckBox")
 	setElementParent(checkbox,parent)
@@ -70,27 +85,23 @@ function dxCreateCheckBox(x,y,width,height,text,parent,selected,color,font,theme
 end
 
 -- // Functions
+--[[!
+	@return Devuelve un valor booleano indicando si el checkbox está seleccionado.
+]]
 function dxCheckBoxGetSelected(dxElement)
-	if not dxElement then
-		outputDebugString("dxCheckBoxGetSelected gets wrong parameters (dxCheckBox)")
-		return
-	end
-	if (getElementType(dxElement)) ~= "dxCheckBox" then
-		outputDebugString("dxCheckBoxGetSelected gets wrong parameters (dxElement must be dxCheckBox)")
-		return false
-	end
+	checkargs("dxCheckBoxGetSelected", 1, "dxCheckBox", dxElement);
+
 	return getElementData(dxElement,"selected")
 end
 
+--[[!
+	Selecciona o deselecciona el check box
+	@param dxElement Es el checkbox
+	@param selected Un valor booleano que indica si el checkbox debe ser seleccionado.
+]]
 function dxCheckBoxSetSelected(dxElement,selected)
-	if not dxElement or selected == nil then
-		outputDebugString("dxCheckBoxSetSelected gets wrong parameters (dxCheckBox)")
-		return
-	end
-	if (getElementType(dxElement)) ~= "dxCheckBox" then
-		outputDebugString("dxCheckBoxSetSelected gets wrong parameters (dxElement must be dxCheckBox)")
-		return
-	end
+	checkargs("dxCheckBoxSetSelected", 1, "dxCheckBox", dxElement, "boolean", selected);
+
 	setElementData(dxElement,"selected",selected)
 	triggerEvent("onClientDXPropertyChanged",dxElement,"selected",selected)
 end

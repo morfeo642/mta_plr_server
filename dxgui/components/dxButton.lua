@@ -12,11 +12,30 @@
 ****************************************************************************************************************/
 ]]
 -- // Initializing
-function dxCreateButton(x,y,width,height,text,parent,color,font,theme)
-	if not x or not y or not width or not height or not text then
-		outputDebugString("dxCreateButton gets wrong parameters (x,y,width,height,text[,parent=dxGetRootPane(),color=white,font=default,theme=dxGetDefaultTheme()])")
-		return
-	end
+--[[!
+	Crea un botón.
+	@param x Es la componente x de la posición del botón
+	@param y Es la componente y de la posición del botón
+	@param width Es la anchura del botón
+	@param height Es la altura del botón
+	@param text Es el texto que se mostrará en el botón
+	@param relative Es un valor booleano indicando si bién la posición y las dimensiones
+	del botón especificadas son relativas al padre.
+	@param parent Es el padre de este botón, por defecto dxGetRootPane()
+	@param color Es el color, por defecto, white
+	@param font Es la fuente que se usará para renderizar el texto, por defecto "default"
+	@param theme Es el estilo, que por defecto es dxGetDefaultTheme()
+]]                                        
+function dxCreateButton(x,y,width,height,text,relative, parent,color,font,theme)
+	-- check arguments.
+	checkargs("dxCreateButton", 1, "number", x, "number", y, "number", width, "number", height, "string", text, "boolean", relative);
+	checkoptionalargs("dxCreateButton", 8, "number", color, "string", font, {"string", "dxTheme"}, theme);
+	
+	if relative then 
+		local px, py = relativeToAbsolute(x + width, y + height);
+		x, y = relativeToAbsolute(x, y);
+		width, height =  px - x, py - y;
+	end;
 	
 	if not parent then
 		parent = dxGetRootPane()

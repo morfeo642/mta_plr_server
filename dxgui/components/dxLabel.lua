@@ -12,11 +12,32 @@
 ****************************************************************************************************************/
 ]]
 -- // Initializing
-function dxCreateLabel(x,y,width,height,text,parent,color,font,scale,alignX,alignY,colorCoded)
-	if not x or not y or not width or not height or not text then
-		outputDebugString("dxCreateLabel gets wrong parameters (x,y,width,height[,parent=dxGetRootPane(),color=white,font=default,scale=1,alignX=left,alignY=top,colorCoded=false])")
-		return
-	end
+--[[!
+	Crea una nueva etiqueta de texto.
+	@param x Es la coordenada x (absoluta o relativa)
+	@param y Es la coordenada y (absoluta o relativa)
+	@param width Es la anchura de la etiqueta
+	@param height Es la altura de la etiqueta
+	@param text Es el texto que contendrá la etiqueta
+	@param relative Infica si la posición y el tamaño de la etiqueta es relativa al pariente o no.
+	@param parent Es el padre de la etiqueta, por defecto, dxGetRootPane()
+	@param color Es el color de la etiqueta, por defecto, white
+	@param font Es la fuente usada para dibujar el texto, por defecto, "default"
+	@param scale Es la escala del texto. 
+	@param alignX Indica el tipo de alineación sobre el eje X del texto (left, right o center), por defecto left
+	@param alignY Indica el tipo de alineación sobre el eje Y del text (top, center, bottom), por defecto top
+	@param colorCoded Indica si bién se usa códigos de colores dentro del texto de la etiqueta.
+]]
+function dxCreateLabel(x,y,width,height,text, relative, parent,color,font,scale,alignX,alignY,colorCoded)
+	-- check arguments.
+	checkargs("dxCreateLabel", 1, "number", x, "number", y, "number", width, "number", height, "string", text, "boolean", relative);
+	checkoptionalargs("dxCreateLabel", 8, "number", color, "string", font, "number", scale, "string", alignX, "string", alignY, "boolean", colorCoded);
+	
+	if relative then 
+		local px, py = relativeToAbsolute(x + width, y + height);
+		x, y = relativeToAbsolute(x, y);
+		width, height =  px - x, py - y;
+	end;
 	
 	if not parent then
 		parent = dxGetRootPane()
@@ -40,11 +61,15 @@ function dxCreateLabel(x,y,width,height,text,parent,color,font,scale,alignX,alig
 	
 	if not alignX then
 		alignX = "left"
-	end
+	else
+		checkvalue("horizontal alignment", alignX, "left", "center", "right");
+	end;
 	
 	if not alignY then
 		alignY = "top"
-	end
+	else 
+		checkValue("vertical alignment", alignY, "top", "center", "bottom");
+	end;
 	
 	local label = createElement("dxLabel")
 	setElementParent(label,parent)
@@ -69,77 +94,69 @@ function dxCreateLabel(x,y,width,height,text,parent,color,font,scale,alignX,alig
 	return label
 end
 -- // Functions
+--[[!
+@return Devuelve la escala del texto de la etiqueta.
+]]
 function dxLabelGetScale(dxElement) 
-	if not dxElement then
-		outputDebugString("dxLabelGetScale gets wrong parameters.(dxElement)")
-		return
-	end
-	if (getElementType(dxElement)~="dxLabel") then
-		outputDebugString("dxLabelGetScale gets wrong parameters.(dxElement must be dxLabel)")
-		return
-	end
+	checkargs("dxLabelGetScale", 1, "dxLabel", dxElement);
+
 	return getElementData(dxElement,"scale")
 end
 
+
+--[[!
+@return Devuelve la alineación horizontal (sobre el eje X) del texto de la etiqueta.
+]]
 function dxLabelGetHorizontalAlign(dxElement) 
-	if not dxElement then
-		outputDebugString("dxLabelGetHorizontalAlign gets wrong parameters.(dxElement)")
-		return
-	end
-	if (getElementType(dxElement)~="dxLabel") then
-		outputDebugString("dxLabelGetHorizontalAlign gets wrong parameters.(dxElement must be dxLabel)")
-		return
-	end
+	checkargs("dxLabelGetHorizontalAlign", 1, "dxLabel", dxElement);
+
 	return getElementData(dxElement,"alignX")
 end
 
+--[[!
+@return Devuelve la alineación vertical (sobre el eje Y) del texto de la etiqueta.
+]]
 function dxLabelGetVerticalAlign(dxElement) 
-	if not dxElement then
-		outputDebugString("dxLabelGetVerticalAlign gets wrong parameters.(dxElement)")
-		return
-	end
-	if (getElementType(dxElement)~="dxLabel") then
-		outputDebugString("dxLabelGetVerticalAlign gets wrong parameters.(dxElement must be dxLabel)")
-		return
-	end
+	checkargs("dxLabelGetVerticalAlign", 1, "dxLabel", dxElement);
+
 	return getElementData(dxElement,"alignY")
 end
 
+--[[!
+Establece la escala del texto de la etiqueta
+@param dxElement Es la etiqueta de texto
+@param scale Es la nueva escala.
+]]
 function dxLabelSetScale(dxElement,scale) 
-	if not dxElement or not scale then
-		outputDebugString("dxLabelGetScale gets wrong parameters.(dxElement,scale)")
-		return
-	end
-	if (getElementType(dxElement)~="dxLabel") then
-		outputDebugString("dxLabelGetScale gets wrong parameters.(dxElement must be dxLabel)")
-		return
-	end
+	checkargs("dxLabelSetScale", 1, "dxLabel", dxElement, "number", scale);
+
 	setElementData(dxElement,"scale",scale)
 	triggerEvent("onClientDXPropertyChanged",dxElement,"scale",scale)
 end
 
+
+--[[!
+Establece la alineación horizontal
+@param dxElement la etiqueta de text
+@param La alineación horizontal (left, right, center)
+]]
 function dxLabelSetHorizontalAlign(dxElement,alignX) 
-	if not dxElement or not alignX then
-		outputDebugString("dxLabelGetHorizontalAlign gets wrong parameters.(dxElement,alignX)")
-		return
-	end
-	if (getElementType(dxElement)~="dxLabel") then
-		outputDebugString("dxLabelGetHorizontalAlign gets wrong parameters.(dxElement must be dxLabel)")
-		return
-	end
+	checkargs("dxLabelSetHorizontalAlign", 1, "dxLabel", dxElement, "number", alignX);
+	checkvalue("horizontal alignment", alignX, "left", "center", "right");
+	
 	setElementData(dxElement,"alignX",alignX)
 	triggerEvent("onClientDXPropertyChanged",dxElement,"alignX",alignX)
 end
 
+--[[!
+	Establece la alineación vertical del texto de una etiqueta
+	@param dxElement Es la etiqueta
+	@param alignY Es la nueva alineación vertical del texto de la misma (top, center o bottom)
+]]
 function dxLabelSetVerticalAlign(dxElement,alignY) 
-	if not dxElement or not alignY then
-		outputDebugString("dxLabelGetVerticalAlign gets wrong parameters.(dxElement,alignY)")
-		return
-	end
-	if (getElementType(dxElement)~="dxLabel") then
-		outputDebugString("dxLabelGetVerticalAlign gets wrong parameters.(dxElement must be dxLabel)")
-		return
-	end
+	checkargs("dxLabelSetVerticalAlign", 1, "dxLabel", dxElement, "number", alignY);
+	checkvalue("vertical alignment", alignY, "top", "center", "bottom");
+	
 	setElementData(dxElement,"alignY",alignY)
 	triggerEvent("onClientDXPropertyChanged",dxElement,"alignY",alignY)
 end

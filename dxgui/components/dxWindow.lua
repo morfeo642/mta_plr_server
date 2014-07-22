@@ -12,11 +12,27 @@
 ****************************************************************************************************************/
 ]]
 -- // Initializing
-function dxCreateWindow(x,y,width,height,title,color,font,theme)
-	if not x or not y or not width or not height or not title then
-		outputDebugString("dxCreateWindow gets wrong parameters. (x,y,width,height,title,[color=white,font=default,theme=dxGetDefaultTheme()]")
-		return false
-	end
+--[[!
+	Crea una nueva ventana.
+	@param x Es la posición x absoluta o relativa de la ventana.
+	@param y Es la posición y absoluta o relativa de la ventana.
+	@param width Es la anchura de la ventana (absoluta o relativa)
+	@param height Es la altura de la ventana (absoluta o relativa)
+	@param color Es el color del título de la ventana. (por defecto es el color blanco)
+	@param font Es la fuente usada para dibujar el texto del título de la ventana (Opcional) Por defecto es "default".
+	@param theme Es el estilo de la ventana (por defecto es dxGetDefaultTheme()) 
+]]
+function dxCreateWindow(x,y,width,height,title, relative, color,font,theme)
+	-- check non optional arguments.
+	checkargs("dxCreateWindow", 1, "number", x, "number", y, "number", width, "number", height, "string", title, "boolean", relative);
+	-- check optional parameters.
+	checkoptionalargs("dxCreateWindow", 7, "number", color, "string", font, {"string", "dxTheme"}, theme);
+	
+	if relative then 
+		local px, py = relativeToAbsolute(x + width, y + height);
+		x, y = relativeToAbsolute(x, y);
+		width, height =  px - x, py - y;
+	end;
 	
 	if not color then
 		color = tocolor(255,255,255,255)
@@ -34,10 +50,8 @@ function dxCreateWindow(x,y,width,height,title,color,font,theme)
 		theme = dxGetTheme(theme)
 	end
 	
-	if not theme then
-		outputDebugString("dxCreateWindow didn't find the main theme.")
-		return false
-	end
+	assert(theme, "dxCreateWindow didn't find the main theme");
+	
 	local parent = dxGetRootPane()
 	local window = createElement("dxWindow")
 	setElementParent(window,dxGetRootPane())
@@ -67,15 +81,14 @@ function dxCreateWindow(x,y,width,height,title,color,font,theme)
 end
 
 -- // Functions
+--[[!
+	@return Devuelve la posición del título de la ventana.
+	@param dxEleement La ventana
+	@param relative Indicando si las coordenadas deben ser relativas o absolutas.
+]]
 function dxWindowGetTitlePosition(dxElement,relative)
-	if not dxElement then
-		outputDebugString("dxWindowGetTitlePosition gets wrong parameters (dxElement[,relative=false])")
-		return
-	end
-	if (getElementType(dxElement)~="dxWindow") then
-		outputDebugString("dxWindowGetTitlePosition gets wrong parameters (dxElement must be dxWindow)")
-		return
-	end
+	-- check arguments 
+	checkargs("dxWindowGetTitlePosition", 1, "dxWindow", dxElement, "boolean", relative);
 
 	local tx,ty = getElementData(dxElement,"Title:x"),getElementData(dxElement,"Title:y")
 	local px,py = getElementData(getElementParent(dxElement),"width"),getElementData(getElementParent(dxElement),"height")
@@ -86,15 +99,16 @@ function dxWindowGetTitlePosition(dxElement,relative)
 	end
 end
 
+--[[!
+	Establece la posición del título de la ventana
+	@param dxElement Es la ventana
+	@param x Es la coordenada x (absoluta o relativa)
+	@param y Es la coordenada y (absoluta o relativa)
+	@param relative Indica si las coordenadas indicadas son relativas o absolutas.
+]]
 function dxWindowSetTitlePosition(dxElement,x,y,relative)
-	if not dxElement or not x or not y then
-		outputDebugString("dxGetPosition gets wrong parameters (dxElement,x,y[,relative=false])")
-		return
-	end
-	if (getElementType(dxElement)~="dxWindow") then
-		outputDebugString("dxGetPosition gets wrong parameters (dxElement must be dxWindow)")
-		return
-	end
+	-- check arguments.
+	checkargs("dxWindowSetTitlePosition", 1, "dxWindow", dxElement, "number", x, "number", y, "boolean", relative);
 
 	local px,py = getElementData(getElementParent(dxElement),"width"),getElementData(getElementParent(dxElement),"height")
 	if relative then
@@ -107,57 +121,60 @@ function dxWindowSetTitlePosition(dxElement,x,y,relative)
 	triggerEvent("onClientDXPropertyChanged",dxElement,"titleposition",x,y,relative)
 end
 
+--[[!
+	@return Devuelve un valor booleano indicando si la ventana es movible
+]]
 function dxWindowGetMovable(dxWindow)
-	if not dxWindow  then
-		outputDebugString("dxGetMovable gets wrong parameters (dxWindow)")
-		return
-	end
-	if (getElementType(dxWindow) ~= "dxWindow") then
-		outputDebugString("dxWindowSetMovable gets wrong parameters (dxElement must be dxWindow)")
-		return
-	end
+	-- check arguments.
+	checkargs("dxWindowGetMovable", 1, "dxWindow", dxWindow);
 	return getElementData(dxWindow,"movable")
 end
 
+--[[!
+	@return Devuelve un valor booleano indicando si la ventana está en 
+	movimiento 
+]]
 function dxWindowIsMoving(dxWindow)
-	if not dxWindow  then
-		outputDebugString("dxIsMoving gets wrong parameters (dxWindow)")
-		return
-	end
-	if (getElementType(dxWindow) ~= "dxWindow") then
-		outputDebugString("dxWindowSetMovable gets wrong parameters (dxElement must be dxWindow)")
-		return
-	end
+	-- check arguments.
+	checkargs("dxWindowIsMoving", 1, "dxWindow", dxWindow);
 	return getElementData(dxWindow,"isMoving")
 end
 
+--[[!
+	Indica si una ventana podrá ser movida por el usuario o deberá ser fija.
+	@param dxWindow Es la ventana.
+	@param movable Un valor booleano. Si es true, la ventana podrá ser desplazada. En cambio,
+	si es false, será fija.
+]]
 function dxWindowSetMovable(dxWindow,movable)
-	if not dxWindow or movable == nil then
-		outputDebugString("dxWindowSetMovable gets wrong parameters (dxWindow,movable)")
-		return
-	end
-	if (getElementType(dxWindow) ~= "dxWindow") then
-		outputDebugString("dxWindowSetMovable gets wrong parameters (dxElement must be dxWindow)")
-		return
-	end
+	-- check arguments.
+	checkargs("dxWindowSetMovable", 1, "dxWindow", dxWindow, "boolean", movable);
+	
 	setElementData(dxWindow,"movable",movable)
 	triggerEvent("onClientDXPropertyChanged",dxElement,"movable",movable)
 end
 
+--[[!
+	Establece la visibilidad del título de una ventana.
+	@param dxElement Es la ventana.
+	@param visible Es un valor booleano indicando si el título de la ventana será visible
+]]
 function dxWindowSetTitleVisible(dxElement,visible)
-	if not dxElement or visible == nil  then
-		outputDebugString("dxWindowSetTitleVisible gets wrong parameters (dxElement,visible)")
-		return
-	end
+	-- check arguments.
+	checkargs("dxWindowSetTitleVisible", 1, "dxWindow", dxElement, "boolean", visible);
+	
 	setElementData(dxElement,"Title:visible",visible)
 	triggerEvent("onClientDXPropertyChanged",dxElement,"titlevisible",visible)
 end
 
+--[[!
+	@return Devuelve la visibilidad del título de una ventana. Devuelve un valor booleano
+	indicando si bién, el título de la ventana es visible o no.
+]]
 function dxWindowGetTitleVisible(dxElement)
-	if not dxElement then
-		outputDebugString("dxWindowGetTitleVisible gets wrong parameters (dxElement)")
-		return
-	end
+	-- check arguments.
+	checkargs("dxWindowGetTitleVisible", 1, "dxWindow", dxElement);
+	
 	return getElementData(dxElement,"Title:visible")
 end
 

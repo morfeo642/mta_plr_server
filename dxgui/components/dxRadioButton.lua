@@ -12,11 +12,36 @@
 ****************************************************************************************************************/
 ]]
 -- // Initializing
-function dxCreateRadioButton(x,y,width,height,text,parent,selected,groupName,color,font,theme)
-	if not x or not y or not width or not height or not text then
-		outputDebugString("dxCreateRadioButton gets wrong parameters (dxElement,x,y,width,height[,parent=dxGetRootPane(),selected=false,groupName=default,color=white,font=default,theme=dxGetDefaultTheme()])")
-		return
-	end
+--[[!
+	Crea un radio button.
+	@param x La coordenada x (relativa o absoluta)
+	@param y La coordenada y (relativa o absoluta)
+	@param width La anchura del radio button
+	@param height La altura del radio button
+	@param text El texto que contendrá el radio button
+	@param relative Indica si la posición y el tamaño del radio button es relativo al pariente o no.
+	@param parent Es el pariente, por defecto dxGetRootPane()
+	@param selected Indica si por defecto el radio button esta seleccionado, por defecto false
+	@param groupName Es el nombre del grupo al que pertence este radio button, por defecto, "default"
+	@param color Es el color del radio button, por defecto white
+	@param font Es la fuente usada para dibujar el texto, por defecto "default"
+	@param theme Es el estilo, que por defecto es dxGetDefaultTheme()
+	
+	@note Solo puede haber unicamente un radio button seleccionado entre todos los radio buttons que tengan un padre
+	común (que pertenezcan a la misma ventana), y que pertenezcan al mismo grupo. La selección de uno implica que el 
+	radio button que estaba previamente seleccionado, se desactive.
+]]
+function dxCreateRadioButton(x,y,width,height,text, relative, parent,selected,groupName,color,font,theme)
+	-- check arguments
+	checkargs("dxCreateRadioButton", 1, "number", x, "number", y, "number", width, "number", height, "string", text, "boolean", relative);
+	-- check optional arguments.
+	checkoptionalargs("dxCreateRadioButton", 8, "boolean", selected, "string", groupName, "number", color, "string", font, {"string", "dxTheme"}, theme);
+	
+	if relative then 
+		local px, py = relativeToAbsolute(x + width, y + height);
+		x, y = relativeToAbsolute(x, y);
+		width, height =  px - x, py - y;
+	end;
 	
 	if not groupName then
 		groupName="default"
@@ -75,52 +100,45 @@ function dxCreateRadioButton(x,y,width,height,text,parent,selected,groupName,col
 end
 
 -- // Functions
+--[[!
+	@return Devuelve el grupo al que pertenece un radio button.
+]]
 function dxRadioButtonGetGroup(dxElement)
-	if not dxElement then
-		outputDebugString("dxRadioButtonGetGroup gets wrong parameters (dxRadioButton)")
-		return
-	end
-	if (getElementType(dxElement)) ~= "dxRadioButton" then
-		outputDebugString("dxRadioButtonGetGroup gets wrong parameters (dxElement must be dxRadioButton)")
-		return false
-	end
+	checkargs("dxRadioButtonGetGroup", 1, "dxRadioButton", dxElement);
+	
 	return getElementData(dxElement,"group")
 end
 
+
+--[[!
+	Establece el grupo al que pertenece un radio button.
+	@param dxElement Es el radio button
+	@param groupName Es el grupo.
+]]
 function dxRadioButtonSetGroup(dxElement,groupName)
-	if not dxElement or not groupName then
-		outputDebugString("dxRadioButtonSetGroup gets wrong parameters (dxRadioButton,groupName)")
-		return
-	end
-	if (getElementType(dxElement)) ~= "dxRadioButton" then
-		outputDebugString("dxRadioButtonSetGroup gets wrong parameters (dxElement must be dxRadioButton)")
-		return false
-	end
+	checkargs("dxRadioButtonSetGroup", 1, "dxRadioButton", dxElement, "string", groupName);
+	
 	setElementData(dxElement,"group",groupName)
 	triggerEvent("onClientDXPropertyChanged",dxElement,"group",group)
 end
 
+--[[!
+	@return Devuelve un valor booleano indicando si el radio
+	button está seleccionado o no.
+]]	
 function dxRadioButtonGetSelected(dxElement)
-	if not dxElement then
-		outputDebugString("dxRadioButtonGetSelected gets wrong parameters (dxRadioButton)")
-		return
-	end
-	if (getElementType(dxElement)) ~= "dxRadioButton" then
-		outputDebugString("dxRadioButtonGetSelected gets wrong parameters (dxElement must be dxRadioButton)")
-		return false
-	end
+	checkargs("dxRadioButtonGetSelected", 1, "dxRadioButton", dxElement);
+	
 	return getElementData(dxElement,"selected")
 end
 
+--[[!
+	Selecciona un radio button.
+	@note El radio button que previamente estaba seleccionado y que pertencía al mismo
+	grupo que al que pertenece este radio button, es deseleccionado (si es que selected es true)
+]]
 function dxRadioButtonSetSelected(dxElement,selected)
-	if not dxElement or selected == nil then
-		outputDebugString("dxRadioButtonSetSelected gets wrong parameters (dxRadioButton)")
-		return
-	end
-	if (getElementType(dxElement)) ~= "dxRadioButton" then
-		outputDebugString("dxRadioButtonSetSelected gets wrong parameters (dxElement must be dxRadioButton)")
-		return
-	end
+	checkargs("dxRadioButtonSetSelected", 1, "dxRadioButton", dxElement, "boolean", selected);
 
 	if selected then
 		for _,element in ipairs(getElementChildren(getElementParent(dxElement))) do

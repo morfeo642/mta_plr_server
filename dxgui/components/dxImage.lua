@@ -12,10 +12,26 @@
 ****************************************************************************************************************/
 ]]
 -- // Initializing
-function dxCreateStaticImage(x,y,width,height,path,rotation,parent)
-	if not x or not y or not width or not height or not path then
-		outputDebugString("dxCreateStaticImage gets wrong parameters (x,y,width,height,path[,rotation=0,parent=dxGetRootPane()])")
-		return
+--[[!
+	Crea una imágen (componente de interfaz de usuario)
+	@param x Es la coordenada x de la posición de la imagen
+	@param y Es la coordenada y de la posición de la imagen
+	@param width Es la anchura de la imágen
+	@param height Es la altura de la imagen
+	@param path Es la ruta del archivo que contiene la imagen a mostrar
+	@param relative Indica si la posición y las dimensiones son relativas al elemento que es padre de la imagen
+	@param parent Es el padre de esta imagen, por defecto es dxGetRootPane()
+	@param rotation Es la rotación de la imágen en grados sexagesimales, por defecto 0.
+]]
+function dxCreateStaticImage(x,y,width,height,path,relative,parent,rotation)
+	-- check arguments
+	checkargs("dxCreateStaticImage", 1, "number", x, "number", y, "number", width, "number", height, "string", path, "boolean", relative);
+	checkoptionalargs("dxCreateStaticImage", 8, "number", rotation);
+	
+	if relative then 
+		local px, py = relativeToAbsolute(x + width, y + height);
+		x, y = relativeToAbsolute(x, y);
+		width, height =  px - x, py - y;
 	end
 	
 	if not parent then
@@ -54,11 +70,28 @@ function dxCreateStaticImage(x,y,width,height,path,rotation,parent)
 	return image
 end
 
-function dxCreateStaticImageSection(resource,x,y,width,height,sectionX,sectionY,sectionWidth,sectionHeight,path,rotation,parent)
-	if not x or not y or not width or not height or not path or not sectionX or not sectionY or not sectionWidth or not sectionHeight then
-		outputDebugString("dxCreateStaticImageSection gets wrong parameters (dxElement,x,y,width,height,sectionX,sectionY,sectionWidth,sectionHeight,path[,rotation=0,parent=dxGetRootPane()])")
-		return
-	end
+--[[!
+	Crea un elemento de interfaz de usuario que muestra únicamente una sección de una
+	imágen.
+	@param x Es la componente x de la posición de la sección.
+	@param y Es la componente y de la posición de la sección
+	@param width Es la anchura que tendrá la sección
+	@param height Es la altura que tendrá la seccion
+	@param sectionX Es la coordenada x donde comienza la sección en la imagen en píxeles
+	@param sectionY Es la coordenada y donde comienza la sección en la imagen en píxeles
+	@param sectionWidth Es la anchura de la sección en la imagen en píxeles.
+	@param sectionHeight Es la altura de la sección en la imagen en píxeles.
+	@param path Es la ruta de la imagen
+	@param relative Es un valor booleano indicando si la posición de la imagen y sus dimensiones deben ser relativas
+	al padre de este componente
+	@param parent Es el padre de este componente, por defecto, dxGetRootPane()
+	@param rotation Es la rotación de la sección de la imagen, por defecto, 0 (en grados sexagesimales)
+]]
+function dxCreateStaticImageSection(x,y,width,height,sectionX,sectionY,sectionWidth,sectionHeight,path, relative, parent, rotation)
+	-- check arguments
+	checkargs("dxCreateStaticImageSection", 1, "number", x, "number", y, "number", width, "number", height, "number", sectionX,
+		"number", sectionY, "number", sectionWidth, "number", sectionHeight, "string", path, "boolean", relative);
+	checkoptionalargs("dxCreateStaticImageSection", 12, "number", rotation);
 	
 	if not parent then
 		parent = dxGetRootPane()
@@ -72,7 +105,7 @@ function dxCreateStaticImageSection(resource,x,y,width,height,sectionX,sectionY,
 	
 	local image = createElement("dxStaticImage")
 	setElementParent(image,parent)
-	setElementData(image,"resource",resource)
+	setElementData(image,"resource",sourceResource)
 	setElementData(image,"x",x)
 	setElementData(image,"y",y)
 	setElementData(image,"width",width)
@@ -91,27 +124,24 @@ function dxCreateStaticImageSection(resource,x,y,width,height,sectionX,sectionY,
 	return image
 end
 -- // Functions
+
+--[[! 
+@return Devuelve la ruta de la imagen asociada.
+]]
 function dxStaticImageGetLoadedImage(dxElement)
-	if not dxElement then
-		outputDebugString("dxStaticImageGetLoadedImage gets wrong parameters.(dxElement)")
-		return
-	end
-	if (getElementType(dxElement)~="dxStaticImage") then
-		outputDebugString("dxStaticImageGetLoadedImage gets wrong parameters.(dxElement must be dxStaticImage)")
-		return
-	end
+	checkargs("dxStaticImageGetLoadedImage", 1, "dxStaticImage", dxElement);
+
 	return getElementData(dxElement,"image")
 end
 
+--[[!
+	Carga una nueva imagen.
+	@param dxElement Es la imagen
+	@param path Es la ruta de la nueva imagen a mostrar.
+]]
 function dxStaticImageLoadImage(dxElement,path)
-	if not dxElement or not path then
-		outputDebugString("dxStaticImageLoadImage gets wrong parameters.(dxElement,path)")
-		return
-	end
-	if (getElementType(dxElement)~="dxStaticImage") then
-		outputDebugString("dxStaticImageLoadImage gets wrong parameters.(dxElement must be dxStaticImage)")
-		return
-	end
+	checkargs("dxStaticImageLoadImage", 1, "dxStaticImage", dxElement, "string", path);
+
 	if not fileExists(path) then
 		return false
 	end
@@ -120,15 +150,14 @@ function dxStaticImageLoadImage(dxElement,path)
 	return true
 end
 
+--[[!
+	@return Devuelve la sección que renderiza la componente 
+	de la imagen. (Una lista de cuatro elementos: x, y, width, height)
+	Si la sección mostrada, es la imágen al completo, se devuelve false.
+]]
 function dxStaticImageGetSection(dxElement)
-	if not dxElement then
-		outputDebugString("dxStaticImageGetSection gets wrong parameters.(dxElement)")
-		return
-	end
-	if (getElementType(dxElement)~="dxStaticImage") then
-		outputDebugString("dxStaticImageGetSection gets wrong parameters.(dxElement must be dxStaticImage)")
-		return
-	end
+	checkargs("dxStaticImageGetSection", 1, "dxStaticImage", dxElement);
+
 	if not (getElementData(dxElement,"Section")) then
 		return false
 	end
@@ -136,15 +165,20 @@ function dxStaticImageGetSection(dxElement)
 		getElementData(dxElement,"Section:width"),getElementData(dxElement,"Section:height")
 end
 
+--[[!
+	Indica que sección de la imagen debe renderizarse.
+	@param dxElement Es la imagen
+	@param sectionX Es la componente x de la posición de la nueva sección
+	@param sectionY Es la componente y de la posición de la nueva sección
+	@param sectionW Es la anchura de la nueva sección en pixeles
+	@param sectionH Es la anchura de la nueva sección en pixeles.
+	@note Si se invoca esta función con la siguiente sintaxis: dxStaticImageSetSection(dxElement), la 
+	sección se establecerá a la imágen al completo.
+]]
 function dxStaticImageSetSection(dxElement,sectionX,sectionY,sectionW,sectionH)
-	if not dxElement then
-		outputDebugString("dxStaticImageSetSection gets wrong parameters.(dxElement,[(sectionX,sectionY,sectionW,sectionH=false)])")
-		return
-	end
-	if (getElementType(dxElement)~="dxStaticImage") then
-		outputDebugString("dxStaticImageSetSection gets wrong parameters.(dxElement must be dxStaticImage)")
-		return
-	end
+	checkargs("dxStaticImageSetSection", 1, "dxStaticImage", dxElement);
+	checkoptionalargs("dxStaticImageSetSection", 2, "number", sectionX, "number", sectionY, "number", sectionW, "number", sectionH);
+
 	if not sectionX then
 		setElementData(dxElement,"Section",false)
 		setElementData(dxElement,"Section:x",false)
@@ -163,27 +197,23 @@ function dxStaticImageSetSection(dxElement,sectionX,sectionY,sectionW,sectionH)
 	return true
 end
 
+--[[!
+	@return Devuelve la rotación de la imagen en grados sexagesimales.
+]]
 function dxStaticImageGetRotation(dxElement)
-	if not dxElement then
-		outputDebugString("dxStaticImageGetRotation gets wrong parameters.(dxElement)")
-		return
-	end
-	if (getElementType(dxElement)~="dxStaticImage") then
-		outputDebugString("dxStaticImageGetRotation gets wrong parameters.(dxElement must be dxStaticImage)")
-		return
-	end
+	checkargs("dxStaticImageGetRotation", 1, "dxStaticImage", dxElement);
+
 	return getElementData(dxElement,"rotation")
 end
 
+--[[!
+	Establece la rotación de la imagen.
+	@param dxElement La imágen
+	@param rot La nueva rotación en grados sexagesimales.
+]]
 function dxStaticImageSetRotation(dxElement,rot)
-	if not dxElement or not rot then
-		outputDebugString("dxStaticImageSetRotation gets wrong parameters.(dxElement,path)")
-		return
-	end
-	if (getElementType(dxElement)~="dxStaticImage") then
-		outputDebugString("dxStaticImageSetRotation gets wrong parameters.(dxElement must be dxStaticImage)")
-		return
-	end
+	checkargs("dxStaticImageSetRotation", 1, "dxStaticImage", dxElement, "number", rot);
+
 	setElementData(dxElement,"rotation",rot)
 	triggerEvent("onClientDXPropertyChanged",dxElement,"rotation",rot)
 end
