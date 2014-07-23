@@ -85,6 +85,9 @@ addEventHandler("onClientRender",getRootElement(),
 					dxSpinnerRender(component,x,y,cpg)
 				elseif (eType == "dxList") then
 					dxListRender(component,x,y,cpg)
+				-- renderizar también edit box !
+				elseif (eType == "dxEdit") then 
+					dxEditRender(component, x, y, cpg);
 				end
 			end
 		end

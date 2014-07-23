@@ -234,3 +234,19 @@ function trimPosAndSize(x, y, w, h, relative, parent)
 	end;
 	return x, y, w, h;
 end;
+
+function getEmbeddedText(text, maxWidth, font, scale) 
+	if text:len() > 0 then 
+		local i = 1;
+		while (i < text:len()) and (dxGetTextWidth(text:sub(1,i), scale, font) <= maxWidth) do 
+			i = i + 1; 
+		end; 
+		if dxGetTextWidth(text:sub(1,i)) > maxWidth then 
+			i = i - 1; 
+		end;
+		if i > 0 then 
+			return text:sub(1,i);
+		end;
+	end;
+	return "";
+end;

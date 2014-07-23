@@ -115,4 +115,14 @@
 	<Image Name="ListBox2NDColor" XPos="0" YPos="0" Width="18" Height="13" Image="images/ListBox/_2ndcolor.png" />
 	<Image Name="ListBoxClickedColor" XPos="0" YPos="0" Width="254" Height="25" Image="images/ListBox/clicked.png" />
 	<Image Name="ListBoxItemArrow" XPos="0" YPos="0" Width="8" Height="10" Image="images/ListBox/arrow.png" />
+	
+	<Image Name="EditBoxBackground" XPos="0" YPos="0" Width="16" Height="16" Image="images/EditBoxBackgroundColor.png" />
+	<Image Name="EditBoxTopLeftCorner" XPos="0" YPos="0" Width="36" Height="36" Image="images/EditBox.png" />
+	<Image Name="EditBoxTopRightCorner" XPos="182" YPos="0" Width="36" Height="36" Image="images/EditBox.png" />
+	<Image Name="EditBoxBottomLeftCorner" XPos="0" YPos="36" Width="36" Height="36" Image="images/EditBox.png" />
+	<Image Name="EditBoxBottomRightCorner" XPos="182" YPos="36" Width="36" Height="36" Image="images/EditBox.png" />
+	<Image Name="EditBoxTopBorder" XPos="36" YPos="0" Width="136" Height="36" Image="images/EditBox.png" />
+	<Image Name="EditBoxLeftBorder" XPos="0" YPos="36" Width="36" Height="1" Image="images/EditBox.png" />
+	<Image Name="EditBoxRightBorder" XPos="182" YPos="36" Width="36" Height="1" Image="images/EditBox.png" />
+	<Image Name="EditBoxBottomBorder" XPos="36" YPos="36" Width="136" Height="36" Image="images/EditBox.png" />
 </Imageset>

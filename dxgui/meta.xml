@@ -23,6 +23,7 @@
 			<script src="components/dxScrollBar.lua" type="client" />
 			<script src="components/dxSpinner.lua" type="client" />
 			<script src="components/dxWindow.lua" type="client" />
+			<script src="components/dxEdit.lua" type="client" />
 		<!-- #Components -->
 	<!-- #Scripts -->
 	<!-- Themes && Files -->
@@ -56,6 +57,8 @@
 		<file src="themes/Orange/images/ListBox/_1stcolor.png" type="client" />
 		<file src="themes/Orange/images/ListBox/clicked.png" type="client" />
 		<file src="themes/Orange/images/ListBox/arrow.png" type="client" />
+		<file src="themes/Orange/images/EditBox.png" />
+		<file src="themes/Orange/images/EditBoxBackgroundColor.png" type="client" />
 		
 		<file src="themes/Subaru/CGUI.png" type="client" />
 		<file src="themes/Subaru/CGUI.is.xml" type="client" />
@@ -192,5 +195,17 @@
 			<export function="dxListSetTitleVisible" type="client" />
 			<export function="dxListGetTitleVisible" type="client" />
 			<export function="dxListRender" type="client" />
+		<!-- EditBox -->
+			<export function="dxCreateEdit" type="client" />
+			<export function="dxEditRender" type="client" />
+			<export function="dxEditGetCaret" type="client" />
+			<export function="dxEditIsReadOnly" type="client" />
+			<export function="dxEditIsMasked" type="client" />
+			<export function="dxEditGetMaxLength" type="client" />
+			<export function="dxEditSetCaret" type="client" />
+			<export function="dxEditSetReadOnly" type="client" />
+			<export function="dxEditSetMasked" type="client" />
+			<export function="dxEditSetMaxLength" type="client" />
+
 	<!-- #Exports -->
 </meta>

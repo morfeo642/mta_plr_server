@@ -379,7 +379,9 @@ function dxWindowComponentRender(element)
 				dxSpinnerRender(component,x,y,cpg)
 			elseif (eType == "dxList") then
 				dxListRender(component,x,y,cpg)
-			end
+			elseif (eType == "dxEdit") then
+				dxEditRender(component,x, y, cpg);
+			end;
 		end
 	end
 end

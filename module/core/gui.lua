@@ -144,3 +144,18 @@ function guiListSetTitleShow(...) return dx:dxListSetTitleShow(...) end
 function guiListGetTitleShow(...) return dx:dxListGetTitleShow(...) end
 function guiListRender(...) return dx:dxListRender(...) end
 
+-- EditBox
+function guiCreateEdit(...) return dx:dxCreateEdit(...); end;
+function guiEditGetPlaceHolder(...) return dx:dxEditGetPlaceHolder(...); end;
+function guiEditGetCaret(...) return dx:dxEditGetCaret(...); end;
+function guiEditIsReadOnly(...) return dx:dxEditIsReadOnly(...); end;
+function guiEditIsMasked(...) return dx:dxEditIsMasked(...); end;
+function guiEditGetMaxLength(...) return dx:dxEditGetMaxLength(...); end;
+function guiEditSetPlaceHolder(...) return dx:dxEditSetPlaceHolder(...); end;
+function guiEditSetCaret(...) return dx:dxEditSetCaret(...); end;
+function guiEditSetReadOnly(...) return dx:dxEditSetReadOnly(...); end;
+function guiEditSetMasked(...) return dx:dxEditSetMasked(...); end;
+function guiEditSetMaxLength(...) return dx:dxEditSetMaxLength(...); end;
+function guiEditRender(...) return dx:dxEditRender(...); end;
+
+
