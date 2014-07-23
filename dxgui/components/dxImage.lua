@@ -28,11 +28,7 @@ function dxCreateStaticImage(x,y,width,height,path,relative,parent,rotation)
 	checkargs("dxCreateStaticImage", 1, "number", x, "number", y, "number", width, "number", height, "string", path, "boolean", relative);
 	checkoptionalargs("dxCreateStaticImage", 8, "number", rotation);
 	
-	if relative then 
-		local px, py = relativeToAbsolute(x + width, y + height);
-		x, y = relativeToAbsolute(x, y);
-		width, height =  px - x, py - y;
-	end
+	x, y, width, height = trimPosAndSize(x, y, width, height, relative, parent);
 	
 	if not parent then
 		parent = dxGetRootPane()

@@ -222,3 +222,15 @@ function checkvalue(valuename, value, ...)
 	assert(value == args[i], valuename .. " must be set to " .. table.concat(args, " or "));
 end;
 
+function trimPosAndSize(x, y, w, h, relative, parent)
+	if relative then 
+		local sx, sy;
+		if not parent then 
+			sx, sy = guiGetScreenSize();
+		else
+			sx, sy = dxGetSize(parent, false);
+		end;
+		return x * sx, y * sy, w * sx, h * sy;
+	end;
+	return x, y, w, h;
+end;

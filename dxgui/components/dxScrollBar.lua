@@ -34,11 +34,7 @@ function dxCreateScrollBar(x,y,width,height, horizontal, relative, parent, progr
 	-- check optional args.
 	checkoptionalargs("dxCreateScrollBar", 8, "number", progress, "number", max_, {"string", "dxTheme"}, theme);
 	
-	if relative then 
-		local px, py = relativeToAbsolute(x + width, y + height);
-		x, y = relativeToAbsolute(x, y);
-		width, height =  px - x, py - y;
-	end;
+	x, y, width, height = trimPosAndSize(x, y, width, height, relative, parent);
 	
 	if not parent then
 		parent = dxGetRootPane()

@@ -28,11 +28,7 @@ function dxCreateWindow(x,y,width,height,title, relative, color,font,theme)
 	-- check optional parameters.
 	checkoptionalargs("dxCreateWindow", 7, "number", color, "string", font, {"string", "dxTheme"}, theme);
 	
-	if relative then 
-		local px, py = relativeToAbsolute(x + width, y + height);
-		x, y = relativeToAbsolute(x, y);
-		width, height =  px - x, py - y;
-	end;
+	x, y, width, height = trimPosAndSize(x, y, width, height, relative, parent);
 	
 	if not color then
 		color = tocolor(255,255,255,255)

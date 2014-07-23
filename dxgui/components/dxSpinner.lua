@@ -33,11 +33,7 @@ function dxCreateSpinner(x,y,width,height, relative, parent,color,defaultPos,min
 	-- check optional arguments.
 	checkoptionalargs("dxCreateSpinner", 7, "number", defaultPos, "number", min_, "number", max_, {"string", "dxTheme"}, theme);
 	
-	if relative then 
-		local px, py = relativeToAbsolute(x + width, y + height);
-		x, y = relativeToAbsolute(x, y);
-		width, height =  px - x, py - y;
-	end;
+	x, y, width, height = trimPosAndSize(x, y, width, height, relative, parent);
 	
 	
 	if not color then

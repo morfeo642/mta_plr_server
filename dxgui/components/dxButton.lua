@@ -31,11 +31,7 @@ function dxCreateButton(x,y,width,height,text,relative, parent,color,font,theme)
 	checkargs("dxCreateButton", 1, "number", x, "number", y, "number", width, "number", height, "string", text, "boolean", relative);
 	checkoptionalargs("dxCreateButton", 8, "number", color, "string", font, {"string", "dxTheme"}, theme);
 	
-	if relative then 
-		local px, py = relativeToAbsolute(x + width, y + height);
-		x, y = relativeToAbsolute(x, y);
-		width, height =  px - x, py - y;
-	end;
+	x, y, width, height = trimPosAndSize(x, y, width, height, relative, parent);
 	
 	if not parent then
 		parent = dxGetRootPane()

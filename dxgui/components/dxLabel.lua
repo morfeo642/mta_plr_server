@@ -33,11 +33,7 @@ function dxCreateLabel(x,y,width,height,text, relative, parent,color,font,scale,
 	checkargs("dxCreateLabel", 1, "number", x, "number", y, "number", width, "number", height, "string", text, "boolean", relative);
 	checkoptionalargs("dxCreateLabel", 8, "number", color, "string", font, "number", scale, "string", alignX, "string", alignY, "boolean", colorCoded);
 	
-	if relative then 
-		local px, py = relativeToAbsolute(x + width, y + height);
-		x, y = relativeToAbsolute(x, y);
-		width, height =  px - x, py - y;
-	end;
+	x, y, width, height = trimPosAndSize(x, y, width, height, relative, parent);
 	
 	if not parent then
 		parent = dxGetRootPane()

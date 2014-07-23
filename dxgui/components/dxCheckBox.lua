@@ -30,11 +30,7 @@ function dxCreateCheckBox(x,y,width,height,text,relative,parent,selected,color,f
 	checkargs("dxCreateCheckBox", 1, "number", x, "number", y, "number", width, "number", height, "string", text, "boolean", relative);
 	checkoptionalargs("dxCreateCheckBox", 9, "boolean", selected, "number", color, "string", font, {"string", "dxTheme"}, theme);
 	
-	if relative then 
-		local px, py = relativeToAbsolute(x + width, y + height);
-		x, y = relativeToAbsolute(x, y);
-		width, height =  px - x, py - y;
-	end
+	x, y, width, height = trimPosAndSize(x, y, width, height, relative, parent);
 	
 	if not selected then
 		selected = false

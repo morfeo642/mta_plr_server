@@ -30,11 +30,7 @@ function dxCreateProgressBar(x,y,width,height, relative, parent,progress,color,m
 	-- check optional arguments.
 	checkoptionalargs("dxCreateProgressBar", 7, "number", progress, "number", color, "number", max_, {"string", "dxTheme"}, theme);
 	
-	if relative then 
-		local px, py = relativeToAbsolute(x + width, y + height);
-		x, y = relativeToAbsolute(x, y);
-		width, height =  px - x, py - y;
-	end;
+	x, y, width, height = trimPosAndSize(x, y, width, height, relative, parent);
 	
 	if not parent then
 		parent = dxGetRootPane()
@@ -135,7 +131,7 @@ end
 ]]
 function dxProgressBarSetProgressPercent(dxElement,progress)
 	checkargs("dxProgressBarSetProgressPercent", 1, "dxProgressBar", dxElement, "number", progress);
-	assert((progress >= 0), and (progress <= 100), "progress percentage must be a non negative value and lower or equal than 100");
+	assert((progress >= 0) and (progress <= 100), "progress percentage must be a non negative value and lower or equal than 100");
 	
 	-- 100 percent
 	-- max x

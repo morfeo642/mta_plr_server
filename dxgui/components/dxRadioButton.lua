@@ -37,11 +37,7 @@ function dxCreateRadioButton(x,y,width,height,text, relative, parent,selected,gr
 	-- check optional arguments.
 	checkoptionalargs("dxCreateRadioButton", 8, "boolean", selected, "string", groupName, "number", color, "string", font, {"string", "dxTheme"}, theme);
 	
-	if relative then 
-		local px, py = relativeToAbsolute(x + width, y + height);
-		x, y = relativeToAbsolute(x, y);
-		width, height =  px - x, py - y;
-	end;
+	x, y, width, height = trimPosAndSize(x, y, width, height, relative, parent);
 	
 	if not groupName then
 		groupName="default"
