@@ -23,6 +23,7 @@ addEvent("onClientDXSpin",false)
 addEvent("onClientDXMove",false)
 addEvent("onClientDXDestroy",false)
 addEvent("onClientDXDestoryAll",false)
+addEvent("onClientDXAccepted",false)
 
 --[[
 	Event: onClientDXMouseEnter
@@ -115,4 +116,12 @@ addEvent("onClientDXDestoryAll",false)
 	Description: Bind an event handler to be fired when the all elements destroy by the dxDestroyElements
 	Source: 
 	Parameters: 
+]]
+
+--[[
+	Event: onClientDXAccepted
+	Trigger For: EditBox
+	Description: This is event is triggered when user press enter key while an edit box is focused (clicked)
+	Source: The edit box
+	Parameters: editBox
 ]]

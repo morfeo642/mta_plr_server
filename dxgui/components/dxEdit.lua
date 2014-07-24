@@ -86,7 +86,15 @@ function dxCreateEdit(x,y,width,height,text,relative,parent,color,font,theme)
 	setElementData(edit,"postGUI",false)
 	setElementData(edit,"ZOrder",getElementData(parent,"ZIndex")+1)
 	setElementData(parent,"ZIndex",getElementData(parent,"ZIndex")+1)
-
+	
+	-- what to do if edit box text change ? 
+	addEventHandler("onClientDXPropertyChanged", edit, 
+		function(dataName, dataValue)
+			if dataName == "text" then 
+				triggerEvent("onClientDXChanged", edit, edit);
+			end;
+		end, false);
+	
 	-- handle clicks on this edit box
 	addEventHandler("onClientDXClick", edit, 
 		function(clickButton, clickState, absoluteX, absoluteY)
@@ -427,7 +435,9 @@ local function onKeyPressed(clickedEditBox, button)
 		end;
 		setElementData(clickedEditBox, "caret", caret);
 		triggerEvent("onClientDXPropertyChanged",clickedEditBox,"caret",caret)
-	end;	
+	elseif button == "enter" then
+		triggerEvent("onClientDXAccepted", clickedEditBox, clickedEditBox);
+	end;
 end
 
 
