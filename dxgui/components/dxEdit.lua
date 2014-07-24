@@ -441,44 +441,45 @@ local function onKeyPressed(clickedEditBox, button)
 end
 
 
+
 	
-local backspaceRepetitionTimer;
-local backspaceRepetitionInitTimer;
+local keyRepetitionTimer;
+local keyRepetitionInitTimer;
 
 addEventHandler("onClientKey", root,
 	function(key, pressed) 
 		if not pressed then 
-			if key == "backspace" then 
-				if isTimer(backspaceRepetitionInitTimer) then 
-					killTimer(backspaceRepetitionInitTimer);
-				elseif isTimer(backspaceRepetitionTimer) then 
-					killTimer(backspaceRepetitionTimer);
+			if (key == "backspace") or (key == "arrow_l") or (key == "arrow_r") then 
+				if isTimer(keyRepetitionInitTimer) then 
+					killTimer(keyRepetitionInitTimer);
+				elseif isTimer(keyRepetitionTimer) then 
+					killTimer(keyRepetitionTimer);
 				end;
 			end;
 		else
 			local clickedEditBox = findClickedEditBox(); 
 			-- check if there is some clicked edit box and non-read-only
 			if (not clickedEditBox) or getElementData(clickedEditBox, "readonly") then return; end;	
-			if key == "backspace" then 
-				onKeyPressed(clickedEditBox, "backspace");
-				if isTimer(backspaceRepetitionInitTimer) then 
-					killTimer(backspaceRepetitionInitTimer);
-				elseif isTimer(backspaceRepetitionTimer) then 
-					killTimer(backspaceRepetitionTimer);
+			if (key == "backspace") or (key == "arrow_l") or (key == "arrow_r") then 
+				onKeyPressed(clickedEditBox, key);
+				if isTimer(keyRepetitionInitTimer) then 
+					killTimer(keyRepetitionInitTimer);
+				elseif isTimer(keyRepetitionTimer) then 
+					killTimer(keyRepetitionTimer);
 				end;
-				backspaceRepetitionInitTimer = setTimer( 
-					function(clickedEditBox) 
+				keyRepetitionInitTimer = setTimer( 
+					function(clickedEditBox, key) 
 						if isElement(clickedEditBox) and getElementData(clickedEditBox, "clicked") then 
-							backspaceRepetitionTimer = setTimer( 
+							keyRepetitionTimer = setTimer( 
 								function(clickedEditBox)
 									if isElement(clickedEditBox) and getElementData(clickedEditBox, "clicked") then 
 										-- backsapce repetition !
-										onKeyPressed(clickedEditBox, "backspace");
+										onKeyPressed(clickedEditBox, key);
 									end;
-								end, 50, 0, clickedEditBox);
+								end, 50, 0, clickedEditBox, key);
 							
 						end;
-					end, 510, 1, clickedEditBox);
+					end, 510, 1, clickedEditBox, key);
 			else
 				onKeyPressed(clickedEditBox, key);
 			end;
