@@ -485,4 +485,3 @@ addEventHandler("onClientKey", root,
 			end;
 		end;
 	end);
-				
