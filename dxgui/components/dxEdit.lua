@@ -355,7 +355,8 @@ end;
 addEventHandler("onClientCharacter", root, 
 	function(character) 
 		local clickedEditBox = findClickedEditBox();
-		if not clickedEditBox then return; end;
+		-- check if there is some edit box clicked and non-read-only
+		if (not clickedEditBox) or getElementData(clickedEditBox, "readonly") then return; end;
 		
 		local x, w = getElementData(clickedEditBox, "x"), getElementData(clickedEditBox, "width");
 		local index = getElementData(clickedEditBox, "index");
@@ -446,7 +447,8 @@ addEventHandler("onClientKey", root,
 			end;
 		else
 			local clickedEditBox = findClickedEditBox(); 
-			if not clickedEditBox then return; end;	
+			-- check if there is some clicked edit box and non-read-only
+			if (not clickedEditBox) or getElementData(clickedEditBox, "readonly") then return; end;	
 			if key == "backspace" then 
 				onKeyPressed(clickedEditBox, "backspace");
 				if isTimer(backspaceRepetitionInitTimer) then 
