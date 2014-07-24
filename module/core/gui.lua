@@ -7,155 +7,152 @@
 	no está en ejecución.
 ]]
 
-local dx = assert(exports.dxgui); -- dxgui debe estar en ejecución.
-
-
 -- Shared. 
 
-function guiCreateRootPane(...) return dx:dxCreateRootPane(...) end
-function guiGetRootPane(...) return dx:dxGetRootPane(...) end
-function guiRefreshThemes(...) return dx:dxRefreshThemes(...) end
-function guiGetTheme(...) return dx:dxGetTheme(...) end
-function guiGetDefaultTheme(...) return dx:dxGetDefaultTheme(...) end
-function guiGetPosition(...) return dx:dxGetPosition(...) end
-function guiGetSize(...) return dx:dxGetSize(...) end
-function guiGetVisible(...) return dx:dxGetVisible(...) end
-function guiGetElementTheme(...) return dx:dxGetElementTheme(...) end
-function guiGetFont(...) return dx:dxGetFont(...) end
-function guiGetColor(...) return dx:dxGetColor(...) end
-function guiGetColorCoded(...) return dx:dxGetColorCoded(...) end
-function guiGetText(...) return dx:dxGetText(...) end
-function guiGetAlpha(...) return dx:dxGetAlpha(...) end
-function guiSetPosition(...) return dx:dxSetPosition(...) end
-function guiSetSize(...) return dx:dxSetSize(...) end
-function guiSetVisible(...) return dx:dxSetVisible(...) end
-function guiSetElementTheme(...) return dx:dxSetElementTheme(...) end
-function guiSetFont(...) return dx:dxSetFont(...) end
-function guiSetColor(...) return dx:dxSetColor(...) end
-function guiSetColorCoded(...) return dx:dxSetColorCoded(...) end
-function guiSetText(...) return dx:dxSetText(...) end
-function guiSetAlpha(...) return dx:dxSetAlpha(...) end
-function guiMove(...) return dx:dxMove(...) end
-function guiRefreshStates(...) return dx:dxRefreshStates(...) end
-function guiRefreshClickStates(...) return dx:dxRefreshClickStates(...) end
+function guiCreateRootPane(...) return exports.dxgui:dxCreateRootPane(...) end
+function guiGetRootPane(...) return exports.dxgui:dxGetRootPane(...) end
+function guiRefreshThemes(...) return exports.dxgui:dxRefreshThemes(...) end
+function guiGetTheme(...) return exports.dxgui:dxGetTheme(...) end
+function guiGetDefaultTheme(...) return exports.dxgui:dxGetDefaultTheme(...) end
+function guiGetPosition(...) return exports.dxgui:dxGetPosition(...) end
+function guiGetSize(...) return exports.dxgui:dxGetSize(...) end
+function guiGetVisible(...) return exports.dxgui:dxGetVisible(...) end
+function guiGetElementTheme(...) return exports.dxgui:dxGetElementTheme(...) end
+function guiGetFont(...) return exports.dxgui:dxGetFont(...) end
+function guiGetColor(...) return exports.dxgui:dxGetColor(...) end
+function guiGetColorCoded(...) return exports.dxgui:dxGetColorCoded(...) end
+function guiGetText(...) return exports.dxgui:dxGetText(...) end
+function guiGetAlpha(...) return exports.dxgui:dxGetAlpha(...) end
+function guiSetPosition(...) return exports.dxgui:dxSetPosition(...) end
+function guiSetSize(...) return exports.dxgui:dxSetSize(...) end
+function guiSetVisible(...) return exports.dxgui:dxSetVisible(...) end
+function guiSetElementTheme(...) return exports.dxgui:dxSetElementTheme(...) end
+function guiSetFont(...) return exports.dxgui:dxSetFont(...) end
+function guiSetColor(...) return exports.dxgui:dxSetColor(...) end
+function guiSetColorCoded(...) return exports.dxgui:dxSetColorCoded(...) end
+function guiSetText(...) return exports.dxgui:dxSetText(...) end
+function guiSetAlpha(...) return exports.dxgui:dxSetAlpha(...) end
+function guiMove(...) return exports.dxgui:dxMove(...) end
+function guiRefreshStates(...) return exports.dxgui:dxRefreshStates(...) end
+function guiRefreshClickStates(...) return exports.dxgui:dxRefreshClickStates(...) end
 function guiAttachToDirectX(...) return dx:guiAttachToDirectX(...) end
-function guiGetAlwaysOnTop(...) return dx:dxGetAlwaysOnTop(...) end
-function guiSetAlwaysOnTop(...) return dx:dxSetAlwaysOnTop(...) end
-function guiGetZOrder(...) return dx:dxGetZOrder(...) end
-function guiSetZOrder(...) return dx:dxSetZOrder(...) end
-function guiBringToFront(...) return dx:dxBringToFront(...) end
-function guiMoveToBack(...) return dx:dxMoveToBack(...) end
-function guiDestroyElement(...) return dx:dxDestroyElement(...) end
-function guiDestroyElements(...) return dx:dxDestroyElements(...) end
+function guiGetAlwaysOnTop(...) return exports.dxgui:dxGetAlwaysOnTop(...) end
+function guiSetAlwaysOnTop(...) return exports.dxgui:dxSetAlwaysOnTop(...) end
+function guiGetZOrder(...) return exports.dxgui:dxGetZOrder(...) end
+function guiSetZOrder(...) return exports.dxgui:dxSetZOrder(...) end
+function guiBringToFront(...) return exports.dxgui:dxBringToFront(...) end
+function guiMoveToBack(...) return exports.dxgui:dxMoveToBack(...) end
+function guiDestroyElement(...) return exports.dxgui:dxDestroyElement(...) end
+function guiDestroyElements(...) return exports.dxgui:dxDestroyElements(...) end
 
 -- Button.
-function guiCreateButton(...) return dx:dxCreateButton(...) end
-function guiButtonRender(...) return dx:dxButtonRender(...) end
+function guiCreateButton(...) return exports.dxgui:dxCreateButton(...) end
+function guiButtonRender(...) return exports.dxgui:dxButtonRender(...) end
 
 -- CheckBox
-function guiCreateCheckBox(...) return dx:dxCreateCheckBox(...) end
-function guiCheckBoxGetSelected(...) return dx:dxCheckBoxGetSelected(...) end
-function guiCheckBoxSetSelected(...) return dx:dxCheckBoxSetSelected(...) end
-function guiCheckBoxRender(...) return dx:dxCheckBoxRender(...) end
+function guiCreateCheckBox(...) return exports.dxgui:dxCreateCheckBox(...) end
+function guiCheckBoxGetSelected(...) return exports.dxgui:dxCheckBoxGetSelected(...) end
+function guiCheckBoxSetSelected(...) return exports.dxgui:dxCheckBoxSetSelected(...) end
+function guiCheckBoxRender(...) return exports.dxgui:dxCheckBoxRender(...) end
 
 -- Label.
-function guiCreateLabel(...) return dx:dxCreateLabel(...) end
-function guiLabelGetScale(...) return dx:dxLabelGetScale(...) end
-function guiLabelGetHorizontalAlign(...) return dx:dxLabelGetHorizontalAlign(...) end
-function guiLabelGetVerticalAlign(...) return dx:dxLabelGetVerticalAlign(...) end
-function guiLabelSetScale(...) return dx:dxLabelSetScale(...) end
-function guiLabelSetHorizontalAlign(...) return dx:dxLabelSetHorizontalAlign(...) end
-function guiLabelSetVerticalAlign(...) return dx:dxLabelSetVerticalAlign(...) end
-function guiLabelRender(...) return dx:dxLabelRender(...) end
+function guiCreateLabel(...) return exports.dxgui:dxCreateLabel(...) end
+function guiLabelGetScale(...) return exports.dxgui:dxLabelGetScale(...) end
+function guiLabelGetHorizontalAlign(...) return exports.dxgui:dxLabelGetHorizontalAlign(...) end
+function guiLabelGetVerticalAlign(...) return exports.dxgui:dxLabelGetVerticalAlign(...) end
+function guiLabelSetScale(...) return exports.dxgui:dxLabelSetScale(...) end
+function guiLabelSetHorizontalAlign(...) return exports.dxgui:dxLabelSetHorizontalAlign(...) end
+function guiLabelSetVerticalAlign(...) return exports.dxgui:dxLabelSetVerticalAlign(...) end
+function guiLabelRender(...) return exports.dxgui:dxLabelRender(...) end
 
 -- ProgressBar
-function guiCreateProgressBar(...) return dx:dxCreateProgressBar(...) end
-function guiProgressBarGetProgress(...) return dx:dxProgressBarGetProgress(...) end
-function guiProgressBarGetProgressPercent(...) return dx:dxProgressBarGetProgressPercent(...) end
-function guiProgressBarGetMaxProgress(...) return dx:dxProgressBarGetMaxProgress(...) end
-function guiProgressBarSetProgress(...) return dx:dxProgressBarSetProgress(...) end
-function guiProgressBarSetProgressPercent(...) return dx:dxProgressBarSetProgressPercent(...) end
-function guiProgressBarSetMaxProgress(...) return dx:dxProgressBarSetMaxProgress(...) end
-function guiProgressBarRender(...) return dx:dxProgressBarRender(...) end
+function guiCreateProgressBar(...) return exports.dxgui:dxCreateProgressBar(...) end
+function guiProgressBarGetProgress(...) return exports.dxgui:dxProgressBarGetProgress(...) end
+function guiProgressBarGetProgressPercent(...) return exports.dxgui:dxProgressBarGetProgressPercent(...) end
+function guiProgressBarGetMaxProgress(...) return exports.dxgui:dxProgressBarGetMaxProgress(...) end
+function guiProgressBarSetProgress(...) return exports.dxgui:dxProgressBarSetProgress(...) end
+function guiProgressBarSetProgressPercent(...) return exports.dxgui:dxProgressBarSetProgressPercent(...) end
+function guiProgressBarSetMaxProgress(...) return exports.dxgui:dxProgressBarSetMaxProgress(...) end
+function guiProgressBarRender(...) return exports.dxgui:dxProgressBarRender(...) end
 
 -- RadioButton
-function guiCreateRadioButton(...) return dx:dxCreateRadioButton(...) end
-function guiRadioButtonGetSelected(...) return dx:dxRadioButtonGetSelected(...) end
-function guiRadioButtonGetGroup(...) return dx:dxRadioButtonGetGroup(...) end
-function guiRadioButtonSetSelected(...) return dx:dxRadioButtonSetSelected(...) end
-function guiRadioButtonSetGroup(...) return dx:dxRadioButtonSetGroup(...) end
-function guiRadioButtonRender(...) return dx:dxRadioButtonRender(...) end
+function guiCreateRadioButton(...) return exports.dxgui:dxCreateRadioButton(...) end
+function guiRadioButtonGetSelected(...) return exports.dxgui:dxRadioButtonGetSelected(...) end
+function guiRadioButtonGetGroup(...) return exports.dxgui:dxRadioButtonGetGroup(...) end
+function guiRadioButtonSetSelected(...) return exports.dxgui:dxRadioButtonSetSelected(...) end
+function guiRadioButtonSetGroup(...) return exports.dxgui:dxRadioButtonSetGroup(...) end
+function guiRadioButtonRender(...) return exports.dxgui:dxRadioButtonRender(...) end
 
 -- Scrollbar.
-function guiCreateScrollBar(...) return dx:dxCreateScrollBar(...) end
-function guiScrollBarGetProgress(...) return dx:dxScrollBarGetProgress(...) end
-function guiScrollBarGetProgressPercent(...) return dx:dxScrollBarGetProgressPercent(...) end
-function guiScrollBarGetMaxProgress(...) return dx:dxScrollBarGetMaxProgress(...) end
-function guiScrollBarSetProgress(...) return dx:dxScrollBarSetProgress(...) end
-function guiScrollBarSetProgressPercent(...) return dx:dxScrollBarSetProgressPercent(...) end
-function guiScrollBarSetMaxProgress(...) return dx:dxScrollBarSetMaxProgress(...) end
-function guiScrollBarRender(...) return dx:dxScrollBarRender(...) end
+function guiCreateScrollBar(...) return exports.dxgui:dxCreateScrollBar(...) end
+function guiScrollBarGetProgress(...) return exports.dxgui:dxScrollBarGetProgress(...) end
+function guiScrollBarGetProgressPercent(...) return exports.dxgui:dxScrollBarGetProgressPercent(...) end
+function guiScrollBarGetMaxProgress(...) return exports.dxgui:dxScrollBarGetMaxProgress(...) end
+function guiScrollBarSetProgress(...) return exports.dxgui:dxScrollBarSetProgress(...) end
+function guiScrollBarSetProgressPercent(...) return exports.dxgui:dxScrollBarSetProgressPercent(...) end
+function guiScrollBarSetMaxProgress(...) return exports.dxgui:dxScrollBarSetMaxProgress(...) end
+function guiScrollBarRender(...) return exports.dxgui:dxScrollBarRender(...) end
 
 -- Spinner.
-function guiCreateSpinner(...) return dx:dxCreateSpinner(...) end
-function guiSpinnerGetPosition(...) return dx:dxSpinnerGetPosition(...) end
-function guiSpinnerGetMin(...) return dx:dxSpinnerGetMin(...) end
-function guiSpinnerGetMin(...) return dx:dxSpinnerGetMin(...) end
-function guiSpinnerSetPosition(...) return dx:dxSpinnerSetPosition(...) end
-function guiSpinnerSetMin(...) return dx:dxSpinnerSetMin(...) end
-function guiSpinnerSetMin(...) return dx:dxSpinnerSetMin(...) end
-function guiSpinnerRender(...) return dx:dxSpinnerRender(...) end
+function guiCreateSpinner(...) return exports.dxgui:dxCreateSpinner(...) end
+function guiSpinnerGetPosition(...) return exports.dxgui:dxSpinnerGetPosition(...) end
+function guiSpinnerGetMin(...) return exports.dxgui:dxSpinnerGetMin(...) end
+function guiSpinnerGetMin(...) return exports.dxgui:dxSpinnerGetMin(...) end
+function guiSpinnerSetPosition(...) return exports.dxgui:dxSpinnerSetPosition(...) end
+function guiSpinnerSetMin(...) return exports.dxgui:dxSpinnerSetMin(...) end
+function guiSpinnerSetMin(...) return exports.dxgui:dxSpinnerSetMin(...) end
+function guiSpinnerRender(...) return exports.dxgui:dxSpinnerRender(...) end
 
 -- Static Image.
-function guiCreateStaticImage(...) return dx:dxCreateStaticImage(...) end
-function guiCreateStaticImageSection(...) return dx:dxCreateStaticImageSection(...) end
-function guiStaticImageGetLoadedImage(...) return dx:dxStaticImageGetLoadedImage(...) end
-function guiStaticImageGetSection(...) return dx:dxStaticImageGetSection(...) end
-function guiStaticImageGetRotation(...) return dx:dxStaticImageGetRotation(...) end
-function guiStaticImageLoadImage(...) return dx:dxStaticImageLoadImage(...) end
-function guiStaticImageSetSection(...) return dx:dxStaticImageSetSection(...) end
-function guiStaticImageSetRotation(...) return dx:dxStaticImageSetRotation(...) end
-function guiStaticImageRender(...) return dx:dxStaticImageRender(...) end
+function guiCreateStaticImage(...) return exports.dxgui:dxCreateStaticImage(...) end
+function guiCreateStaticImageSection(...) return exports.dxgui:dxCreateStaticImageSection(...) end
+function guiStaticImageGetLoadedImage(...) return exports.dxgui:dxStaticImageGetLoadedImage(...) end
+function guiStaticImageGetSection(...) return exports.dxgui:dxStaticImageGetSection(...) end
+function guiStaticImageGetRotation(...) return exports.dxgui:dxStaticImageGetRotation(...) end
+function guiStaticImageLoadImage(...) return exports.dxgui:dxStaticImageLoadImage(...) end
+function guiStaticImageSetSection(...) return exports.dxgui:dxStaticImageSetSection(...) end
+function guiStaticImageSetRotation(...) return exports.dxgui:dxStaticImageSetRotation(...) end
+function guiStaticImageRender(...) return exports.dxgui:dxStaticImageRender(...) end
 
 -- Window
-function guiCreateWindow(...) return dx:dxCreateWindow(...) end
-function guiWindowGetTitlePosition(...) return dx:dxWindowGetTitlePosition(...) end
-function guiWindowGetMovable(...) return dx:dxWindowGetMovable(...) end
-function guiWindowIsMoving(...) return dx:dxWindowIsMoving(...) end
-function guiWindowGetTitleVisible(...) return dx:dxWindowGetTitleVisible(...) end
-function guiWindowSetTitlePosition(...) return dx:dxWindowSetTitlePosition(...) end
-function guiWindowSetMovable(...) return dx:dxWindowSetMovable(...) end
-function guiWindowGetTitleVisible(...) return dx:dxWindowGetTitleVisible(...) end
-function guiWindowGetPostGUI(...) return dx:dxWindowGetPostGUI(...) end
-function guiWindowSetPostGUI(...) return dx:dxWindowSetPostGUI(...) end
-function guiWindowRender(...) return dx:dxWindowRender(...) end
-function guiWindowMoveControl(...) return dx:dxWindowMoveControl(...) end
-function guiWindowComponentRender(...) return dx:dxWindowComponentRender(...) end
+function guiCreateWindow(...) return exports.dxgui:dxCreateWindow(...) end
+function guiWindowGetTitlePosition(...) return exports.dxgui:dxWindowGetTitlePosition(...) end
+function guiWindowGetMovable(...) return exports.dxgui:dxWindowGetMovable(...) end
+function guiWindowIsMoving(...) return exports.dxgui:dxWindowIsMoving(...) end
+function guiWindowGetTitleVisible(...) return exports.dxgui:dxWindowGetTitleVisible(...) end
+function guiWindowSetTitlePosition(...) return exports.dxgui:dxWindowSetTitlePosition(...) end
+function guiWindowSetMovable(...) return exports.dxgui:dxWindowSetMovable(...) end
+function guiWindowGetTitleVisible(...) return exports.dxgui:dxWindowGetTitleVisible(...) end
+function guiWindowGetPostGUI(...) return exports.dxgui:dxWindowGetPostGUI(...) end
+function guiWindowSetPostGUI(...) return exports.dxgui:dxWindowSetPostGUI(...) end
+function guiWindowRender(...) return exports.dxgui:dxWindowRender(...) end
+function guiWindowMoveControl(...) return exports.dxgui:dxWindowMoveControl(...) end
+function guiWindowComponentRender(...) return exports.dxgui:dxWindowComponentRender(...) end
 
 -- ListBox
-function guiCreateList(...) return dx:dxCreateList(...) end
-function guiListClear(...) return dx:dxListClear(...) end
-function guiListGetSelectedItem(...) return dx:dxListGetSelectedItem(...) end
-function guiListSetSelectedItem(...) return dx:dxListSetSelectedItem(...) end
-function guiListGetItemCount(...) return dx:dxListGetItemCount(...) end
-function guiListRemoveRow(...) return dx:dxListRemoveRow(...) end
-function guiListAddRow(...) return dx:dxListAddRow(...) end
-function guiListSetTitleShow(...) return dx:dxListSetTitleShow(...) end
-function guiListGetTitleShow(...) return dx:dxListGetTitleShow(...) end
-function guiListRender(...) return dx:dxListRender(...) end
+function guiCreateList(...) return exports.dxgui:dxCreateList(...) end
+function guiListClear(...) return exports.dxgui:dxListClear(...) end
+function guiListGetSelectedItem(...) return exports.dxgui:dxListGetSelectedItem(...) end
+function guiListSetSelectedItem(...) return exports.dxgui:dxListSetSelectedItem(...) end
+function guiListGetItemCount(...) return exports.dxgui:dxListGetItemCount(...) end
+function guiListRemoveRow(...) return exports.dxgui:dxListRemoveRow(...) end
+function guiListAddRow(...) return exports.dxgui:dxListAddRow(...) end
+function guiListSetTitleShow(...) return exports.dxgui:dxListSetTitleShow(...) end
+function guiListGetTitleShow(...) return exports.dxgui:dxListGetTitleShow(...) end
+function guiListRender(...) return exports.dxgui:dxListRender(...) end
 
 -- EditBox
-function guiCreateEdit(...) return dx:dxCreateEdit(...); end;
-function guiEditGetPlaceHolder(...) return dx:dxEditGetPlaceHolder(...); end;
-function guiEditGetCaret(...) return dx:dxEditGetCaret(...); end;
-function guiEditIsReadOnly(...) return dx:dxEditIsReadOnly(...); end;
-function guiEditIsMasked(...) return dx:dxEditIsMasked(...); end;
-function guiEditGetMaxLength(...) return dx:dxEditGetMaxLength(...); end;
-function guiEditSetPlaceHolder(...) return dx:dxEditSetPlaceHolder(...); end;
-function guiEditSetCaret(...) return dx:dxEditSetCaret(...); end;
-function guiEditSetReadOnly(...) return dx:dxEditSetReadOnly(...); end;
-function guiEditSetMasked(...) return dx:dxEditSetMasked(...); end;
-function guiEditSetMaxLength(...) return dx:dxEditSetMaxLength(...); end;
-function guiEditRender(...) return dx:dxEditRender(...); end;
+function guiCreateEdit(...) return exports.dxgui:dxCreateEdit(...); end;
+function guiEditGetPlaceHolder(...) return exports.dxgui:dxEditGetPlaceHolder(...); end;
+function guiEditGetCaret(...) return exports.dxgui:dxEditGetCaret(...); end;
+function guiEditIsReadOnly(...) return exports.dxgui:dxEditIsReadOnly(...); end;
+function guiEditIsMasked(...) return exports.dxgui:dxEditIsMasked(...); end;
+function guiEditGetMaxLength(...) return exports.dxgui:dxEditGetMaxLength(...); end;
+function guiEditSetPlaceHolder(...) return exports.dxgui:dxEditSetPlaceHolder(...); end;
+function guiEditSetCaret(...) return exports.dxgui:dxEditSetCaret(...); end;
+function guiEditSetReadOnly(...) return exports.dxgui:dxEditSetReadOnly(...); end;
+function guiEditSetMasked(...) return exports.dxgui:dxEditSetMasked(...); end;
+function guiEditSetMaxLength(...) return exports.dxgui:dxEditSetMaxLength(...); end;
+function guiEditRender(...) return exports.dxgui:dxEditRender(...); end;
 
 
