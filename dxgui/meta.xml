@@ -25,6 +25,7 @@
 			<script src="components/dxSpinner.lua" type="client" />
 			<script src="components/dxWindow.lua" type="client" />
 			<script src="components/dxEdit.lua" type="client" />
+			<script src="components/dxDrawBoard.lua" type="client" />
 		<!-- #Components -->
 	<!-- #Scripts -->
 	<!-- Themes && Files -->
@@ -207,6 +208,9 @@
 			<export function="dxEditSetReadOnly" type="client" />
 			<export function="dxEditSetMasked" type="client" />
 			<export function="dxEditSetMaxLength" type="client" />
-
+		<!-- DrawBoard -->
+			<export function="dxCreateDrawBoard" type="client" />
+			<export function="dxDrawBoardGetTargetSize" type="client" />
+			<export function="dxDrawBoardSetTargetSize" type="client" />
 	<!-- #Exports -->
 </meta>

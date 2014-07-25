@@ -237,6 +237,19 @@ function trimPosAndSize(x, y, w, h, relative, parent)
 	return x, y, w, h;
 end;
 
+function trimSize(w, h, relative, parent)
+	if relative then 
+		local sx, sy;
+		if not parent then 
+			sx, sy = guiGetScreenSize();
+		else
+			sx, sy = dxGetSize(parent, false);
+		end;
+		return w * sx, h * sy;
+	end;
+	return w, h;
+end;
+
 function getEmbeddedText(text, maxWidth, font, scale) 
 	if text:len() > 0 then 
 		local i = 1;

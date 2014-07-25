@@ -24,7 +24,7 @@ end
 function dxDestroyElement(dxElement)
 	if (isElement(dxElement)) then
 		triggerEvent("onClientDXDestroy",dxElement)
-		if not (wasEventCanceled()) then
+		if not (wasEventCancelled()) then
 			destroyElement(dxElement)
 			return true;
 		end
@@ -89,7 +89,9 @@ addEventHandler("onClientRender",getRootElement(),
 				-- renderizar también edit box !
 				elseif (eType == "dxEdit") then 
 					dxEditRender(component, x, y, cpg, alphaFactor);
-				end
+				elseif (eType == "dxDrawBoard") then 
+					dxDrawBoardRender(component, x, y, cpg, alphaFactor);
+				end;
 			end
 		end
 	end

@@ -18,7 +18,7 @@
 	@param y Es la posición y absoluta o relativa de la ventana.
 	@param width Es la anchura de la ventana (absoluta o relativa)
 	@param height Es la altura de la ventana (absoluta o relativa)
-	@param color Es el color del título de la ventana. (por defecto es el color blanco)
+	@param color Es el color del título de la ventana. (por defecto es el color RGBA = (255, 255, 255, 220))
 	@param font Es la fuente usada para dibujar el texto del título de la ventana (Opcional) Por defecto es "default".
 	@param theme Es el estilo de la ventana (por defecto es dxGetDefaultTheme()) 
 ]]
@@ -31,7 +31,7 @@ function dxCreateWindow(x,y,width,height,title, relative, color,font,theme)
 	x, y, width, height = trimPosAndSize(x, y, width, height, relative, parent);
 	
 	if not color then
-		color = tocolor(255,255,255,255)
+		color = tocolor(255,255,255,220)
 	end
 	
 	if not font then
@@ -253,6 +253,7 @@ function dxWindowRender(element, alphaFactor)
 	
 	-- apply root pane alpha factor
 	color = multiplyalpha(color, alphaFactor);
+	local alpha = extractalpha(color);
 	
 	if (getElementData(element,"Title:visible")) then
 		local clickedset = ""
@@ -306,7 +307,7 @@ function dxWindowRender(element, alphaFactor)
 		a = a-20
 	end
 	]]
-	local r,g,b,a = fromcolor(color);
+	local r,g,b,a = 255, 255, 255, alpha;
 	a = math.max(0, a - 20);
 
 	local leftw = getElementData(theme,"Frame2Left:Width")
@@ -391,6 +392,8 @@ function dxWindowComponentRender(element, rootPaneAlphaFactor)
 				dxListRender(component,x,y,cpg, alphaFactor)
 			elseif (eType == "dxEdit") then
 				dxEditRender(component,x, y, cpg, alphaFactor);
+			elseif (eType == "dxDrawBoard") then 
+				dxDrawBoardRender(component, x, y, cpg, alphaFactor);
 			end;
 		end
 	end

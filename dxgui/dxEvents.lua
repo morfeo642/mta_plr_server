@@ -24,6 +24,7 @@ addEvent("onClientDXMove",false)
 addEvent("onClientDXDestroy",false)
 addEvent("onClientDXDestoryAll",false)
 addEvent("onClientDXAccepted",false)
+addEvent("onClientDXDrawBoardRender",false)
 
 --[[
 	Event: onClientDXMouseEnter

@@ -155,4 +155,9 @@ function guiEditSetMasked(...) return exports.dxgui:dxEditSetMasked(...); end;
 function guiEditSetMaxLength(...) return exports.dxgui:dxEditSetMaxLength(...); end;
 function guiEditRender(...) return exports.dxgui:dxEditRender(...); end;
 
+-- DrawBoard
+function guiCreateDrawBoard(...) return exports.dxgui:dxCreateDrawBoard(...); end;
+function guiDrawBoardGetTargetSize(...) return exports.dxgui:dxDrawBoardGetTargetSize(...); end;
+function guiDrawBoardSetTargetSize(...) return exports.dxgui:dxDrawBoardSetTargetSize(...); end;
 
+function guiDrawBoardAddHandler(drawBoard, handler) return addEventHandler("onClientDXDrawBoardRender", drawBoard, function(target) dxSetRenderTarget(target,true); handler(dxGetMaterialSize(target)); dxSetRenderTarget(); end);end;
