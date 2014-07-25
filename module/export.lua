@@ -11,6 +11,13 @@
 en formato binario. 
 @note Lanza una excepción si el nombre del módulo no es válido (no es un string o contiene
 caracteres no válidos, o bien si el módulo no existe)
+
+@note Todos los recursos podrán cargar módulos via loadModule que invocarán a esta función para 
+obtener el código binario. Notese que sin el recurso module, los demás recursos no podrán cargar el código.
+El recurso debe añadir a su archivo meta.xml la etiqueta <include resource="module" />, pero aun así, si el recurso
+"module" no está en ejecución. No pueden importarse módulos al ejecutarse el script del servidor en primera instancia, 
+pero se garantiza que después de que se produzca el evento "onResourceStart" de dicho recurso, los módulos podrán comenzarse
+a cargar.
 ]]
 function getModule(moduleName)
 	-- comprobar que se intenta acceder realmente al código de un módulo.
