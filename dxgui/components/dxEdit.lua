@@ -13,6 +13,7 @@
 ]]
 
 local cornerSize = 12;
+local lastClickedEditBox;
 
 -- It won't work.Because It doesn't add to the render. No, now it works! Thanks octoplatypus
 --[[!
@@ -101,13 +102,15 @@ function dxCreateEdit(x,y,width,height,text,relative,parent,color,font,theme)
 		
 			if clickButton ~= "left" then return; end;
 			guiSetInputEnabled(true);
+		
 			local function removeEditBoxInput()
 				-- lose input
-				if not getElementData(edit, "clicked") then 
+				if not getElementData(lastClickedEditBox, "clicked") then 
 					guiSetInputEnabled(false);
 				end;
 				removeEventHandler("onClientClick", root, removeEditBoxInput);
 			end;
+			lastClickedEditBox = source;
 			addEventHandler("onClientClick", root, removeEditBoxInput);
 			
 			local tx, ty = dxGetPosition(source, false);
