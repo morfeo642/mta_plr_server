@@ -1,5 +1,6 @@
 <meta>
 	<info type="script" name="dxGUI" version="1.4.2" author="Skyline.(laserlaser)" />
+	<min_mta_version client="1.3.2" />
 	<!-- Scripts -->
 		<script src="deprecatedFunction.lua" type="server" />
 		

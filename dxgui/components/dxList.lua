@@ -321,26 +321,21 @@ function list__(button, absoluteX, absoluteY, worldX, worldY, worldZ, clickedWor
 end
 
 -- // Render
-function dxListRender(component,cpx,cpy,cpg)
+function dxListRender(component,cpx,cpy,cpg, alphaFactor)
 	if not cpx then cpx = 0 end
 	if not cpy then cpy = 0 end
 	-- // Initializing
 	local cTheme = dxGetElementTheme(component)
 			or dxGetElementTheme(getElementParent(component))
 	
-	local cx,cy = dxGetPosition(component)
-	local cw,ch = dxGetSize(component)
+	local cx,cy = getElementData(component, "x"), getElementData(component, "y");
+	local cw,ch = getElementData(component, "width"), getElementData(component, "height");
 	
-	local color = getElementData(component,"color")
-	local font = dxGetFont(component)
+	local color = multiplyalpha(getElementData(component,"color"), alphaFactor);
+	local alpha = extractalpha(color);
+	local font = getElementData(component, "font");
 	
-	if not font then
-		font = "default"
-	end
-	
-	if not color then
-		color = tocolor(255,255,255,255)
-	end
+
 	local cpxx = cpx+cx
 	local cpyy = cpy+cy
 	local tShow = getElementData(component,"Title:show")
@@ -355,12 +350,12 @@ function dxListRender(component,cpx,cpy,cpg)
 		dxDrawImageSection(cpxx,cpyy,cw,titleHeight,
 			getElementData(cTheme,"ListBoxTitle:X"),getElementData(cTheme,"ListBoxTitle:Y"),
 			getElementData(cTheme,"ListBoxTitle:Width"),getElementData(cTheme,"ListBoxTitle:Height"),
-			getElementData(cTheme,"ListBoxTitle:images"),0,0,0,tocolor(255,255,255), cpg)
+			getElementData(cTheme,"ListBoxTitle:images"),0,0,0,tocolor(255,255,255, alpha), cpg)
 		local funct = dxDrawText
 		if (dxGetColorCoded(component)) then
 			funct = dxDrawColorText
 		end
-		local color_ = getElementData(component,"color")
+		local color_ = color;
 		local font_ = dxGetFont(component)
 		funct(dxGetText(component),cpxx,cpyy,cpxx+cw,cpyy+titleHeight,color_,1,font_,"center","center",true,false,cpg)
 		coh = coh-titleHeight
@@ -370,7 +365,7 @@ function dxListRender(component,cpx,cpy,cpg)
 	dxDrawImageSection(cpxx,cpyyy,cw,coh,
 		getElementData(cTheme,"ListBoxBackground:X"),getElementData(cTheme,"ListBoxBackground:Y"),
 		getElementData(cTheme,"ListBoxBackground:Width"),getElementData(cTheme,"ListBoxBackground:Height"),
-		getElementData(cTheme,"ListBoxBackground:images"),0,0,0,tocolor(255,255,255), cpg)
+		getElementData(cTheme,"ListBoxBackground:images"),0,0,0,tocolor(255,255,255, alpha), cpg)
 	
 	
 	local itemHeight = 23
@@ -412,13 +407,13 @@ function dxListRender(component,cpx,cpy,cpg)
 			dxDrawImageSection(cpxx+1,cpyyy+itemMax,cw-2,itemShow,
 				getElementData(cTheme,back..":X"),getElementData(cTheme,back..":Y"),
 				getElementData(cTheme,back..":Width"),getElementData(cTheme,back..":Height"),
-				getElementData(cTheme,back..":images"),0,0,0,tocolor(255,255,255),cpg)
+				getElementData(cTheme,back..":images"),0,0,0,tocolor(255,255,255, alpha),cpg)
 			local funct = dxDrawText
 			if ( dxGetColorCoded(item) ) then
 				funct = dxDrawColorText
 			end
 			local font__ = getElementData(item,"font")
-			local color__ = getElementData(item,"color")
+			local color__ = color;
 			if not font__ then
 				font__ = "default"
 			end

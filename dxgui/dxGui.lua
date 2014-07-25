@@ -54,6 +54,7 @@ addEventHandler("onClientRender",getRootElement(),
 		table.sort(comps,function(a,b)
 			return (dxGetZOrder(a) < dxGetZOrder(b))
 		end)
+		local alphaFactor = extractalpha(getElementData(dxGetRootPane(), "color")) / 255;
 		for _,component in ipairs(comps) do
 			if dxGetVisible(component) and (dxGetVisible(dxGetRootPane())) then
 				for _,aElements in ipairs(attachedElements) do
@@ -66,28 +67,28 @@ addEventHandler("onClientRender",getRootElement(),
 				local eType = getElementType(component)
 				local x,y,cpg = 0,0,dxGetAlwaysOnTop(component)
 				if ( eType == "dxWindow") then
-					dxWindowRender(component)
+					dxWindowRender(component, alphaFactor)
 				elseif ( eType == "dxButton" ) then
-					dxButtonRender(component,x,y,cpg)
+					dxButtonRender(component,x,y,cpg, alphaFactor)
 				elseif (eType == "dxCheckBox") then
-					dxCheckBoxRender(component,x,y,cpg)
+					dxCheckBoxRender(component,x,y,cpg, alphaFactor)
 				elseif (eType == "dxRadioButton") then
-					dxRadioButtonRender(component,x,y,cpg)
+					dxRadioButtonRender(component,x,y,cpg, alphaFactor)
 				elseif (eType == "dxLabel") then
-					dxLabelRender(component,x,y,cpg)
+					dxLabelRender(component,x,y,cpg, alphaFactor)
 				elseif (eType == "dxStaticImage") then
-					dxStaticImageRender(component,x,y,cpg)
+					dxStaticImageRender(component,x,y,cpg, alphaFactor)
 				elseif (eType == "dxProgressBar") then
-					dxProgressBarRender(component,x,y,cpg)
+					dxProgressBarRender(component,x,y,cpg, alphaFactor)
 				elseif (eType == "dxScrollBar") then
-					dxScrollBarRender(component,x,y,cpg)
+					dxScrollBarRender(component,x,y,cpg, alphaFactor)
 				elseif (eType == "dxSpinner") then
-					dxSpinnerRender(component,x,y,cpg)
+					dxSpinnerRender(component,x,y,cpg, alphaFactor)
 				elseif (eType == "dxList") then
-					dxListRender(component,x,y,cpg)
+					dxListRender(component,x,y,cpg, alphaFactor)
 				-- renderizar también edit box !
 				elseif (eType == "dxEdit") then 
-					dxEditRender(component, x, y, cpg);
+					dxEditRender(component, x, y, cpg, alphaFactor);
 				end
 			end
 		end

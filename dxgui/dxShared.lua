@@ -14,7 +14,9 @@
 -- dxDrawColorText : by Aiboforcen from mtasa.com
 -- Edited: Someone
 -- Skyline's add: clip,wordBreak,postGUI options.And added maxWidth compatible
+-- Modified by Victor Ruiz Gomez (method don´t take care about color´s alpha component)
 function dxDrawColorText(str, ax, ay, bx, by, color, scale, font, alignX, alignY,clip,wordBreak,postGUI)
+	local alpha = extractalpha(color);
 	--local maxWidth = bx-ax
 
 	local strAdded = 0
@@ -48,7 +50,7 @@ function dxDrawColorText(str, ax, ay, bx, by, color, scale, font, alignX, alignY
 	  local s, e, cap, col = str:find(pat, 1)
 	  local last = 1
 		while s do
-		if cap == "" and col then color = tocolor(tonumber("0x"..col:sub(1, 2)), tonumber("0x"..col:sub(3, 4)), tonumber("0x"..col:sub(5, 6)), 255) end
+		if cap == "" and col then color = tocolor(tonumber("0x"..col:sub(1, 2)), tonumber("0x"..col:sub(3, 4)), tonumber("0x"..col:sub(5, 6)), alpha) end
 		if s ~= 1 or cap ~= "" then
 		  local w = dxGetTextWidth(cap, scale, font)
 		 --[[ if (w > maxWidth) then
@@ -71,7 +73,7 @@ function dxDrawColorText(str, ax, ay, bx, by, color, scale, font, alignX, alignY
 			end
 		  dxDrawText(cap, ax, ay, ax + w, by, color, scale, font,"left","top",clip,wordBreak,postGUI)
 		  ax = ax + w
-		  color = tocolor(tonumber("0x"..col:sub(1, 2)), tonumber("0x"..col:sub(3, 4)), tonumber("0x"..col:sub(5, 6)), 255)
+		  color = tocolor(tonumber("0x"..col:sub(1, 2)), tonumber("0x"..col:sub(3, 4)), tonumber("0x"..col:sub(5, 6)), alpha)
 		end
 		last = e + 1
 		s, e, cap, col = str:find(pat, last)
@@ -249,4 +251,17 @@ function getEmbeddedText(text, maxWidth, font, scale)
 		end;
 	end;
 	return "";
+end;
+
+function fromcolor(color)
+	return bitExtract(color, 16,8), bitExtract(color, 8,8), bitExtract(color, 0, 8), bitExtract(color, 24,8);
+end; 
+
+function extractalpha(color)
+	return bitExtract(color, 24, 8);
+end; 
+
+function multiplyalpha(color, factor)
+	local r,g,b,a = fromcolor(color);
+	return tocolor(r,g,b, a * factor);
 end;

@@ -18,6 +18,7 @@ function dxCreateRootPane()
 	setElementData(element,"y",0)
 	setElementData(element,"width",screenX)
 	setElementData(element,"height",screenY)
+	setElementData(element,"color",tocolor(255,255,255,255));
 	setElementData(element,"theme",dxGetDefaultTheme())
 	setElementData(element,"visible",true)
 	setElementData(element,"container",true)

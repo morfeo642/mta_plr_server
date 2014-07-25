@@ -91,7 +91,7 @@ end
 	@return Devuelve el valor del progreso de la barra actualmente.
 ]]
 function dxProgressBarGetProgress(dxElement)
-	checkargs("dxProgressBarGetProgress", "dxProgressBar", dxElement);	
+	checkargs("dxProgressBarGetProgress", 1, "dxProgressBar", dxElement);	
 
 	return getElementData(dxElement,"progress")
 end
@@ -164,26 +164,22 @@ function dxProgressBarSetMaxProgress(dxElement,progress)
 end
 
 -- // Render
-function dxProgressBarRender(component,cpx,cpy,cpg)
+function dxProgressBarRender(component,cpx,cpy,cpg, alphaFactor)
 	if not cpx then cpx = 0 end
 	if not cpy then cpy = 0 end
 	-- // Initializing
 	local cTheme = dxGetElementTheme(component)
 			or dxGetElementTheme(getElementParent(component))
 	
-	local cx,cy = dxGetPosition(component)
-	local cw,ch = dxGetSize(component)
+	local cx,cy = getElementData(component, "x"), getElementData(component, "y");
+	local cw,ch = getElementData(component, "width"), getElementData(component, "height");
 	
 	local color = getElementData(component,"color")
-	local font = dxGetFont(component)
+	local font = getElementData(component, "font");
 	
-	if not font then
-		font = "default"
-	end
+	-- Changes alpha component based on paent´s alpha factor
+	color = multiplyalpha(color, alphaFactor);
 	
-	if not color then
-		color = tocolor(255,255,255,255)
-	end
 	local cpxx = cpx+cx
 	local cpyy = cpy+cy
 	

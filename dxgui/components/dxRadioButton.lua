@@ -159,26 +159,22 @@ addEventHandler("onClientDXClick",getRootElement(),
 	end)
 
 -- // Render
-function dxRadioButtonRender(component,cpx,cpy,cpg)
+function dxRadioButtonRender(component,cpx,cpy,cpg, alphaFactor)
 	if not cpx then cpx = 0 end
 	if not cpy then cpy = 0 end
 	-- // Initializing
 	local cTheme = dxGetElementTheme(component)
 			or dxGetElementTheme(getElementParent(component))
 	
-	local cx,cy = dxGetPosition(component)
-	local cw,ch = dxGetSize(component)
+	local cx,cy = getElementData(component, "x"), getElementData(component, "y");
+	local cw,ch = getElementData(component, "width"), getElementData(component, "height");
 	
 	local color = getElementData(component,"color")
-	local font = dxGetFont(component)
+	local font = getElementData(component, "font");
 	
-	if not font then
-		font = "default"
-	end
+	-- Change alpha component based on parent´s alpha factor
+	color = multiplyalpha(color, alphaFactor);
 	
-	if not color then
-		color = tocolor(255,255,255,255)
-	end
 	local checked = dxRadioButtonGetSelected(component)
 	local imageset  = "RadioButtonNormal"
 	if not checked then

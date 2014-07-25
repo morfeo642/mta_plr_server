@@ -268,10 +268,11 @@ function dxEditSetMaxLength(dxElement,maxlen)
 end
 
 -- render edit box
-function dxEditRender(component, cpx, cpy, cpg)
+function dxEditRender(component, cpx, cpy, cpg, alphaFactor)
 	local x, y = getElementData(component, "x")+cpx, getElementData(component, "y")+cpy;
 	local w, h = getElementData(component, "width"), getElementData(component, "height");
-	local color = getElementData(component, "color");
+	local color = multiplyalpha(getElementData(component, "color"), alphaFactor);
+	local alpha = extractalpha(color);
 	local font = getElementData(component, "font");
 	local masked = getElementData(component, "masked");
 	local editable = not getElementData(component, "readonly");
@@ -287,48 +288,48 @@ function dxEditRender(component, cpx, cpy, cpg)
 	dxDrawImageSection(x, y, cornerSize, cornerSize,
 		getElementData(cTheme,"EditBoxTopLeftCorner:X"),getElementData(cTheme,"EditBoxTopLeftCorner:Y"),
 		getElementData(cTheme,"EditBoxTopLeftCorner:Width"),getElementData(cTheme,"EditBoxTopLeftCorner:Height"),
-		getElementData(cTheme,"EditBoxTopLeftCorner:images"),0,0,0,tocolor(255,255,255), cpg) 
+		getElementData(cTheme,"EditBoxTopLeftCorner:images"),0,0,0,tocolor(255,255,255,alpha), cpg) 
 	-- Draw top right rounded corner.
 	dxDrawImageSection(x+w-cornerSize, y, cornerSize, cornerSize,
 		getElementData(cTheme,"EditBoxTopRightCorner:X"),getElementData(cTheme,"EditBoxTopRightCorner:Y"),
 		getElementData(cTheme,"EditBoxTopRightCorner:Width"),getElementData(cTheme,"EditBoxTopRightCorner:Height"),
-		getElementData(cTheme,"EditBoxTopRightCorner:images"),0,0,0,tocolor(255,255,255), cpg) 	
+		getElementData(cTheme,"EditBoxTopRightCorner:images"),0,0,0,tocolor(255,255,255,alpha), cpg) 	
 	-- Draw bottom left rounded corner
 	dxDrawImageSection(x, y+h-cornerSize, cornerSize, cornerSize,
 		getElementData(cTheme,"EditBoxBottomLeftCorner:X"),getElementData(cTheme,"EditBoxBottomLeftCorner:Y"),
 		getElementData(cTheme,"EditBoxBottomLeftCorner:Width"),getElementData(cTheme,"EditBoxBottomLeftCorner:Height"),
-		getElementData(cTheme,"EditBoxBottomLeftCorner:images"),0,0,0,tocolor(255,255,255), cpg) 	
+		getElementData(cTheme,"EditBoxBottomLeftCorner:images"),0,0,0,tocolor(255,255,255,alpha), cpg) 	
 	-- Draw bottom right rounded corner
 	dxDrawImageSection(x+w-cornerSize, y+h-cornerSize, cornerSize, cornerSize,
 		getElementData(cTheme,"EditBoxBottomRightCorner:X"),getElementData(cTheme,"EditBoxBottomRightCorner:Y"),
 		getElementData(cTheme,"EditBoxBottomRightCorner:Width"),getElementData(cTheme,"EditBoxBottomRightCorner:Height"),
-		getElementData(cTheme,"EditBoxBottomRightCorner:images"),0,0,0,tocolor(255,255,255), cpg) 	
+		getElementData(cTheme,"EditBoxBottomRightCorner:images"),0,0,0,tocolor(255,255,255,alpha), cpg) 	
 	-- Draw background.
 	dxDrawImageSection(x+cornerSize, y+cornerSize, w-2*cornerSize, h-2*cornerSize,
 		getElementData(cTheme,"EditBoxBackground:X"),getElementData(cTheme,"EditBoxBackground:Y"),
 		getElementData(cTheme,"EditBoxBackground:Width"),getElementData(cTheme,"EditBoxBackground:Height"),
-		getElementData(cTheme,"EditBoxBackground:images"),0,0,0,tocolor(255,255,255), cpg) 
+		getElementData(cTheme,"EditBoxBackground:images"),0,0,0,tocolor(255,255,255,alpha), cpg) 
 		
 	-- Draw top border
 	dxDrawImageSection(x+cornerSize, y, w-2*cornerSize, cornerSize,
 		getElementData(cTheme,"EditBoxTopBorder:X"),getElementData(cTheme,"EditBoxTopBorder:Y"),
 		getElementData(cTheme,"EditBoxTopBorder:Width"),getElementData(cTheme,"EditBoxTopBorder:Height"),
-		getElementData(cTheme,"EditBoxTopBorder:images"),0,0,0,tocolor(255,255,255), cpg) 
+		getElementData(cTheme,"EditBoxTopBorder:images"),0,0,0,tocolor(255,255,255,alpha), cpg) 
 	-- Draw left border
 	dxDrawImageSection(x, y+cornerSize, cornerSize, h-2*cornerSize,
 		getElementData(cTheme,"EditBoxLeftBorder:X"),getElementData(cTheme,"EditBoxLeftBorder:Y"),
 		getElementData(cTheme,"EditBoxLeftBorder:Width"),getElementData(cTheme,"EditBoxLeftBorder:Height"),
-		getElementData(cTheme,"EditBoxLeftBorder:images"),0,0,0,tocolor(255,255,255), cpg) 
+		getElementData(cTheme,"EditBoxLeftBorder:images"),0,0,0,tocolor(255,255,255,alpha), cpg) 
 	-- Draw right border.
 	dxDrawImageSection(x+w-cornerSize, y+cornerSize, cornerSize, h-2*cornerSize,
 		getElementData(cTheme,"EditBoxRightBorder:X"),getElementData(cTheme,"EditBoxRightBorder:Y"),
 		getElementData(cTheme,"EditBoxRightBorder:Width"),getElementData(cTheme,"EditBoxRightBorder:Height"),
-		getElementData(cTheme,"EditBoxRightBorder:images"),0,0,0,tocolor(255,255,255), cpg)
+		getElementData(cTheme,"EditBoxRightBorder:images"),0,0,0,tocolor(255,255,255,alpha), cpg)
 	-- Draw bottom border.
 	dxDrawImageSection(x+cornerSize, y+h-cornerSize, w-2*cornerSize, cornerSize,
 		getElementData(cTheme,"EditBoxBottomBorder:X"),getElementData(cTheme,"EditBoxBottomBorder:Y"),
 		getElementData(cTheme,"EditBoxBottomBorder:Width"),getElementData(cTheme,"EditBoxBottomBorder:Height"),
-		getElementData(cTheme,"EditBoxBottomBorder:images"),0,0,0,tocolor(255,255,255), cpg) 
+		getElementData(cTheme,"EditBoxBottomBorder:images"),0,0,0,tocolor(255,255,255,alpha), cpg) 
 	-- Draw the text on the background.
 	if text:len() > 0 then 
 		dxDrawText(text:sub(index), x+cornerSize, y+cornerSize, x+w-cornerSize, y+h-cornerSize, color, 1, font, "left", "center", 

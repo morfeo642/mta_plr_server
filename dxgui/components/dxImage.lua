@@ -215,15 +215,17 @@ function dxStaticImageSetRotation(dxElement,rot)
 end
 
 -- // Render
-function dxStaticImageRender(component,cpx,cpy,cpg)
+function dxStaticImageRender(component,cpx,cpy,cpg, alphaFactor)
 	local path = getElementData(component,"image")
 	local rotation = getElementData(component,"rotation")
-	local cx,cy = dxGetPosition(component)
-	local cw,ch = dxGetSize(component)
+	local cx,cy = getElementData(component, "x"), getElementData(component, "y");
+	local cw,ch = getElementData(component, "width"), getElementData(component, "height");
+	local alpha = 255 * alphaFactor;
+	
 	if (getElementData(component,"Section")) then
 		local sx,sy,sw,sh = getElementData(component,"Section:x"),getElementData(component,"Section:y"),getElementData(component,"Section:width"),getElementData(component,"Section:height")
-		dxDrawImageSection(cpx+cx,cpx+cy,cw,ch,sx,sy,sw,sh,path,rotation,0,0,tocolor(255,255,255),cpg)
+		dxDrawImageSection(cpx+cx,cpx+cy,cw,ch,sx,sy,sw,sh,path,rotation,0,0,tocolor(255,255,255,alpha),cpg)
 	else
-		dxDrawImage(cpx+cx,cpy+cy,cw,ch,path,rotation,0,0,tocolor(255,255,255),cpg)
+		dxDrawImage(cpx+cx,cpy+cy,cw,ch,path,rotation,0,0,tocolor(255,255,255,alpha),cpg)
 	end
 end

@@ -67,6 +67,7 @@ function dxCreateButton(x,y,width,height,text,relative, parent,color,font,theme)
 	setElementData(button,"height",height)
 	setElementData(button,"text",text)
 	setElementData(button,"visible",true)
+	setElementData(button,"color",color)
 	setElementData(button,"colorcoded",false)
 	setElementData(button,"hover",false)
 	setElementData(button,"font",font)
@@ -80,7 +81,7 @@ function dxCreateButton(x,y,width,height,text,relative, parent,color,font,theme)
 end
 
 -- // Functions
-function dxButtonRender(component,cpx,cpy,cpg)
+function dxButtonRender(component,cpx,cpy,cpg, alphaFactor)
 	if not cpx then cpx = 0 end
 	if not cpy then cpy = 0 end
 	-- // Initializing
@@ -93,13 +94,8 @@ function dxButtonRender(component,cpx,cpy,cpg)
 	local color = getElementData(component,"color")
 	local font = dxGetFont(component)
 	
-	if not font then
-		font = "default"
-	end
-	
-	if not color then
-		color = tocolor(255,255,255,255)
-	end
+	-- change alpha color based on parent.
+	color = multiplyalpha(color, alphaFactor);
 	
 	local cpxx = cpx+cx
 	local cpyy = cpy+cy

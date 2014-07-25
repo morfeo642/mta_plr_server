@@ -158,27 +158,23 @@ function dxLabelSetVerticalAlign(dxElement,alignY)
 end
 
 -- // Render
-function dxLabelRender(component,cpx,cpy,cpg)
+function dxLabelRender(component,cpx,cpy,cpg, alphaFactor)
 	if not cpx then cpx = 0 end
 	if not cpy then cpy = 0 end
 	-- // Initializing
 	local cTheme = dxGetElementTheme(component)
 			or dxGetElementTheme(getElementParent(component))
 	
-	local cx,cy = dxGetPosition(component)
-	local cw,ch = dxGetSize(component)
+	local cx,cy = getElementData(component, "x"), getElementData(component, "y");
+	local cw,ch = getElementData(component, "width"), getElementData(component, "height");
 	
 	local color = getElementData(component,"color")
-	local font = dxGetFont(component)
+	local font = getElementData(component, "font");
 	
-	if not font then
-		font = "default"
-	end
-	
-	if not color then
-		color = tocolor(255,255,255,255)
-	end
-	local title,font = dxGetText(component),dxGetFont(component)
+	-- Change alpha component based on parent´s alpha factor
+	color = multiplyalpha(color, alphaFactor);
+		
+	local title = getElementData(component, "text");
 	local tx = cx
 	local th = ch					
 	local textX = cpx+cx

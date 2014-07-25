@@ -241,7 +241,7 @@ function dxWindowMoveControl(element)
 		setElementData(element,"y",y-getElementData(element,"Move:y"))
 	end
 end
-function dxWindowRender(element)
+function dxWindowRender(element, alphaFactor)
 	dxWindowMoveControl(element)
 	
 	-- // Property initializing
@@ -250,6 +250,10 @@ function dxWindowRender(element)
 	local title,color = dxGetText(element),getElementData(element,"color")
 	local theme,font = getElementData(element,"theme"),getElementData(element,"font")
 	local cpg = dxGetAlwaysOnTop(element)
+	
+	-- apply root pane alpha factor
+	color = multiplyalpha(color, alphaFactor);
+	
 	if (getElementData(element,"Title:visible")) then
 		local clickedset = ""
 		if ( getElementData(element,"clicked") ) then clickedset = "Selected" end 
@@ -294,12 +298,16 @@ function dxWindowRender(element)
 		funct(title,titlex+25,titley,titlex+25+w-50,titley+titleHeight,color,1,font,"center","center",true,false,cpg)
 	end
 	-- // Drawing Component Pane
+	--[[ 
 	local hex = tostring(toHex(color))
 	hex = hex:gsub("(..)(......)","%2%1")
 	local r,g,b,a = getColorFromString("#"..hex)
 	if (a > 20) then
 		a = a-20
 	end
+	]]
+	local r,g,b,a = fromcolor(color);
+	a = math.max(0, a - 20);
 
 	local leftw = getElementData(theme,"Frame2Left:Width")
 	local rightw = getElementData(theme,"Frame2Right:Width")
@@ -332,13 +340,15 @@ function dxWindowRender(element)
 			getElementData(theme,"Frame2BottomRight:Width"),getElementData(theme,"Frame2BottomRight:Height"),
 			getElementData(theme,"Frame2BottomRight:images"),0,0,0,tocolor(r,g,b,a),cpg)
 			
-	dxWindowComponentRender(element)
+	dxWindowComponentRender(element, alphaFactor)
 end
 
-function dxWindowComponentRender(element)
+function dxWindowComponentRender(element, rootPaneAlphaFactor)
 	local w,h = dxGetSize(element)
 	local x,y,titlex,titley = dxGetPosition(element)
 	local title,color = dxGetText(element),getElementData(element,"color")
+	color = multiplyalpha(color, rootPaneAlphaFactor);
+	local alphaFactor = extractalpha(color) / 255;
 	local theme,font = getElementData(element,"theme"),getElementData(element,"font")
 	local cpg = dxGetAlwaysOnTop(element)
 	for _,aElements in ipairs(attachedElements) do
@@ -362,25 +372,25 @@ function dxWindowComponentRender(element)
 			local eType = getElementType(component)
 			
 			if ( eType == "dxButton" ) then
-				dxButtonRender(component,x,y,cpg)
+				dxButtonRender(component,x,y,cpg, alphaFactor)
 			elseif (eType == "dxCheckBox") then
-				dxCheckBoxRender(component,x,y,cpg)
+				dxCheckBoxRender(component,x,y,cpg, alphaFactor)
 			elseif (eType == "dxRadioButton") then
-				dxRadioButtonRender(component,x,y,cpg)
+				dxRadioButtonRender(component,x,y,cpg, alphaFactor)
 			elseif (eType == "dxLabel") then
-				dxLabelRender(component,x,y,cpg)
+				dxLabelRender(component,x,y,cpg, alphaFactor)
 			elseif (eType == "dxStaticImage") then
-				dxStaticImageRender(component,x,y,cpg)
+				dxStaticImageRender(component,x,y,cpg, alphaFactor)
 			elseif (eType == "dxProgressBar") then
-				dxProgressBarRender(component,x,y,cpg)
+				dxProgressBarRender(component,x,y,cpg, alphaFactor)
 			elseif (eType == "dxScrollBar") then
-				dxScrollBarRender(component,x,y,cpg)
+				dxScrollBarRender(component,x,y,cpg, alphaFactor)
 			elseif (eType == "dxSpinner") then
-				dxSpinnerRender(component,x,y,cpg)
+				dxSpinnerRender(component,x,y,cpg, alphaFactor)
 			elseif (eType == "dxList") then
-				dxListRender(component,x,y,cpg)
+				dxListRender(component,x,y,cpg, alphaFactor)
 			elseif (eType == "dxEdit") then
-				dxEditRender(component,x, y, cpg);
+				dxEditRender(component,x, y, cpg, alphaFactor);
 			end;
 		end
 	end
