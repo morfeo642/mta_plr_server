@@ -11,6 +11,13 @@
 *
 ****************************************************************************************************************/
 ]]
+--[[!
+	Establece la posición de un componente de interfaz
+	@param dxElement Es un componente de interfaz
+	@param x Es la componente x de la nueva posición del componente
+	@param y Es la componente y de la nueva posición del componente
+	@param relative Es un valor booleano que indica si la nueva posición es relativa al elemento padre del componente
+]]
 function dxSetPosition(dxElement,x,y,relative,setTitle)
 	if not dxElement or not x or not y then
 		outputDebugString("dxSetPosition gets wrong parameters (dxElement,x,y[,relative=false,setTitle=true]")
@@ -49,6 +56,14 @@ function dxSetPosition(dxElement,x,y,relative,setTitle)
 	end
 end
 
+--[[!
+	Establece las dimensiones de un componente de interfaz
+	@param dxElement Es el componente
+	@param width Es la nueva anchura del componente
+	@param height Es la nueva altura del componente
+	@param relative Es un valor booleano indicando si las nuevas dimensiones son relativas al elemento
+	padre del componente.
+]]
 function dxSetSize(dxElement,w,h,relative)
 	if not dxElement or not w or not h then
 		outputDebugString("dxSetSize gets wrong parameters (dxElement,width,height[,relative=false]")
@@ -66,6 +81,11 @@ function dxSetSize(dxElement,w,h,relative)
 	triggerEvent("onClientDXPropertyChanged",dxElement,"size",w,h,relative)
 end
 
+--[[!
+	Establece la visibilidad de un componente de interfaz
+	@param dxElement Es el componente
+	@param visible Es un valor booleano indicando si el componente es visible o no.
+]]
 function dxSetVisible(dxElement,visible)
 	if not dxElement or visible == nil  then
 		outputDebugString("dxSetVisible gets wrong parameters (dxElement,visible)")
@@ -75,6 +95,11 @@ function dxSetVisible(dxElement,visible)
 	triggerEvent("onClientDXPropertyChanged",dxElement,"visible",visible)
 end
 
+--[[!
+	Establece el estilo de un componente de interfaz.
+	@param dxElement Es el componente
+	@param theme Es el nuevo estilo.
+]]
 function dxSetElementTheme(dxElement,theme)
 	if not dxElement or not theme  then
 		outputDebugString("dxSetElementTheme gets wrong parameters (dxElement,theme)")
@@ -84,6 +109,11 @@ function dxSetElementTheme(dxElement,theme)
 	triggerEvent("onClientDXPropertyChanged",dxElement,"theme",theme)
 end
 
+--[[!
+	Establece la fuente de un componente de interfaz
+	@param dxElement Es el componente
+	@param font Es la nueva fuente que usará el componente.
+]]
 function dxSetFont(dxElement,font)
 	if not dxElement or not font  then
 		outputDebugString("dxSetFont gets wrong parameters (dxElement,font)")
@@ -93,6 +123,11 @@ function dxSetFont(dxElement,font)
 	triggerEvent("onClientDXPropertyChanged",dxElement,"font",font)
 end
 
+--[[!
+	Establece el color de un componente de interfaz
+	@param dxElement Es el componente
+	@param color Es el nuevo color del componente
+]]
 function dxSetColor(dxElement,color)
 	if not dxElement or not color  then
 		outputDebugString("dxSetFont gets wrong parameters (dxElement,color)")
@@ -102,6 +137,12 @@ function dxSetColor(dxElement,color)
 	triggerEvent("onClientDXPropertyChanged",dxElement,"color",color)
 end
 
+--[[!
+	Indica si un componente de interfaz usará códigos de colores
+	@param dxElement Es el componente
+	@param colorcoded Es un valor booleano indicando si el componente usará códigos
+	de colores.
+]]
 function dxSetColorCoded(dxElement,colorcoded)
 	if not dxElement or colorcoded == nil  then
 		outputDebugString("dxSetColorCoded gets wrong parameters (dxElement,colorcoded)")
@@ -111,6 +152,11 @@ function dxSetColorCoded(dxElement,colorcoded)
 	triggerEvent("onClientDXPropertyChanged",dxElement,"colorcoded",colorcoded)
 end
 
+--[[!
+	Establece el texto de un componente.
+	@param dxElement Es el componente
+	@param text Es el nuevo texto que tendrá el componente.
+]]	
 function dxSetText(dxElement,text)
 	if not dxElement or not text  then
 		outputDebugString("dxSetText gets wrong parameters (dxElement,text)")
@@ -120,6 +166,11 @@ function dxSetText(dxElement,text)
 	triggerEvent("onClientDXPropertyChanged",dxElement,"text",text)
 end
 
+--[[!
+	Establece la compnente alpha del color de un componente de interfaz
+	@param dxElement El componente
+	@param alpha El nuevo valor del componente alpha de su color.
+]]
 function dxSetAlpha(dxElement,alpha)
 	if not dxElement or not alpha then
 		outputDebugString("dxSetAlpha gets wrong parameters (dxElement,alpha)")
@@ -132,6 +183,10 @@ function dxSetAlpha(dxElement,alpha)
 	triggerEvent("onClientDXPropertyChanged",dxElement,"alpha",alpha)
 end
 
+--[[!
+	Indica si un componente debe dibujarse después de que se dibuje la interfaz de usuario
+	MTA o antes.
+]]
 function dxSetAlwaysOnTop(dxElement,postGUI)
 	if not dxElement or postGUI==nil then
 		outputDebugString("dxSetAlwaysOnTop gets wrong parameters.(dxElement,alwaysOnTop)")
