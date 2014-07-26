@@ -194,7 +194,7 @@ function dxScrollBarRefresh(element)
 	if (getElementData(element,"GiveUp")) then
 		local scroll = dxScrollBarGetScroll(element)
 		if scroll >0 then				
-			dxScrollBarSetScroll(element,scroll-getElementData(element,"period"))
+			dxScrollBarSetScroll(element,math.max(0, scroll-getElementData(element,"period")))
 		end
 	end
 	
@@ -348,7 +348,7 @@ addEventHandler( "onClientKey", getRootElement(),function(button, press)
 			if (getElementData(element,"clicked")) then
 				local scroll = dxScrollBarGetScroll(element)
 				if (scroll > 0) then
-					dxScrollBarSetScroll(element,scroll-getElementData(element,"period"))
+					dxScrollBarSetScroll(element,math.max(0, scroll-getElementData(element,"period")))
 				end
 			end
 		end
