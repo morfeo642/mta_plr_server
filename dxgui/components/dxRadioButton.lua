@@ -35,6 +35,7 @@ function dxCreateRadioButton(x,y,width,height,text, relative, parent,selected,gr
 	-- check arguments
 	checkargs("dxCreateRadioButton", 1, "number", x, "number", y, "number", width, "number", height, "string", text, "boolean", relative);
 	-- check optional arguments.
+	checkoptionalcontainer("dxCreateRadioButton", 7, parent);
 	checkoptionalargs("dxCreateRadioButton", 8, "boolean", selected, "string", groupName, "number", color, "string", font, {"string", "dxTheme"}, theme);
 	
 	x, y, width, height = trimPosAndSize(x, y, width, height, relative, parent);

@@ -28,6 +28,7 @@ function dxCreateProgressBar(x,y,width,height, relative, parent,progress,color,m
 	-- check arguments.
 	checkargs("dxCreateProgressBar", 1, "number", x, "number", y, "number", width, "number", height, "boolean", relative);
 	-- check optional arguments.
+	checkoptionalcontainer("dxCreateProgressBar", 6, parent);
 	checkoptionalargs("dxCreateProgressBar", 7, "number", progress, "number", color, "number", max_, {"string", "dxTheme"}, theme);
 	
 	x, y, width, height = trimPosAndSize(x, y, width, height, relative, parent);

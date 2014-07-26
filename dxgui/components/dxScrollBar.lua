@@ -32,6 +32,7 @@ function dxCreateScrollBar(x,y,width,height, horizontal, relative, parent, progr
 	-- check non optional args.
 	checkargs("dxCreateScrollBar", 1, "number", x, "number", y, "number", width, "number", height, "boolean", horizontal, "boolean", relative);
 	-- check optional args.
+	checkargs("dxCreateScrollBar", 7, parent);
 	checkoptionalargs("dxCreateScrollBar", 8, "number", progress, "number", max_, {"string", "dxTheme"}, theme);
 	
 	x, y, width, height = trimPosAndSize(x, y, width, height, relative, parent);

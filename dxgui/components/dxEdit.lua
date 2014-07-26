@@ -32,6 +32,7 @@ local lastClickedEditBox;
 function dxCreateEdit(x,y,width,height,text,relative,parent,color,font,theme)
 	-- check args
 	checkargs("dxCreateEdit", 1, "number", x, "number", y, "number", width, "number", height, "string", text, "boolean", relative);
+	checkoptionalcontainer("dxCreateEdit", 7, parent);
 	checkoptionalargs("dxCreateEdit", 8, "number", color, "string", font, {"string", "dxTheme"}, theme);
 	
 	x, y, width, height = trimPosAndSize(x, y, width, height, relative, parent);

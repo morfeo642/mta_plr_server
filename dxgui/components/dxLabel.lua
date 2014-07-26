@@ -31,6 +31,7 @@
 function dxCreateLabel(x,y,width,height,text, relative, parent,color,font,scale,alignX,alignY,colorCoded)
 	-- check arguments.
 	checkargs("dxCreateLabel", 1, "number", x, "number", y, "number", width, "number", height, "string", text, "boolean", relative);
+	checkoptionalcontainer("dxCreateLabel", 7, parent);
 	checkoptionalargs("dxCreateLabel", 8, "number", color, "string", font, "number", scale, "string", alignX, "string", alignY, "boolean", colorCoded);
 	
 	x, y, width, height = trimPosAndSize(x, y, width, height, relative, parent);

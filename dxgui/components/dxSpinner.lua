@@ -31,6 +31,7 @@ function dxCreateSpinner(x,y,width,height, relative, parent,color,defaultPos,min
 	-- check arguments.
 	checkargs("dxCreateSpinner", 1, "number",x, "number",y, "number", width, "number", height, "boolean", relative);
 	-- check optional arguments.
+	checkoptionalcontainer("dxCreateSpinner", 6, parent);
 	checkoptionalargs("dxCreateSpinner", 7, "number", defaultPos, "number", min_, "number", max_, {"string", "dxTheme"}, theme);
 	
 	x, y, width, height = trimPosAndSize(x, y, width, height, relative, parent);

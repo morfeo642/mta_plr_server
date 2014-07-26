@@ -167,3 +167,17 @@ function dxGetZOrder(dxElement)
 	local zOrder = getElementData(dxElement,"ZOrder")
 	return zOrder
 end
+
+--[[!
+	@return Devuelve un valor booleano indicando si la variable hace referencia a un
+	componente de interfaz DX.
+]]
+function dxIsElement(var)
+	if not isElement(var) then 
+		return false;
+	end;
+	while getElementParent(var) and (getElementType(var) ~= "dxRootPane") do 
+		var = getElementParent(var);
+	end;
+	return getElementType(var) == "dxRootPane";
+end; 

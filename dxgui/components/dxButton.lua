@@ -29,6 +29,7 @@
 function dxCreateButton(x,y,width,height,text,relative, parent,color,font,theme)
 	-- check arguments.
 	checkargs("dxCreateButton", 1, "number", x, "number", y, "number", width, "number", height, "string", text, "boolean", relative);
+	checkoptionalcontainer("dxCreateButton", 7, parent);
 	checkoptionalargs("dxCreateButton", 8, "number", color, "string", font, {"string", "dxTheme"}, theme);
 	
 	x, y, width, height = trimPosAndSize(x, y, width, height, relative, parent);

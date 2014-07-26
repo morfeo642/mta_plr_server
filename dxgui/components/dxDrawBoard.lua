@@ -30,6 +30,7 @@ function dxCreateDrawBoard(x, y, width, height, relative, parent, targetWidth, t
 	-- check arguments.
 	checkargs("dxCreateDrawBoard", 1, "number", x, "number", y, "number", width, "number", height, "boolean", relative);
 	-- check optional args.
+	checkoptionalcontainer("dxCreateDrawBoard", 6, parent);
 	checkoptionalargs("dxCreateDrawBoard", 7, "number", targetWidth, "number", targetHeight, "number", color);
 	
 	x, y, width, height = trimPosAndSize(x, y, width, height, relative, parent);

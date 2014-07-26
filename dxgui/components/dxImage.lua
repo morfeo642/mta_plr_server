@@ -26,6 +26,7 @@
 function dxCreateStaticImage(x,y,width,height,path,relative,parent,rotation)
 	-- check arguments
 	checkargs("dxCreateStaticImage", 1, "number", x, "number", y, "number", width, "number", height, "string", path, "boolean", relative);
+	checkoptionalcontainer("dxCreateStaticImage", 7, parent);
 	checkoptionalargs("dxCreateStaticImage", 8, "number", rotation);
 	
 	x, y, width, height = trimPosAndSize(x, y, width, height, relative, parent);

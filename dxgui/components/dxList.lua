@@ -28,6 +28,7 @@
 function dxCreateList(x,y,width,height,title,relative,parent,color,font,theme)
 	-- check arguments.
 	checkargs("dxCreateList", 1, "number", x, "number", y, "number", width, "number", height, "string", title, "boolean", relative);
+	checkoptionalcontainer("dxCreateList", 7, parent);
 	checkoptionalargs("dxCreateList", 8, "number", color, "string", font, {"string", "dxTheme"}, theme);
 	
 	x, y, width, height = trimPosAndSize(x, y, width, height, relative, parent);

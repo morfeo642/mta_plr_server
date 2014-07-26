@@ -28,7 +28,8 @@
 ]]
 function dxCreateCheckBox(x,y,width,height,text,relative,parent,selected,color,font,theme)
 	checkargs("dxCreateCheckBox", 1, "number", x, "number", y, "number", width, "number", height, "string", text, "boolean", relative);
-	checkoptionalargs("dxCreateCheckBox", 9, "boolean", selected, "number", color, "string", font, {"string", "dxTheme"}, theme);
+	checkoptionalcontaienr("dxCreateCheckBox", 7, parent);
+	checkoptionalargs("dxCreateCheckBox", 8, "boolean", selected, "number", color, "string", font, {"string", "dxTheme"}, theme);
 	
 	x, y, width, height = trimPosAndSize(x, y, width, height, relative, parent);
 	
