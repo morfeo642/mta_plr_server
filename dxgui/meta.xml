@@ -109,6 +109,7 @@
 			<export function="dxMoveToBack" type="client" />
 			<export function="dxDestroyElement" type="client" />
 			<export function="dxDestroyElements" type="client" />
+			<export function="dxIsElement" type="client" />
 		<!-- Button -->
 			<export function="dxCreateButton" type="client" />
 			<export function="dxButtonRender" type="client" />

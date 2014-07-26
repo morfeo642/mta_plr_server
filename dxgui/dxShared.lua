@@ -193,7 +193,7 @@ function checkargs(funcname, firstarg, ...)
 
 		-- not founded any type that matches the argument's type. ? 
 		assert(valueType == expectedTypes[j], "Argument mismatch in function \"" .. funcname .. "\" at argument " .. 
-			tostring((i+1) / 2 + firstarg - 1) .. ": " .. table.concat(expectedTypes, " or ") .. " expected, but " .. valueType .. " found (" .. tostring(value) .. ")");
+			tostring((i+1) / 2 + firstarg - 1) .. "; " .. table.concat(expectedTypes, " or ") .. " expected, but " .. valueType .. " found (" .. tostring(value) .. ")");
 		
 		i = i + 2;
 	end;
@@ -223,6 +223,30 @@ function checkvalue(valuename, value, ...)
 	end;
 	assert(value == args[i], valuename .. " must be set to " .. table.concat(args, " or "));
 end;
+
+function iscontainer(var)
+	return isElement(var) and (getElementData(var, "container"));
+end; 
+
+function checkcontainer(funcname, argnum, var)
+	assert((type(funcname) == "string") and (type(argnum) == "number") and (argnum > 0));
+	local varType;
+	if isElement(var) then 
+		varType = getElementType(var);
+	else 
+		varType = type(var);
+	end;
+	
+	assert(iscontainer(var), "Argument mismatch in function \"" .. funcname .. "\" at argument " .. 
+			argnum .. "; " .. table.concat({"dxRootPane", "dxWindow"}, " or ") .. " expected, but " .. varType .. " found");
+end;
+
+function checkoptionalcontainer(funcname, argnum, var) 
+	if var ~= nil then 
+		checkcontainer(funcname, argnum, var);
+	end;
+end;
+
 
 function trimPosAndSize(x, y, w, h, relative, parent)
 	if relative then 

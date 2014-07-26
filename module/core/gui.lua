@@ -44,6 +44,7 @@ function guiBringToFront(...) return exports.dxgui:dxBringToFront(...) end
 function guiMoveToBack(...) return exports.dxgui:dxMoveToBack(...) end
 function guiDestroyElement(...) return exports.dxgui:dxDestroyElement(...) end
 function guiDestroyElements(...) return exports.dxgui:dxDestroyElements(...) end
+function guiIsElement(...) return exports.dxgui:dxIsElement(...); end; 
 
 -- Button.
 function guiCreateButton(...) return exports.dxgui:dxCreateButton(...) end
