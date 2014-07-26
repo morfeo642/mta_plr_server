@@ -40,7 +40,6 @@ function dxGetPosition(dxElement,relative)
 	end
 end
 
-]]
 
 --[[!
 	@param dxElement Es el componente
