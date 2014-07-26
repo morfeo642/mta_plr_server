@@ -247,6 +247,18 @@ function checkoptionalcontainer(funcname, argnum, var)
 	end;
 end;
 
+function checkDXElement(funcname, argnum, var)
+	assert((type(funcname) == "string") and (type(argnum) == "number") and (argnum > 0));
+	local varType;
+	if isElement(var) then 
+		varType = getElementType(var); 
+	else
+		varType = type(var);
+	end;
+	assert(dxIsElement(var), "Argument mismatch in function \"" .. funcname .. "\" at argument " .. 
+			argnum .. "; dxElement expected, but " .. varType .. " found");
+end;
+
 
 function trimPosAndSize(x, y, w, h, relative, parent)
 	if relative then 

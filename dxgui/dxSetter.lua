@@ -17,12 +17,13 @@
 	@param x Es la componente x de la nueva posición del componente
 	@param y Es la componente y de la nueva posición del componente
 	@param relative Es un valor booleano que indica si la nueva posición es relativa al elemento padre del componente
+	@param setTitle Es un valor booleano que indica si el título también cambiara de posición.
 ]]
 function dxSetPosition(dxElement,x,y,relative,setTitle)
-	if not dxElement or not x or not y then
-		outputDebugString("dxSetPosition gets wrong parameters (dxElement,x,y[,relative=false,setTitle=true]")
-		return
-	end
+	checkDXElement("dxSetPosition", 1, dxElement);
+	checkargs("dxSetPosition", 2, "number", x, "number", y);
+	checkoptionalargs("dxSetPosition", 4, "boolean", relative, "boolean", setTitle);
+	
 	if relative == nil then
 		relative = false
 	end
@@ -65,10 +66,9 @@ end
 	padre del componente.
 ]]
 function dxSetSize(dxElement,w,h,relative)
-	if not dxElement or not w or not h then
-		outputDebugString("dxSetSize gets wrong parameters (dxElement,width,height[,relative=false]")
-		return
-	end
+	checkDXElement("dxGetSize", 1, dxElement);
+	checkargs("dxGetSize", 2, "number", w, "number", h);
+	checkoptionalargs("dxGetSize", 4, "boolean", relative);
 	
 	local px,py = getElementData(getElementParent(dxElement),"width"),getElementData(getElementParent(dxElement),"height")
 	if relative then
@@ -87,10 +87,9 @@ end
 	@param visible Es un valor booleano indicando si el componente es visible o no.
 ]]
 function dxSetVisible(dxElement,visible)
-	if not dxElement or visible == nil  then
-		outputDebugString("dxSetVisible gets wrong parameters (dxElement,visible)")
-		return
-	end
+	checkDXElement("dxSetVisible", 1, dxElement);
+	checkargs("dxSetVisible", 2, "boolean", visible);
+
 	setElementData(dxElement,"visible",visible)
 	triggerEvent("onClientDXPropertyChanged",dxElement,"visible",visible)
 end
@@ -101,10 +100,9 @@ end
 	@param theme Es el nuevo estilo.
 ]]
 function dxSetElementTheme(dxElement,theme)
-	if not dxElement or not theme  then
-		outputDebugString("dxSetElementTheme gets wrong parameters (dxElement,theme)")
-		return
-	end
+	checkDXElement("dxSetElementTheme", 1, dxElement);
+	checkargs("dxSetElementTheme", 2, "dxTheme", theme);
+
 	setElementData(dxElement,"theme",theme)
 	triggerEvent("onClientDXPropertyChanged",dxElement,"theme",theme)
 end
@@ -115,10 +113,9 @@ end
 	@param font Es la nueva fuente que usará el componente.
 ]]
 function dxSetFont(dxElement,font)
-	if not dxElement or not font  then
-		outputDebugString("dxSetFont gets wrong parameters (dxElement,font)")
-		return
-	end
+	checkDXElement("dxSetFont", 1, dxElement);
+	checkargs("dxSetFont", 2, "string", font);
+
 	setElementData(dxElement,"font",font)
 	triggerEvent("onClientDXPropertyChanged",dxElement,"font",font)
 end
@@ -129,10 +126,9 @@ end
 	@param color Es el nuevo color del componente
 ]]
 function dxSetColor(dxElement,color)
-	if not dxElement or not color  then
-		outputDebugString("dxSetFont gets wrong parameters (dxElement,color)")
-		return
-	end
+	checkDXElement("dxSetColor", 1, dxElement);
+	checkargs("dxSetColor", 2, "number", color);
+	
 	setElementData(dxElement,"color",color)
 	triggerEvent("onClientDXPropertyChanged",dxElement,"color",color)
 end
@@ -144,10 +140,9 @@ end
 	de colores.
 ]]
 function dxSetColorCoded(dxElement,colorcoded)
-	if not dxElement or colorcoded == nil  then
-		outputDebugString("dxSetColorCoded gets wrong parameters (dxElement,colorcoded)")
-		return
-	end
+	checkDXElement("dxSetColorCoded", 1, dxElement);
+	checkargs("dxSetColorCoded", 2, "boolean", colorcoded);
+
 	setElementData(dxElement,"colorcoded",colorcoded)
 	triggerEvent("onClientDXPropertyChanged",dxElement,"colorcoded",colorcoded)
 end
@@ -158,10 +153,9 @@ end
 	@param text Es el nuevo texto que tendrá el componente.
 ]]	
 function dxSetText(dxElement,text)
-	if not dxElement or not text  then
-		outputDebugString("dxSetText gets wrong parameters (dxElement,text)")
-		return
-	end
+	checkDXElement("dxSetText", 1, dxElement);
+	checkargs("dxSetText", 2, "string", text);
+
 	setElementData(dxElement,"text",text)
 	triggerEvent("onClientDXPropertyChanged",dxElement,"text",text)
 end
@@ -172,10 +166,9 @@ end
 	@param alpha El nuevo valor del componente alpha de su color.
 ]]
 function dxSetAlpha(dxElement,alpha)
-	if not dxElement or not alpha then
-		outputDebugString("dxSetAlpha gets wrong parameters (dxElement,alpha)")
-		return
-	end
+	checkDXElement("dxSetAlpha", 1, dxElement);
+	checkargs("dxSetAlpha", 2, "number", alpha);
+
 	local hex = tostring(toHex(getElementData(dxElement,"color")))
 	hex = hex:gsub("(..)(......)","%2%1")
 	local r,g,b,a = getColorFromString("#"..hex)
@@ -188,26 +181,22 @@ end
 	MTA o antes.
 ]]
 function dxSetAlwaysOnTop(dxElement,postGUI)
-	if not dxElement or postGUI==nil then
-		outputDebugString("dxSetAlwaysOnTop gets wrong parameters.(dxElement,alwaysOnTop)")
-		return
-	end
+	checkDXElement("dxSetAlwaysOnTop", 1, dxElement);
+	checkargs("dxSetAlwaysOnTop", 2, "boolean", postGUI);
+
 	setElementData(dxElement,"postGUI",postGUI)
 end
 
 function dxSetZOrder(dxElement,ZOrder)
-	if not dxElement or ZOrder==nil then
-		outputDebugString("dxSetZOrder gets wrong parameters.(dxElement,ZOrder)")
-		return
-	end
+	checkDXElement("dxSetZOrder", 1, dxElement);
+	checkargs("dxSetZOrder", 2, "number", ZOrder);
+
 	setElementData(dxElement,"ZOrder",ZOrder)
 end
 
 function dxBringToFront(dxElement)
-	if not dxElement  then
-		outputDebugString("dxBringToFront gets wrong parameters.(dxElement)")
-		return
-	end
+	checkDXElement("dxBringToFront", 1, dxElement);
+
 	local parentChilds = getElementChildren(getElementParent(dxElement))
 	local bringOne = dxGetZOrder(dxElement)
 	for _,w in ipairs(parentChilds) do
@@ -219,10 +208,8 @@ function dxBringToFront(dxElement)
 end
 
 function dxMoveToBack(dxElement)
-	if not dxElement  then
-		outputDebugString("dxMoveToBack gets wrong parameters.(dxElement)")
-		return
-	end
+	checkDXElement("dxMoveToBack", 1, dxElement);
+
 	local parentChilds = getElementChildren(getElementParent(dxElement))
 	local bringOne = dxGetZOrder(dxElement)
 	local willMove = {}
