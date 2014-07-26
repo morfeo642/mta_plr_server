@@ -12,7 +12,7 @@
 ****************************************************************************************************************/
 ]]
 
-local cornerSize = 6;
+local cornerSize = 8;
 local lastClickedEditBox;
 
 -- It won't work.Because It doesn't add to the render. No, now it works! Thanks octoplatypus

@@ -98,13 +98,25 @@ end
 	Establece el estilo de un componente de interfaz.
 	@param dxElement Es el componente
 	@param theme Es el nuevo estilo.
+	@param propagate Es un valor booleano que indica si también los elementos que son hijos también deben cambiar a este estilo. (Por defecto false)
 ]]
-function dxSetElementTheme(dxElement,theme)
+function dxSetElementTheme(dxElement, theme, propagate)
 	checkDXElement("dxSetElementTheme", 1, dxElement);
-	checkargs("dxSetElementTheme", 2, "dxTheme", theme);
-
+	checkargs("dxSetElementTheme", 2, {"dxTheme", "string"}, theme);
+	checkoptionalargs("dxSetElementTheme", 3, "boolean", propagate);
+	
+	if type(theme) == "string" then 
+		theme = assert(dxGetTheme(theme), "dxSetElementTheme couldn´t find the main theme");
+	end;
+	
 	setElementData(dxElement,"theme",theme)
 	triggerEvent("onClientDXPropertyChanged",dxElement,"theme",theme)
+	
+	if propagate then
+		for _, child in ipairs(getElementChildren(dxElement)) do 
+			dxSetElementTheme(child, theme, true);
+		end;
+	end; 
 end
 
 --[[!
