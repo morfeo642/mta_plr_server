@@ -12,7 +12,7 @@
 ****************************************************************************************************************/
 ]]
 
-local cornerSize = 12;
+local cornerSize = 6;
 local lastClickedEditBox;
 
 -- It won't work.Because It doesn't add to the render. No, now it works! Thanks octoplatypus
@@ -338,9 +338,9 @@ function dxEditRender(component, cpx, cpy, cpg, alphaFactor)
 	end;
 	
 	-- Draw caret
-	local caretHeight = 1.3 * dxGetFontHeight(scale, font);
+	local caretHeight = 1.5 * dxGetFontHeight(1, font);
 	if caretHeight > (2*cornerSize) then caretHeight = 2*cornerSize; end;
-	local space = (h - caretHeight) / 2;
+	local space = (h - caretHeight) / 3;
 
 	if(getElementData(component,"clicked") and (caret ~= -1)) then 
 		local offset = cornerSize; 
