@@ -67,14 +67,6 @@
 		<file src="themes/Orange/images/EditBox.png" />
 		<file src="themes/Orange/images/EditBoxBackgroundColor.png" type="client" />
 		
-		<file src="themes/Subaru/CGUI.png" type="client" />
-		<file src="themes/Subaru/CGUI.is.xml" type="client" />
-		<file src="themes/Subaru/images/spinner.png" type="client" />
-		<file src="themes/Subaru/images/ListBox/Background.png" type="client" />
-		<file src="themes/Subaru/images/ListBox/_2ndcolor.png" type="client" />
-		<file src="themes/Subaru/images/ListBox/_1stcolor.png" type="client" />
-		<file src="themes/Subaru/images/ListBox/clicked.png" type="client" />
-		<file src="themes/Subaru/images/ListBox/arrow.png" type="client" />
 	<!-- #Themes && Files -->
 	
 	<!-- Exports  -->
