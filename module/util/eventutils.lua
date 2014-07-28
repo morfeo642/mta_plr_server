@@ -25,9 +25,24 @@ function addAutoremovableEventHandler(eventName, attachedTo, handlerFunction, ge
 end;	
 
 
-
-
-
-
-
+--[[!
+Crea un manejador que siempre cancela el evento que está manejando mediante el método cancelEvent()
+@param eventName Es el nombre del evento
+@param attachedTo Es el elemento asociado
+@param getPropagated Indica si el evento debe propagarse hacía arriba y abajo del árbol de elementos
+@param priority Es la pioridad de este manejador para se invocado
+@param autoRemovable Si es true, el manejador solo cancelará el evento una vez y luego se eliminará. Si es false,
+el evento se cancela continuamente.
+@param reason Es la razón de porque el evento es cancelado, por defecto ninguna
+]]
+function addCancellerEventHandler(eventName, attachedTo, getPropagated, priority, autoRemovable, reason)
+	local function cancellerEventHandler() 
+		cancelEvent(true, reason);
+	end;
+	if autoRemovable then 
+		addAutoremovableEventHandler(eventName, attachedTo, cancellerEventHandler, getPropagated, priority);
+	else 
+		addEventHandler(eventName, attachedTo, cancellerEventHandler, getPropagated, priority);	
+	end;
+end;
 
