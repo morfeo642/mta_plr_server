@@ -31,5 +31,6 @@
 	
 	<file src="util/math/vec2.lua" />
 	<file src="util/math/vec3.lua" />
+	<file src="util/math/color.lua" />
 </meta>
 
