@@ -12,8 +12,9 @@
 ****************************************************************************************************************/
 ]]
 
-local cornerSize = 8;
+local textOffset = 14;
 local lastClickedEditBox;
+local _getEmbeddedText, _dxGetTextWidth;
 
 -- It won't work.Because It doesn't add to the render. No, now it works! Thanks octoplatypus
 --[[!
@@ -118,7 +119,7 @@ function dxCreateEdit(x,y,width,height,text,relative,parent,color,font,theme)
 			local px, py = dxGetPosition(getElementParent(source), false);
 			local w = getElementData(source, "width");
 			local x, y = absoluteX-px-tx, absoluteY-py-ty;
-			local offset = x - cornerSize;
+			local offset = x - textOffset;
 			
 			-- now, move the cursor of the edit box...
 			local text = getElementData(source, "text");
@@ -131,7 +132,7 @@ function dxCreateEdit(x,y,width,height,text,relative,parent,color,font,theme)
 				else 
 					-- Added 2 units so that user can click between two caracters and the caret would point to the character on
 					-- the right.
-					local leftSideText = getEmbeddedText(text:sub(index), offset+2, font, 1); 
+					local leftSideText = _getEmbeddedText(text:sub(index), offset+2, font, 1, getElementData(source, "masked")); 
 
 					setElementData(source, "caret", leftSideText:len() + 1);
 					triggerEvent("onClientDXPropertyChanged",source,"caret",caret)
@@ -210,7 +211,7 @@ function dxEditSetCaret(dxElement,caret)
 	elseif caret > index then 
 		local newIndex = index;
 	
-		while dxGetTextWidth(text:sub(newIndex, caret), 1, font) >= (w-2*cornerSize) do 
+		while _dxGetTextWidth(text:sub(newIndex, caret), 1, font, getElementData(dxElement, "masked")) >= (w-2*textOffset) do 
 			newIndex = newIndex + 1;
 		end;
 		if newIndex ~= index then 
@@ -282,70 +283,75 @@ function dxEditRender(component, cpx, cpy, cpg, alphaFactor)
 	local text = getElementData(component, "text");
 	local index = getElementData(component, "index");
 
-	w = math.max(w, 2*cornerSize);
-	h = math.max(h, 2*cornerSize);
 	
+	local _cornerSize = getElementData(cTheme, "SButtonTopLeft:Width");
+	
+	w = math.max(w, 2*_cornerSize);
+	h = math.max(h, 2*_cornerSize);
+	
+	dxDrawImageSection(x, y, _cornerSize, _cornerSize, 
+		getElementData(cTheme,"SButtonTopLeft:X"),getElementData(cTheme,"SButtonTopLeft:Y"),
+		getElementData(cTheme,"SButtonTopLeft:Width"),getElementData(cTheme,"SButtonTopLeft:Height"),
+		getElementData(cTheme,"SButtonTopLeft:images"),0,0,0,tocolor(255,255,255,alpha), cpg) 	
+	
+	dxDrawImageSection(x, y+_cornerSize, _cornerSize, h-2*_cornerSize, 
+		getElementData(cTheme,"SButtonLeft:X"),getElementData(cTheme,"SButtonLeft:Y"),
+		getElementData(cTheme,"SButtonLeft:Width"),getElementData(cTheme,"SButtonLeft:Height"),
+		getElementData(cTheme,"SButtonLeft:images"),0,0,0,tocolor(255,255,255,alpha), cpg) 	
+
+	dxDrawImageSection(x, y+h-_cornerSize, _cornerSize, _cornerSize, 
+		getElementData(cTheme,"SButtonBottomLeft:X"),getElementData(cTheme,"SButtonBottomLeft:Y"),
+		getElementData(cTheme,"SButtonBottomLeft:Width"),getElementData(cTheme,"SButtonBottomLeft:Height"),
+		getElementData(cTheme,"SButtonBottomLeft:images"),0,0,0,tocolor(255,255,255,alpha), cpg) 	
+
+	dxDrawImageSection(x+_cornerSize, y+h-_cornerSize, w-2*_cornerSize, _cornerSize, 
+		getElementData(cTheme,"SButtonBottom:X"),getElementData(cTheme,"SButtonBottom:Y"),
+		getElementData(cTheme,"SButtonBottom:Width"),getElementData(cTheme,"SButtonBottom:Height"),
+		getElementData(cTheme,"SButtonBottom:images"),0,0,0,tocolor(255,255,255,alpha), cpg) 	
+
+	dxDrawImageSection(x+_cornerSize, y, w-2*_cornerSize, _cornerSize, 
+		getElementData(cTheme,"SButtonTop:X"),getElementData(cTheme,"SButtonTop:Y"),
+		getElementData(cTheme,"SButtonTop:Width"),getElementData(cTheme,"SButtonTop:Height"),
+		getElementData(cTheme,"SButtonTop:images"),0,0,0,tocolor(255,255,255,alpha), cpg) 
+
+	dxDrawImageSection(x+w-_cornerSize, y, _cornerSize, _cornerSize, 
+		getElementData(cTheme,"SButtonTopRight:X"),getElementData(cTheme,"SButtonTopRight:Y"),
+		getElementData(cTheme,"SButtonTopRight:Width"),getElementData(cTheme,"SButtonTopRight:Height"),
+		getElementData(cTheme,"SButtonTopRight:images"),0,0,0,tocolor(255,255,255,alpha), cpg) 	
+
+	dxDrawImageSection(x+w-_cornerSize, y+h-_cornerSize, _cornerSize, _cornerSize, 
+		getElementData(cTheme,"SButtonBottomRight:X"),getElementData(cTheme,"SButtonBottomRight:Y"),
+		getElementData(cTheme,"SButtonBottomRight:Width"),getElementData(cTheme,"SButtonBottomRight:Height"),
+		getElementData(cTheme,"SButtonBottomRight:images"),0,0,0,tocolor(255,255,255,alpha), cpg) 		
+
+	dxDrawImageSection(x+w-_cornerSize, y+_cornerSize, _cornerSize, h-2*_cornerSize, 
+		getElementData(cTheme,"SButtonRight:X"),getElementData(cTheme,"SButtonRight:Y"),
+		getElementData(cTheme,"SButtonRight:Width"),getElementData(cTheme,"SButtonRight:Height"),
+		getElementData(cTheme,"SButtonRight:images"),0,0,0,tocolor(255,255,255,alpha), cpg) 		
+
+	dxDrawImageSection(x+_cornerSize, y+_cornerSize, w-2*_cornerSize, h-2*_cornerSize, 
+		getElementData(cTheme,"SButtonCenter:X"),getElementData(cTheme,"SButtonCenter:Y"),
+		getElementData(cTheme,"SButtonCenter:Width"),getElementData(cTheme,"SButtonCenter:Height"),
+		getElementData(cTheme,"SButtonCenter:images"),0,0,0,tocolor(255,255,255,alpha), cpg) 			
 	-- Draw top left rounded corner.
-	dxDrawImageSection(x, y, cornerSize, cornerSize,
-		getElementData(cTheme,"EditBoxTopLeftCorner:X"),getElementData(cTheme,"EditBoxTopLeftCorner:Y"),
-		getElementData(cTheme,"EditBoxTopLeftCorner:Width"),getElementData(cTheme,"EditBoxTopLeftCorner:Height"),
-		getElementData(cTheme,"EditBoxTopLeftCorner:images"),0,0,0,tocolor(255,255,255,alpha), cpg) 
-	-- Draw top right rounded corner.
-	dxDrawImageSection(x+w-cornerSize, y, cornerSize, cornerSize,
-		getElementData(cTheme,"EditBoxTopRightCorner:X"),getElementData(cTheme,"EditBoxTopRightCorner:Y"),
-		getElementData(cTheme,"EditBoxTopRightCorner:Width"),getElementData(cTheme,"EditBoxTopRightCorner:Height"),
-		getElementData(cTheme,"EditBoxTopRightCorner:images"),0,0,0,tocolor(255,255,255,alpha), cpg) 	
-	-- Draw bottom left rounded corner
-	dxDrawImageSection(x, y+h-cornerSize, cornerSize, cornerSize,
-		getElementData(cTheme,"EditBoxBottomLeftCorner:X"),getElementData(cTheme,"EditBoxBottomLeftCorner:Y"),
-		getElementData(cTheme,"EditBoxBottomLeftCorner:Width"),getElementData(cTheme,"EditBoxBottomLeftCorner:Height"),
-		getElementData(cTheme,"EditBoxBottomLeftCorner:images"),0,0,0,tocolor(255,255,255,alpha), cpg) 	
-	-- Draw bottom right rounded corner
-	dxDrawImageSection(x+w-cornerSize, y+h-cornerSize, cornerSize, cornerSize,
-		getElementData(cTheme,"EditBoxBottomRightCorner:X"),getElementData(cTheme,"EditBoxBottomRightCorner:Y"),
-		getElementData(cTheme,"EditBoxBottomRightCorner:Width"),getElementData(cTheme,"EditBoxBottomRightCorner:Height"),
-		getElementData(cTheme,"EditBoxBottomRightCorner:images"),0,0,0,tocolor(255,255,255,alpha), cpg) 	
-	-- Draw background.
-	dxDrawImageSection(x+cornerSize, y+cornerSize, w-2*cornerSize, h-2*cornerSize,
-		getElementData(cTheme,"EditBoxBackground:X"),getElementData(cTheme,"EditBoxBackground:Y"),
-		getElementData(cTheme,"EditBoxBackground:Width"),getElementData(cTheme,"EditBoxBackground:Height"),
-		getElementData(cTheme,"EditBoxBackground:images"),0,0,0,tocolor(255,255,255,alpha), cpg) 
-		
-	-- Draw top border
-	dxDrawImageSection(x+cornerSize, y, w-2*cornerSize, cornerSize,
-		getElementData(cTheme,"EditBoxTopBorder:X"),getElementData(cTheme,"EditBoxTopBorder:Y"),
-		getElementData(cTheme,"EditBoxTopBorder:Width"),getElementData(cTheme,"EditBoxTopBorder:Height"),
-		getElementData(cTheme,"EditBoxTopBorder:images"),0,0,0,tocolor(255,255,255,alpha), cpg) 
-	-- Draw left border
-	dxDrawImageSection(x, y+cornerSize, cornerSize, h-2*cornerSize,
-		getElementData(cTheme,"EditBoxLeftBorder:X"),getElementData(cTheme,"EditBoxLeftBorder:Y"),
-		getElementData(cTheme,"EditBoxLeftBorder:Width"),getElementData(cTheme,"EditBoxLeftBorder:Height"),
-		getElementData(cTheme,"EditBoxLeftBorder:images"),0,0,0,tocolor(255,255,255,alpha), cpg) 
-	-- Draw right border.
-	dxDrawImageSection(x+w-cornerSize, y+cornerSize, cornerSize, h-2*cornerSize,
-		getElementData(cTheme,"EditBoxRightBorder:X"),getElementData(cTheme,"EditBoxRightBorder:Y"),
-		getElementData(cTheme,"EditBoxRightBorder:Width"),getElementData(cTheme,"EditBoxRightBorder:Height"),
-		getElementData(cTheme,"EditBoxRightBorder:images"),0,0,0,tocolor(255,255,255,alpha), cpg)
-	-- Draw bottom border.
-	dxDrawImageSection(x+cornerSize, y+h-cornerSize, w-2*cornerSize, cornerSize,
-		getElementData(cTheme,"EditBoxBottomBorder:X"),getElementData(cTheme,"EditBoxBottomBorder:Y"),
-		getElementData(cTheme,"EditBoxBottomBorder:Width"),getElementData(cTheme,"EditBoxBottomBorder:Height"),
-		getElementData(cTheme,"EditBoxBottomBorder:images"),0,0,0,tocolor(255,255,255,alpha), cpg) 
+
 	-- Draw the text on the background.
 	if text:len() > 0 then 
-		dxDrawText(text:sub(index), x+cornerSize, y+cornerSize, x+w-cornerSize, y+h-cornerSize, color, 1, font, "left", "center", 
+		local _text = text; 
+		if masked then _text = string.rep("*", text:len()); end;
+		dxDrawText(_text:sub(index), x+textOffset, y+textOffset, x+w-textOffset, y+h-textOffset, color, 1, font, "left", "center", 
 					true, false, cpg); 
 	end;
 	
 	-- Draw caret
 	local caretHeight = 1.5 * dxGetFontHeight(1, font);
-	if caretHeight > (2*cornerSize) then caretHeight = 2*cornerSize; end;
+	if caretHeight > (2*textOffset) then caretHeight = 2*textOffset; end;
 	local space = (h - caretHeight) / 3;
 
 	if(getElementData(component,"clicked") and (caret ~= -1)) then 
-		local offset = cornerSize; 
+		local offset = textOffset; 
 		if (text:len() > 0) and (caret > 1) then 
-			offset = offset + dxGetTextWidth(text:sub(index, caret - 1), 1,font);
+			offset = offset + _dxGetTextWidth(text:sub(index, caret - 1), 1, font, masked);
 		end;
 		dxDrawLine(x+offset, y+space, x+offset, y+h-space, tocolor(0, 0, 0, 255), 2, cpg);
 	end;
@@ -388,7 +394,7 @@ addEventHandler("onClientCharacter", root,
 		caret = caret + 1;
 		local newIndex = index;
 		
-		while dxGetTextWidth(text:sub(newIndex, caret), 1, font) >= (w-2*cornerSize) do 
+		while _dxGetTextWidth(text:sub(newIndex, caret), 1, font, getElementData(clickedEditBox, "masked")) >= (w-2*textOffset) do 
 			newIndex = newIndex + 1;
 		end;
 		if newIndex ~= index then 
@@ -431,7 +437,7 @@ local function onKeyPressed(clickedEditBox, button)
 		caret = caret + 1;
 		local newIndex = index;
 		
-		while dxGetTextWidth(text:sub(newIndex, caret), 1, font) >= (w-2*cornerSize) do 
+		while _dxGetTextWidth(text:sub(newIndex, caret), 1, font, getElementData(clickedEditBox, "masked")) >= (w-2*textOffset) do 
 			newIndex = newIndex + 1;
 		end;
 		if newIndex ~= index then 
@@ -478,7 +484,7 @@ addEventHandler("onClientKey", root,
 							keyRepetitionTimer = setTimer( 
 								function(clickedEditBox)
 									if isElement(clickedEditBox) and getElementData(clickedEditBox, "clicked") then 
-										-- backsapce repetition !
+										-- backspace repetition !
 										onKeyPressed(clickedEditBox, key);
 									end;
 								end, 50, 0, clickedEditBox, key);
@@ -490,3 +496,21 @@ addEventHandler("onClientKey", root,
 			end;
 		end;
 	end);
+	
+-- auxiliar functions to give support to masked text.
+_getEmbeddedText = 
+	function(text, maxWidth, font, scale, masked)
+		if masked then 
+			return string.rep("*", math.min(text:len(), math.floor(maxWidth / dxGetTextWidth("*", scale, font))));
+		else 
+			return getEmbeddedText(text, maxWidth, font, scale);
+		end;
+	end;
+_dxGetTextWidth =
+	function(text, scale, font, masked)
+		if masked then 
+			return dxGetTextWidth(string.rep("*", text:len()), scale, font);
+		else 
+			return dxGetTextWidth(text, scale, font);
+		end;
+	end;

@@ -40,8 +40,6 @@
 		<file src="themes/Lighter Black/images/ListBox/_1stcolor.png" type="client" />
 		<file src="themes/Lighter Black/images/ListBox/clicked.png" type="client" />
 		<file src="themes/Lighter Black/images/ListBox/arrow.png" type="client" />
-		<file src="themes/Lighter Black/images/EditBox.png" type="client" />
-		<file src="themes/Lighter Black/images/EditBoxBackgroundColor.png" type="client" />
 
 		
 		<file src="themes/Lighter Blue/CGUI.png" type="client" />
@@ -52,8 +50,6 @@
 		<file src="themes/Lighter Blue/images/ListBox/_1stcolor.png" type="client" />
 		<file src="themes/Lighter Blue/images/ListBox/clicked.png" type="client" />
 		<file src="themes/Lighter Blue/images/ListBox/arrow.png" type="client" />
-		<file src="themes/Lighter Blue/images/EditBox.png" type="client" />
-		<file src="themes/Lighter Blue/images/EditBoxBackgroundColor.png" type="client" />
 
 		
 		<file src="themes/Orange/CGUI.png" type="client" />
@@ -64,8 +60,6 @@
 		<file src="themes/Orange/images/ListBox/_1stcolor.png" type="client" />
 		<file src="themes/Orange/images/ListBox/clicked.png" type="client" />
 		<file src="themes/Orange/images/ListBox/arrow.png" type="client" />
-		<file src="themes/Orange/images/EditBox.png" />
-		<file src="themes/Orange/images/EditBoxBackgroundColor.png" type="client" />
 		
 	<!-- #Themes && Files -->
 	
