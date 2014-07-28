@@ -346,7 +346,7 @@ function dxEditRender(component, cpx, cpy, cpg, alphaFactor)
 	-- Draw caret
 	local caretHeight = 1.5 * dxGetFontHeight(1, font);
 	if caretHeight > (2*textOffset) then caretHeight = 2*textOffset; end;
-	local space = (h - caretHeight) / 3;
+	local space = (h - caretHeight) / 2;
 
 	if(getElementData(component,"clicked") and (caret ~= -1)) then 
 		local offset = textOffset; 
