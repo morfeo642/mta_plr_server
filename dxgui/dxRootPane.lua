@@ -38,5 +38,4 @@ addEventHandler("onClientResourceStart",getResourceRootElement(getThisResource()
 		if resource == getThisResource() then
 			dxCreateRootPane()
 		end
-	end
-) 
+	end, false, "normal-1") 

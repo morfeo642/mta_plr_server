@@ -13,6 +13,7 @@
 		<script src="dxSetter.lua" type="client" />
 		<script src="dxAnimation.lua" type="client" />
 		<script src="dxStates.lua" type="client" />
+		<script src="dxCursor.lua" type="client" />
 		<!-- Components -->
 			<script src="components/dxButton.lua" type="client" />
 			<script src="components/dxCheckBox.lua" type="client" />
