@@ -314,3 +314,15 @@ function multiplyalpha(color, factor)
 	local r,g,b,a = fromcolor(color);
 	return tocolor(r,g,b, a * factor);
 end;
+
+function isAnyWindowBeingMoved()
+	local windows = getElementsByType("dxWindow");
+	if #windows > 0 then 
+		local i = 1; 
+		while (i < #windows) and (not getElementData(windows[i], "isMoving")) do 
+			i = i + 1;
+		end;
+		return getElementData(windows[i], "isMoving");
+	end;
+	return false;
+end; 

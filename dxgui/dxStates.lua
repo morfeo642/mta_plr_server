@@ -13,6 +13,7 @@
 ]]
 -- // Functions
 function dxRefreshStates(container)
+	if isAnyWindowBeingMoved() then return; end;
 	if not container then
 		container = dxGetRootPane()
 	end

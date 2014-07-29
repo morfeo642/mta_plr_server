@@ -229,7 +229,7 @@ addEventHandler("onClientClick",getRootElement(),
 				setElementData(wnd,"Move:y",false)
 			end
 		end
-	end)
+	end, true, "normal+1")
 
 -- // Render Functions
 function dxWindowMoveControl(element)
