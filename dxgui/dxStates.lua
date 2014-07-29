@@ -42,10 +42,15 @@ function dxRefreshStates(container)
 					setElementData(element,"pushBefore",getElementData(element,"push"))
 					setElementData(element,"hoverBefore",getElementData(element,"hover"))
 					setElementData(element,"hover",false)
+
 					setElementData(element,"push",false)
 					if ( intersect(x,y,x+width,y+height,absoluteX,absoluteY) ) then
 						table.insert(elementFor,element)
-					end
+					else 
+						if getElementData(element, "hoverBefore") then 
+							triggerEvent("onClientDXMouseLeave", element, absoluteX, absoluteY);
+						end;
+					end;
 					if (getElementData(element,"container")) then
 						local comp = dxRefreshStates(element)
 						for _,w in ipairs(comp) do
@@ -104,6 +109,7 @@ function dxRefreshStates(container)
 			local element = elementFor[i]
 			local hover = getElementData(element,"hoverBefore")
 			local push = getElementData(element,"pushBefore")
+
 			if (getKeyState("mouse1")) and getElementData(element,"clicked") then
 				setElementData(element,"push",true)
 				setElementData(element,"hover",true)
@@ -115,7 +121,6 @@ function dxRefreshStates(container)
 			if (not hover) and (hover1) then
 				triggerEvent("onClientDXMouseEnter",element,absoluteX,absoluteY)
 			end
-			
 			if hover and (not hover1) then
 				triggerEvent("onClientDXMouseLeave",element,absoluteX,absoluteY)
 			end
@@ -244,3 +249,4 @@ addEventHandler("onClientDoubleClick",getRootElement(),
 	function(button, absoluteX, absoluteY, worldX, worldY, worldZ, clickedWorld)
 		dxRefreshClickStates(dxGetRootPane(),button,false,absoluteX,absoluteY,true)
 	end)
+	
