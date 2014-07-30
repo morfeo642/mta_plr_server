@@ -27,15 +27,17 @@ addEventHandler("onClientResourceStart", resourceRoot,
 		
 		addEventHandler("onClientElementDestroy", dxGetRootPane(),
 			function() 
-				local cursor = getElementData(dxGetRootPane(), "cursor");
-				local backgroundComponent = getElementData(cursor, "backgroundComponent");
-				local aux = backgroundComponent;
-				while (getElementType(getElementParent(aux)) ~= "dxRootPane") and (aux ~= source) do 
-					aux = getElementParent(aux);
+				if getElementType(source) ~= "dxRootPane" then 
+					local cursor = getElementData(dxGetRootPane(), "cursor");
+					local backgroundComponent = getElementData(cursor, "backgroundComponent");
+					local aux = backgroundComponent;
+					while (getElementType(getElementParent(aux)) ~= "dxRootPane") and (aux ~= source) do 
+						aux = getElementParent(aux);
+					end;		
+					if aux == source then 
+						setElementData(cursor, "backgroundComponent", getElementParent(source));
+					end;
 				end;		
-				if (aux == source) and (getElementType(source) ~= "dxRootPane") then 
-					setElementData(cursor, "backgroundComponent", getElementParent(source));
-				end; 
 			end)
 	end, false, "normal-1");
 
