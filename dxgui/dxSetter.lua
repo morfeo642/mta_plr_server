@@ -184,7 +184,7 @@ function dxSetAlpha(dxElement,alpha)
 	local hex = tostring(toHex(getElementData(dxElement,"color")))
 	hex = hex:gsub("(..)(......)","%2%1")
 	local r,g,b,a = getColorFromString("#"..hex)
-	setElementData(dxElement,"color",tocolor(r,g,b,alpha))
+	setElementData(dxElement,"color",tocolor(r,g,b,alpha*255))
 	triggerEvent("onClientDXPropertyChanged",dxElement,"alpha",alpha)
 end
 

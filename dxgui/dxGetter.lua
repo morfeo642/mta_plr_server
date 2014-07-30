@@ -126,7 +126,7 @@ function dxGetAlpha(dxElement)
 	local hex = tostring(toHex(getElementData(dxElement,"color")))
 	hex = hex:gsub("(..)(......)","%2%1")
 	local r,g,b,a = getColorFromString("#"..hex)
-	return a
+	return a*255;
 end
 
 --[[!
