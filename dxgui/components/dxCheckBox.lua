@@ -19,23 +19,19 @@
 	@param width Es la anchura del checkbox
 	@param height Es la altura del checkbox
 	@param text Es el texto que contendrá el checkbox
+	@param selected Es un valor booleano indicando si el checkbox esta marcado inicialmente.
 	@param relative Indica si la posición y las dimensiones son relativas al elemento padre
 	@param Es el elemento padre, por defecto, dxGetRootPane()
-	@param selected Es un valor booleano indicando si el checkbox esta marcado inicialmente.
 	@param color Es el color, por defecto, white
 	@param font Es la fuente de texto, por defecto, "default"
 	@param theme Es el estilo, por defecto, dxGetDefaultTheme()
 ]]
-function dxCreateCheckBox(x,y,width,height,text,relative,parent,selected,color,font,theme)
-	checkargs("dxCreateCheckBox", 1, "number", x, "number", y, "number", width, "number", height, "string", text, "boolean", relative);
-	checkoptionalcontaienr("dxCreateCheckBox", 7, parent);
-	checkoptionalargs("dxCreateCheckBox", 8, "boolean", selected, "number", color, "string", font, {"string", "dxTheme"}, theme);
+function dxCreateCheckBox(x,y,width,height,text,relative,selected,parent,color,font,theme)
+	checkargs("dxCreateCheckBox", 1, "number", x, "number", y, "number", width, "number", height, "string", text, "boolean", selected, "boolean", relative);
+	checkoptionalcontainer("dxCreateCheckBox", 7, parent);
+	checkoptionalargs("dxCreateCheckBox", 9, "number", color, "string", font, {"string", "dxTheme"}, theme);
 	
 	x, y, width, height = trimPosAndSize(x, y, width, height, relative, parent);
-	
-	if not selected then
-		selected = false
-	end
 	
 	if not parent then
 		parent = dxGetRootPane()
