@@ -1,5 +1,6 @@
 ﻿<meta>
 	<info name="module" author="platypus" version="1.0.0" description="Permite trabajar con módulos para reutilizar código" />
+	<include resource="dxgui" />
 	
 	<script src="export.lua" type="server" />
 	<script src="export.lua" type="client" />
