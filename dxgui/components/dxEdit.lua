@@ -150,7 +150,7 @@ end
 	@return Devuelve la posición del caret(cursor de texto) o -1 si el caret no está posicionado
 	en el texto. Devuelve 0 si el cursor está posicionado en el campo pero no hay texto.
 ]]
-function dxEditGetCaret(dxElement)
+function dxEditGetCaretIndex(dxElement)
 	-- check args
 	checkargs("dxEditGetCaret", 1, "dxEdit", dxElement);
 	return getElementData(dxElement,"caret")
@@ -194,7 +194,7 @@ end
 	@note Si el texto del campo editable, es una cadena vacía, el valor del caret será 0 (el caret aparecerá
 	en el campo pero no hay texto)
 ]]
-function dxEditSetCaret(dxElement,caret)
+function dxEditSetCaretIndex(dxElement,caret)
 	checkargs("dxEditSetCaret", 1, "dxEdit", dxElement, "number", caret);
 	assert(caret >= 0, "Text cursor position must be a non negative number");
 	local text = getElementData(dxElement, "text");

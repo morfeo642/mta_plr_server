@@ -93,6 +93,8 @@ function guiScrollBarSetProgress(...) return exports.dxgui:dxScrollBarSetProgres
 function guiScrollBarSetProgressPercent(...) return exports.dxgui:dxScrollBarSetProgressPercent(...) end
 function guiScrollBarSetMaxProgress(...) return exports.dxgui:dxScrollBarSetMaxProgress(...) end
 function guiScrollBarRender(...) return exports.dxgui:dxScrollBarRender(...) end
+guiScrollBarGetScrollPosition = guiScrollBarGetProgressPercent
+guiScrollBarSetScrollPosition = guiScrollBarSetProgressPercent
 
 -- Spinner.
 function guiCreateSpinner(...) return exports.dxgui:dxCreateSpinner(...) end
@@ -142,15 +144,24 @@ function guiListSetTitleShow(...) return exports.dxgui:dxListSetTitleShow(...) e
 function guiListGetTitleShow(...) return exports.dxgui:dxListGetTitleShow(...) end
 function guiListRender(...) return exports.dxgui:dxListRender(...) end
 
+-- ComboBox = ListBox, por cuestiones de compatibilidad...
+guiCreateComboBox = guiCreateList
+guiComboBoxAddItem = guiListAddRow
+guiComboBoxClear = guiListClear
+guiComboBoxSetSelectedItem = guiListSetSelectedItem
+guiComboBoxGetSelectedItem = guiListGetSelectedItem
+guiComboBoxAddItem = guiListAddRow
+guiComboBoxRemoveItem = guiListRemoveRow
+
 -- EditBox
 function guiCreateEdit(...) return exports.dxgui:dxCreateEdit(...); end;
 function guiEditGetPlaceHolder(...) return exports.dxgui:dxEditGetPlaceHolder(...); end;
-function guiEditGetCaret(...) return exports.dxgui:dxEditGetCaret(...); end;
+function guiEditGetCaretIndex(...) return exports.dxgui:dxEditGetCaretIndex(...); end;
 function guiEditIsReadOnly(...) return exports.dxgui:dxEditIsReadOnly(...); end;
 function guiEditIsMasked(...) return exports.dxgui:dxEditIsMasked(...); end;
 function guiEditGetMaxLength(...) return exports.dxgui:dxEditGetMaxLength(...); end;
 function guiEditSetPlaceHolder(...) return exports.dxgui:dxEditSetPlaceHolder(...); end;
-function guiEditSetCaret(...) return exports.dxgui:dxEditSetCaret(...); end;
+function guiEditSetCaretIndex(...) return exports.dxgui:dxEditSetCaretIndex(...); end;
 function guiEditSetReadOnly(...) return exports.dxgui:dxEditSetReadOnly(...); end;
 function guiEditSetMasked(...) return exports.dxgui:dxEditSetMasked(...); end;
 function guiEditSetMaxLength(...) return exports.dxgui:dxEditSetMaxLength(...); end;
