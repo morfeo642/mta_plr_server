@@ -16,6 +16,11 @@ local function dxCreateCursor()
 		function()
 			setCursorAlpha(extractalpha(getElementData(source, "color")));
 		end);
+	addEventHandler("onClientElementDataChange", cursor,
+		function(dataName) 
+			if dataName ~= "backgroundComponent" then return; end;
+			outputChatBox(getElementType(getElementData(source, "backgroundComponent")));
+		end);
 	return cursor;
 end;
 
@@ -24,9 +29,22 @@ addEventHandler("onClientResourceStart", resourceRoot,
 	function()
 		local cursor = dxCreateCursor();
 		setElementData(dxGetRootPane(), "cursor", cursor);
+		
+		addEventHandler("onClientElementDestroy", dxGetRootPane(),
+			function() 
+				local cursor = getElementData(dxGetRootPane(), "cursor");
+				local backgroundComponent = getElementData(cursor, "backgroundComponent");
+				local aux = backgroundComponent;
+				while (getElementType(getElementParent(aux)) ~= "dxRootPane") and (aux ~= source) do 
+					aux = getElementParent(aux);
+				end;		
+				if (aux == source) and (getElementType(source) ~= "dxRootPane") then 
+					setElementData(cursor, "backgroundComponent", getElementParent(source));
+				end; 
+			end)
 	end, false, "normal-1");
 
-	
+
 addEventHandler("onClientRender", root,
 	function() 
 		if isCursorShowing() then 
@@ -61,14 +79,16 @@ addEventHandler("onClientRender", root,
 			
 		end;
 	end);
+	
 
-addEventHandler("onClientDXMouseEnter", root, 
-	function() 
+addEventHandler("onClientDXMouseEnter", root,
+	function()
 		local cursor = getElementData(dxGetRootPane(), "cursor");
 		setElementData(cursor, "backgroundComponent", source);
 	end);
 	
-addEventHandler("onClientDXMouseLeave", root,
+addEventHandler("onClientDXMouseLeave", root,	
 	function() 
-		setElementData(getElementData(dxGetRootPane(), "cursor"), "backgroundComponent", getElementParent(source));		
+		local cursor = getElementData(dxGetRootPane(), "cursor");
+		setElementData(cursor, "backgroundComponent", getElementParent(source));		
 	end);
