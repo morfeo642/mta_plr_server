@@ -16,11 +16,6 @@ local function dxCreateCursor()
 		function()
 			setCursorAlpha(extractalpha(getElementData(source, "color")));
 		end);
-	addEventHandler("onClientElementDataChange", cursor,
-		function(dataName) 
-			if dataName ~= "backgroundComponent" then return; end;
-			outputChatBox(getElementType(getElementData(source, "backgroundComponent")));
-		end);
 	return cursor;
 end;
 
