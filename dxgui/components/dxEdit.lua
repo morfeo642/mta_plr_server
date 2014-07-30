@@ -104,7 +104,7 @@ function dxCreateEdit(x,y,width,height,text,relative,parent,color,font,theme)
 		
 			if clickButton ~= "left" then return; end;
 			guiSetInputEnabled(true);
-		
+			lastClickedEditBox = source;
 			local function removeEditBoxInput()
 				-- lose input
 				if not getElementData(lastClickedEditBox, "clicked") then 
@@ -112,7 +112,6 @@ function dxCreateEdit(x,y,width,height,text,relative,parent,color,font,theme)
 				end;
 				removeEventHandler("onClientClick", root, removeEditBoxInput);
 			end;
-			lastClickedEditBox = source;
 			addEventHandler("onClientClick", root, removeEditBoxInput);
 			
 			local tx, ty = dxGetPosition(source, false);
