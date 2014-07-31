@@ -2,13 +2,8 @@
 --[[!
 	\file 
 	\brief Este script permite establecer un protocolo entre diferentes recursos 
-	para compartir variables e invocar funciones exportadas con mayor facilidad.
-	
-	\code
-	-- Invocar la función foo() del recurso "bar".
-	bar.foo(...);
-	\endcode
-	
+	para compartir variables.
+
 	\code
 	-- Establecer la variable global compartida "x" de "bar" a 50.
 	bar.x = 50; -- solo funciona si la variable x está marcada como pública.
@@ -106,6 +101,7 @@ setmetatable(_G,
 							__metatable = false,
 							__index = 
 								function(t, index)
+									--[[ 
 									-- obtener la variable.
 									-- es una función exportada por el recurso ? 
 									local exports = getResourceExportedFunctions(resource);
@@ -119,8 +115,8 @@ setmetatable(_G,
 											return function(...) call(resource, index, ...); end;
 										end;
 									end;
-									
-									-- no es una función. comprobamos si bién es un valor.
+									]] 
+									-- comprobamos si bién es un valor.
 									return call(resource, "__get", index);
 								end,
 							__newindex = 
