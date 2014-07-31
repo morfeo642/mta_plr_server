@@ -164,7 +164,7 @@ function getImagePath(iResource, fileName)
 	return ":"..getResourceName(iResource).."/"..fileName
 end
 
-                        
+   --// checking functions                     
 function checkargs(funcname, firstarg, ...)
 	assert((type(funcname) == "string") and (type(firstarg) == "number") and (firstarg > 0));
 	local args = {...};
@@ -259,7 +259,7 @@ function checkDXElement(funcname, argnum, var)
 			argnum .. "; dxElement expected, but " .. varType .. " found");
 end;
 
-
+--// miscelaenous
 function trimPosAndSize(x, y, w, h, relative, parent)
 	if relative then 
 		local sx, sy;
@@ -298,6 +298,51 @@ function getEmbeddedText(text, maxWidth, font, scale)
 		if i > 0 then 
 			return text:sub(1,i);
 		end;
+	end;
+	return "";
+end;
+
+function getTextWithoutColorCodes(text) 
+	if text:len() >= 7 then 
+		local i = 1;
+		local textWithinCodes = "";
+		while ((text:len() - i + 1) >= 7) do 
+			if text:sub(i, i+6):find("#%x%x%x%x%x%x") then 
+				i = i + 7; 
+			else 
+				textWithinCodes = textWithinCodes .. text:sub(i,i);
+				i = i + 1;
+			end;
+		end;
+		return textWithinCodes .. text:sub(i);
+	end; 
+	return text;
+end;
+
+function getSubColorCodedText(text, lastChar) 
+	if text:len() >= 7 then 
+		local str = "";
+		local i, j = 1, 1;
+		while ((text:len() - j + 1) >= 7) and (i <= lastChar) do
+			if text:sub(j, j+6):find("#%x%x%x%x%x%x") then 
+				str = str .. text:sub(j, j+6);
+				j = j + 7; 
+			else
+				str = str .. text:sub(j, j);
+				j = j + 1; 
+				i = i + 1;
+			end;
+		end;
+		return str .. text:sub(j, j + lastChar - i);
+	end;
+	return text:sub(1, lastChar);
+end;
+
+function getEmbeddedColorCodedText(text, ...)
+	if text:len() > 0 then
+		local textWithoutCode = getTextWithoutColorCodes(text);
+		local embeddedText = getEmbeddedText(textWithoutCode, ...);
+		return getSubColorCodedText(text, embeddedText:len());
 	end;
 	return "";
 end;

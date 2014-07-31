@@ -144,7 +144,10 @@ function dxCheckBoxRender(component,cpx,cpy,cpg, alphaFactor)
 		end
 	end
 	
-	dxDrawImageSection(cpx+cx,cpy+cy,cw,ch,
+	
+	local buttonWidth, buttonHeight = 18, 18;
+	
+	dxDrawImageSection(cpx+cx,cpy+cy,buttonWidth, buttonHeight,
 			getElementData(cTheme,imageset..":X"),getElementData(cTheme,imageset..":Y"),
 			getElementData(cTheme,imageset..":Width"),getElementData(cTheme,imageset..":Height"),
 			getElementData(cTheme,imageset..":images"),0,0,0,color,cpg)
@@ -154,11 +157,17 @@ function dxCheckBoxRender(component,cpx,cpy,cpg, alphaFactor)
 	local tx = cx
 	local th = ch					
 	local textHeight = dxGetFontHeight(1,font)
-	local textX = cpx+cx+cw+5
-	local textY = cpy+cy+((th-textHeight)/2)
+	local textX = cpx+cx+buttonWidth+2
+	local textY = cpy+cy; 
+	if textHeight > buttonHeight then 
+		textY = textY - (textHeight - buttonHeight) / 2; 
+	elseif textHeight < buttonHeight then
+		textY = textY + (buttonHeight - textHeight) / 2;
+	end;
+	
 	if (dxGetColorCoded(component)) then
-		dxDrawColorText(title,textX,textY,textX,textY,color,1,font,"left","top",false,false,cpg)
+		dxDrawColorText(getEmbeddedColorCodedText(title, cw-buttonWidth-2, font, 1),textX,textY,textX,textY,color,1,font,"left","top",false,false,cpg)
 	else
-		dxDrawText(title,textX,textY,textX,textY,color,1,font,"left","top",false,false,cpg)
+		dxDrawText(title,textX,textY,cpx+cx+cw,textY+textHeight,color,1,font,"left","top",true,false,cpg)
 	end
 end
