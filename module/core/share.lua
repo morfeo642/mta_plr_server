@@ -116,7 +116,7 @@ setmetatable(_G,
 										end;
 										if value == index then 
 											-- es una función exportada.
-											return function(...) return call(resource, index, ...); end;
+											return function(...) call(resource, index, ...); end;
 										end;
 									end;
 									
