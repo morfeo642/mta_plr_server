@@ -131,6 +131,7 @@ function guiWindowSetPostGUI(...) return exports.dxgui:dxWindowSetPostGUI(...) e
 function guiWindowRender(...) return exports.dxgui:dxWindowRender(...) end
 function guiWindowMoveControl(...) return exports.dxgui:dxWindowMoveControl(...) end
 function guiWindowComponentRender(...) return exports.dxgui:dxWindowComponentRender(...) end
+function guiWindowSetSizable(...) end -- será implementado en versiones posteriores de dxgui
 
 -- ListBox
 function guiCreateList(...) return exports.dxgui:dxCreateList(...) end
