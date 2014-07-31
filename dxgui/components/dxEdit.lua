@@ -385,6 +385,8 @@ addEventHandler("onClientCharacter", root,
 		
 		if (maxLength ~= -1) and (text:len() == maxLength) then return; end;
 		
+		if caret == 0 then caret = caret + 1; end;
+		
 		if text:len() > 0 then 
 			text = text:sub(1,caret-1) .. character .. text:sub(caret);
 		else
