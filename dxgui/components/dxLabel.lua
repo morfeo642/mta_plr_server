@@ -138,7 +138,7 @@ Establece la alineación horizontal
 @param La alineación horizontal (left, right, center)
 ]]
 function dxLabelSetHorizontalAlign(dxElement,alignX) 
-	checkargs("dxLabelSetHorizontalAlign", 1, "dxLabel", dxElement, "number", alignX);
+	checkargs("dxLabelSetHorizontalAlign", 1, "dxLabel", dxElement, "string", alignX);
 	checkvalue("horizontal alignment", alignX, "left", "center", "right");
 	
 	setElementData(dxElement,"alignX",alignX)
@@ -151,7 +151,7 @@ end
 	@param alignY Es la nueva alineación vertical del texto de la misma (top, center o bottom)
 ]]
 function dxLabelSetVerticalAlign(dxElement,alignY) 
-	checkargs("dxLabelSetVerticalAlign", 1, "dxLabel", dxElement, "number", alignY);
+	checkargs("dxLabelSetVerticalAlign", 1, "dxLabel", dxElement, "string", alignY);
 	checkvalue("vertical alignment", alignY, "top", "center", "bottom");
 	
 	setElementData(dxElement,"alignY",alignY)

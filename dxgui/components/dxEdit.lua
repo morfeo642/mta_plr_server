@@ -333,18 +333,23 @@ function dxEditRender(component, cpx, cpy, cpg, alphaFactor)
 		getElementData(cTheme,"SButtonCenter:Width"),getElementData(cTheme,"SButtonCenter:Height"),
 		getElementData(cTheme,"SButtonCenter:images"),0,0,0,tocolor(255,255,255,alpha), cpg) 			
 	-- Draw top left rounded corner.
-
+	
+	
 	-- Draw the text on the background.
 	if text:len() > 0 then 
 		local _text = text; 
 		if masked then _text = string.rep("*", text:len()); end;
-		dxDrawText(_text:sub(index), x+textOffset, y+textOffset, x+w-textOffset, y+h-textOffset, color, 1, font, "left", "center", 
+		local textHeight = dxGetFontHeight(1, font);
+		local _textOffset = math.min((h-textHeight)/2);
+		dxDrawText(_text:sub(index), x+textOffset, y+_textOffset, x+w-textOffset, y+h-_textOffset, color, 1, font, "left", "center", 
 					true, false, cpg); 
 	end;
 	
 	-- Draw caret
 	local caretHeight = 1.5 * dxGetFontHeight(1, font);
-	if caretHeight > (2*textOffset) then caretHeight = 2*textOffset; end;
+	-- if caretHeight > (2*textOffset) then caretHeight = 2*textOffset; 
+	if caretHeight > h then caretHeight = h; end;
+	
 	local space = (h - caretHeight) / 2;
 
 	if(getElementData(component,"clicked") and (caret ~= -1)) then 
