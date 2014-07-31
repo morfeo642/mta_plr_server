@@ -174,3 +174,11 @@ function guiDrawBoardGetTargetSize(...) return exports.dxgui:dxDrawBoardGetTarge
 function guiDrawBoardSetTargetSize(...) return exports.dxgui:dxDrawBoardSetTargetSize(...); end;
 
 function guiDrawBoardAddHandler(drawBoard, handler) return addEventHandler("onClientDXDrawBoardRender", drawBoard, function(target) dxSetRenderTarget(target,true); handler(dxGetMaterialSize(target)); dxSetRenderTarget(); end);end;
+
+-- Cursor
+function setCursorColor(...) return exports.dxgui:dxSetCursorColor(...); end;
+function getCursorColor(...) return exports.dxgui:dxGetCursorColor(...); end;
+function setCursorAlpha(...) return exports.dxgui:dxSetCursorAlpha(...); end;
+function getCursorAlpha(...) return exports.dxgui:dxGetCursorAlpha(...); end;
+function setCursorTheme(...) return exports.dxgui:dxSetCursorTheme(...); end;
+function getCursorTheme(...) return exports.dxgui:dxGetCursorTheme(...); end;

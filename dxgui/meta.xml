@@ -205,5 +205,12 @@
 			<export function="dxCreateDrawBoard" type="client" />
 			<export function="dxDrawBoardGetTargetSize" type="client" />
 			<export function="dxDrawBoardSetTargetSize" type="client" />
+		<!-- Cursor -->
+			<export function="dxSetCursorColor" type="client" />
+			<export function="dxSetCursorAlpha" type="client" />
+			<export function="dxGetCursorColor" type="client" />
+			<export function="dxGetCursorAlpha" type="client" />
+			<export function="dxGetCursorTheme" type="client" />
+			<export function="dxSetCursorTheme" type="client" />
 	<!-- #Exports -->
 </meta>
