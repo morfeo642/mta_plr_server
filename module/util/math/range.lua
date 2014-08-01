@@ -5,11 +5,8 @@
 	de ste.
 ]]
 
-package.path = package.path .. ";../?.lua";
-require 'class';
 
--- loadModule("util/class");
-
+loadModule("util/class");
 
 range = class();
 
