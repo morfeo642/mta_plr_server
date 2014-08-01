@@ -72,7 +72,16 @@ function class(BaseClass)
 			local baseClass = assert(newClass.__base);
 			baseClass.init(this, ...);
 		end;
-	
+	-- Clonador de instancias por defecto.
+	newClass.clone = 
+		function(this, ...)
+			local other = {};
+			-- hacer una copia de los valores de la instancia a la tabla
+			for index, value in pairs(this) do other[index] = value; end;
+			setmetatable(other, newClass);
+			-- no hace falta invocar al constructor.
+			return other;
+		end;
 	-- Comprobar si un objeto hereda de una clase.
 	newClass.isinstanceof =
 		function(this, otherClass)
