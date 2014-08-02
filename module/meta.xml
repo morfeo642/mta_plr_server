@@ -29,9 +29,12 @@
 	<file src="util/tableutils.lua" />
 	<file src="util/pack.lua" />
 	<file src="util/printutils.lua" />
+	<file src="util/groupids.lua" />
+	<file src="util/vehicleids.lua" />
 	
 	<file src="util/math/vec2.lua" />
 	<file src="util/math/vec3.lua" />
 	<file src="util/math/color.lua" />
+	<file src="util/math/range.lua" />
 </meta>
 
