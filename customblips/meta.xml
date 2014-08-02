@@ -17,4 +17,6 @@
 	<export function="setCustomBlipVisible" type="client" />
 	<export function="isCustomBlipVisible" type="client" />
 	<export function="destroyCustomBlip" type="client" />
+	<export function="attachCustomBlipToElement" type="client" />
+	<export function="detachCustomBlip" type="client" />
 </meta>

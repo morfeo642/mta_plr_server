@@ -267,3 +267,35 @@ addEventHandler("onClientRender",g_root,
 	end
 )
 
+-- Added by Victor Ruiz Gomez
+local attachments = {};
+function attachCustomBlipToElement(blip, element)
+	blip = convertToWidget(blip);
+	if (not isWidget(blip)) or (not isElement(element)) then 
+		outputDebugString("Bad argument - attachCustomBlipToElement", 0); 
+		return false;
+	end;
+	attachments[blip] = element;
+end;
+
+function detachCustomBlip(blip)
+	blip = convertToWidget(blip);
+	if not isWidget(blip) then 
+		outputDebugString("Bad argument - detachCustomBlip", 0);
+		return false;
+	end;
+	attachments[blip] = nil;
+end; 
+
+addEventHandler("onClientPreRender", root,
+	function() 
+		-- refresh attached customblips positions.
+		for blip, element in pairs(attachments) do 
+			if not streamedBlips[blip] then
+				attachments[blip] = nil;
+			else 
+				local x, y = getElementPosition(element);
+				streamedBlips[blip].x,streamedBlips[blip].y = x,y;
+			end;
+		end;
+	end);
