@@ -291,7 +291,7 @@ addEventHandler("onClientPreRender", root,
 	function() 
 		-- refresh attached customblips positions.
 		for blip, element in pairs(attachments) do 
-			if not streamedBlips[blip] then
+			if (not streamedBlips[blip]) or (not isElement(element)) then
 				attachments[blip] = nil;
 			else 
 				local x, y = getElementPosition(element);
