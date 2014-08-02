@@ -7,6 +7,8 @@
 
 loadModule("util/class");
 loadModule("util/math/range");
+loadModule("util/checkutils");
+loadModule("util/stringutils");
 
 
 --[[!
@@ -30,6 +32,34 @@ function groupIds:init(...)
 			self:addId(ids);
 		end;
 	end;
+end;
+
+--[[!
+	Convierte una cadena de caracteres en un grupo de IDs.
+	@param str Es la cadena de caracteres donde se especifican las IDs o bien rangos de IDs 
+	separados por comas o por punto y coma
+	\code
+	local group = groupIds.fromString("3, 4, 5,3,10,20,30,  70-80, -1);
+	\endcode
+]]	
+function groupIds.fromString(str) 
+	-- tokenizar la cadena de caracteres.
+	local tokens = {};
+	for token in wpairs(str, ",; ") do tokens[#tokens+1] = token; end;
+	local group = groupIds();
+	-- analizar cada token
+	for _, token in ipairs(tokens) do 
+		if token:match("%d+-%d+") then 
+			local lowerBound, upperBound = token:match("(%d+)-(%d+)");
+			lowerBound, upperBound = tonumber(lowerBound), tonumber(upperBound);
+			group:addRangeIds(range(lowerBound, upperBound));
+		else 
+			local id = tonumber(localizedAssert(token:match("%d+"), "Failed to parse group IDs; " .. token .. " is not a valid ID", 2));
+			group:addId(id);
+		end;
+	end;
+	
+	return group;
 end;
 
 --[[!

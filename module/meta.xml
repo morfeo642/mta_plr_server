@@ -27,6 +27,7 @@
 	<file src="util/class.lua" />
 	<file src="util/stringutils.lua" />
 	<file src="util/tableutils.lua" />
+	<file src="util/checkutils.lua" />
 	<file src="util/pack.lua" />
 	<file src="util/printutils.lua" />
 	<file src="util/groupids.lua" />
