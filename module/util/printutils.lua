@@ -1,10 +1,10 @@
 
 --[[!
 	\file
-	\brief Este es un módulo que permite usar la función print (la reemplaza de la tabla _G), usando la función outputDebugString.
+	\brief Este es un módulo que permite usar la función print, usando la función outputDebugString.
 ]]
 
-_G.print = 
+print = 
 	function(...)
 		local str = "";
 		local args = {...};
