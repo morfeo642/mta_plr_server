@@ -34,22 +34,24 @@ end;
 
 local __modules = {};
 
-function loadModule(moduleName, environment)
-	if not __modules[moduleName] then 
+function loadModule(modulePath, environment)
+	if not __modules[modulePath] then  
 		if not environment then 
 			environment = _G;
 		end;
-		
-		local code = getModule(moduleName);
+		local code = getModule(modulePath);
 		local success, chunk = pcall(loadstring, code, nil, "t", environment);
-		if not success then error("Failed to load script \"" .. moduleName .. ".lua\": " .. chunk); end;
-		
-		__modules[moduleName] = true;
+		if not success then error("Failed to load script \"" .. modulePath .. ".lua\"; " .. chunk); end;
+		setfenv(chunk, environment); 
+		__modules[modulePath] = environment;
 		
 		local msg;
 		success, msg = pcall(chunk);
-		if not success then error("Failed to load module \"" .. moduleName .. "\": " .. msg); end;
+		if not success then error("Failed to load module \"" .. modulePath .. "\"; " .. msg); end;
+		
+		return environment;
 	end;
+	return __modules[modulePath];
 end;
 
 importModule = loadModule;
