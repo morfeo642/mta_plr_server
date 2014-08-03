@@ -9,6 +9,7 @@
 -- Añadimos una tabla de módulos cargados para evitar errores en dependencias circulares.
 local __modules = {};
 
+
 function loadModule(modulePath, environment)
 	if not __modules[modulePath] then  
 		if not environment then 
@@ -18,12 +19,15 @@ function loadModule(modulePath, environment)
 		local success, chunk = pcall(loadstring, code, nil, "t", environment);
 		if not success then error("Failed to load script \"" .. modulePath .. ".lua\"; " .. chunk); end;
 		setfenv(chunk, environment); 
-		__modules[modulePath] = true;
+		__modules[modulePath] = environment;
 		
 		local msg;
 		success, msg = pcall(chunk);
 		if not success then error("Failed to load module \"" .. modulePath .. "\"; " .. msg); end;
+		
+		return environment;
 	end;
+	return __modules[modulePath];
 end;
 
 importModule = loadModule;
