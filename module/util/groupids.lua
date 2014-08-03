@@ -97,7 +97,7 @@ function groupIds:addRangeIds(rangeIds)
 				else 
 					-- no hay ningún rango después del rango iésimo que no
 					-- interseccione con el nuevo rango.
-					local aux = rangeIds:getWrapper(self.ranges[i]):getWrapper(self.ranges[j+1]); 
+					local aux = rangeIds:getWrapper(self.ranges[i]):getWrapper(self.ranges[#self.ranges]); 
 					-- eliminamos todos los rangos a partir del iesimo.
 					for k=j+1,i+1,-1 do 
 						table.remove(self.ranges, k);
@@ -115,14 +115,19 @@ function groupIds:addRangeIds(rangeIds)
 			-- inferior del nuevo rango...
 			-- buscar ese rango...
 			if #self.ranges > 1 then 
-				i = 1;
-				while ((i+1) < #self.ranges) and (rangeIds:getUpperBound() >  self.ranges[i+1]:getLowerBound()) do 
-					i = i + 1;
-				end;
-				if rangeIds:getUpperBound() < self.ranges[i+1]:getLowerBound() then 
-					table.insert(self.ranges, i, rangeIds);
-				else
-					table.insert(self.ranges, rangeIds);
+				if rangeIds:getUpperBound() < self.ranges[1]:getLowerBound() then 
+					-- añadir al principio.
+					table.insert(self.ranges, 1, rangeIds);
+				else 
+					i = 1;
+					while ((i+1) < #self.ranges) and (rangeIds:getUpperBound() >  self.ranges[i+1]:getLowerBound()) do 
+						i = i + 1;
+					end;
+					if rangeIds:getUpperBound() < self.ranges[i+1]:getLowerBound() then 
+						table.insert(self.ranges, i+1, rangeIds);
+					else
+						table.insert(self.ranges, rangeIds);
+					end;
 				end;
 			else
 				if rangeIds:getUpperBound() < self.ranges[1]:getLowerBound() then 
