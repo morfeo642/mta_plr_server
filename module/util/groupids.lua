@@ -38,11 +38,14 @@ end;
 	Convierte una cadena de caracteres en un grupo de IDs.
 	@param str Es la cadena de caracteres donde se especifican las IDs o bien rangos de IDs 
 	separados por comas o por punto y coma
+	@param symbols Por defecto es una tabla vacía. Es una tabla con grupos de IDs. Los índices son símbolos representativos
+	de estos grupos (pueden especificarse en la cadena de caracteres a analizar y serán interpretados como el grupo de IDs que representan) y los 
+	valores son los grupos de IDs.
 	\code
 	local group = groupIds.fromString("3, 4, 5,3,10,20,30,  70-80, -1);
 	\endcode
 ]]	
-function groupIds.fromString(str) 
+function groupIds.fromString(str, symbols) 
 	-- tokenizar la cadena de caracteres.
 	local tokens = {};
 	for token in wpairs(str, ",; ") do tokens[#tokens+1] = token; end;
@@ -53,9 +56,12 @@ function groupIds.fromString(str)
 			local lowerBound, upperBound = token:match("(%d+)-(%d+)");
 			lowerBound, upperBound = tonumber(lowerBound), tonumber(upperBound);
 			group:addRangeIds(range(lowerBound, upperBound));
-		else 
-			local id = tonumber(localizedAssert(token:match("%d+"), "Failed to parse group IDs; " .. token .. " is not a valid ID", 2));
+		elseif token:match("%d+") then 
+			local id = tonumber(token:match("(%d+)"));
 			group:addId(id);
+		else 
+			localizedAssert(symbols and symbols[token], "Failed to parse group IDs; " .. token .. " is not a valid ID our group of IDs", 2);
+			group = group + symbols[token];
 		end;
 	end;
 	
