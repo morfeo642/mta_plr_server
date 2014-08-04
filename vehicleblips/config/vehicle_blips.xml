@@ -1,0 +1,18 @@
+<!-- Autor: Victor Ruiz Gomez -->
+
+<vehicle_blips>
+	<!-- Planes -->
+	<blip ids="bigPlaneIds" image="bigplane.png" width="20" height="20" streamRadius="400" />
+	
+	<!-- Helicopters -->
+	<blip ids="helicopterIds" image="helicopter.png" width="12" height="4" streamRadius="350" />
+	
+	<!-- Boats -->
+	
+	<!-- Ambulance -->
+	
+	<!-- Fire Truck -->
+	<blip ids="407" image="helicopter.png" width="30" height="10" streamRadius="300" />
+	
+	<!-- Police Car --> 
+</vehicle_blips>
