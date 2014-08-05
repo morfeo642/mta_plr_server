@@ -83,6 +83,7 @@ function dxCreateList(x,y,width,height,title,relative,parent,color,font,theme)
 	setElementData(parent,"ZIndex",getElementData(parent,"ZIndex")+1)
 	addEventHandler("onClientDXClick",list,__list,false)
 	addEventHandler("onClientDXDoubleClick",list,list__,false)
+	
 	return list
 end
 -- // Functions
@@ -388,6 +389,8 @@ function dxListRender(component,cpx,cpy,cpg, alphaFactor)
 		if not (scrollbarVert) then
 			
 			scrollbarVert = dxCreateScrollBar(cx+cw-22,cy,20,choc,false,false,getElementParent(component),0,200,cTheme)
+			-- make sure sourceResource is added properly in order the scrollbar to deleted when resource stops...
+			setElementData(scrollbarVert, "resource", getElementData(component, "resource"));
 			setElementData(component,"scrollbarVert",scrollbarVert)
 		else
 			dxSetPosition(scrollbarVert,cx+cw-1,cy-2.2)
