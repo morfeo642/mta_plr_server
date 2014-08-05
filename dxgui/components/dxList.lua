@@ -387,7 +387,7 @@ function dxListRender(component,cpx,cpy,cpg, alphaFactor)
 		end
 		if not (scrollbarVert) then
 			
-			scrollbarVert = dxCreateScrollBar(cx+cw-22,cy,20,choc,getElementParent(component),"Vertical",0,200,cTheme)
+			scrollbarVert = dxCreateScrollBar(cx+cw-22,cy,20,choc,false,false,getElementParent(component),0,200,cTheme)
 			setElementData(component,"scrollbarVert",scrollbarVert)
 		else
 			dxSetPosition(scrollbarVert,cx+cw-1,cy-2.2)
