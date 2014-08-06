@@ -5,6 +5,7 @@
 	\brief Este script define utilidades para trabajar con tablas.
 ]]
 
+loadModule("util/checkutils");
 
 --[[!
 	Es un iterador para iterar sobre los elementos de una tabla de derecha a
@@ -275,3 +276,79 @@ table.recursive_tail_match = table.deep_tail_match;
 table.recursive_tail_find = table.deep_tail_find;
 
 
+table.toJSON = function(t) 
+	local function _toJSON(t, level) 
+		local function parsePair(index, value, level)
+			local indexType = type(index);
+			local valueType = type(value);
+			localizedAssert((indexType == "number") or (indexType == "string") or (indexType == "boolean"), "Bad table passed to table.toJSON, indexes must be numbers, booleans or strings", level+1);
+			localizedAssert((valueType == "number") or (valueType == "string") or (valueType == "boolean") or (valueType == "table"),
+				"Bad table passed to table.toJSON, values must be numbers, booleans, strings or tables", level+1);
+			if valueType == "table" then 
+				value = _toJSON(value, level+1);
+			else
+				value = valueType:sub(1,1) .. tostring(value);
+			end;
+			index = indexType:sub(1,1) .. tostring(index);
+			return "\"" .. index .. "\"=\"" .. value .. "\"";  
+		end;
+	
+		localizedAssert(type(t) == "table",  "Bad argument to table.toJSON", level+1);
+		local json = "{";
+
+		if next(t) then 
+			local index, value = next(t);
+			while next(t, index) do 
+				json = json .. parsePair(index, value, level+1) .. " ";
+				index, value = next(t, index);
+			end;
+			json = json .. parsePair(index, value, level+1);
+		end; 
+		
+		return json .. "}";
+	end;
+	
+	return _toJSON(t, 2);
+end;
+
+table.fromJSON = function(str) 
+	local function _fromJSON(str)
+		local function stringToValue(value)
+			local valueType, value = value:match("(%a)(.+)");
+			if valueType == "n" then 
+				return tonumber(value);
+			elseif valueType == "b" then 
+				return (value == "true");
+			elseif valueType ~= "s" then 
+				return false;
+			end;
+			return value;
+		end;
+	
+		local t = {};	
+		-- analizar subtablas...
+		
+		for token in str:gmatch("\"[^\"]+\"=\"{[^}]*}\"") do 
+			local index, value = token:match("\"(.+)\"=\"{([^}]*)}\"");	
+			index = stringToValue(index);
+			value = _fromJSON(value);
+			if (index == nil) or (not value) then return false; end;
+			t[index] = value;
+		end;		
+		str = str:gsub("\"[^\"]+\"=\"{[^}]*}\"", "");
+		
+		for token in string.gmatch(str, "\"[^\"]+\"=\"[^\"]+\"") do 
+			local index, value = token:match("\"(.+)\"=\"(.+)\"");
+			index, value = stringToValue(index), stringToValue(value);
+			if (index == nil) or (value == nil) then return false; end;
+			t[index] = value;
+		end;
+		
+		return t;
+	end;
+	localizedAssert(type(str) == "string", "Bad argument passed to table.fromJSON", 2);
+	if not str:match("{.*}") then 
+		return false;
+	end;
+	return _fromJSON(str:match("{(.*)}"));
+end;
