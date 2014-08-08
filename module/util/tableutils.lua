@@ -275,3 +275,32 @@ table.recursive_tail_match = table.deep_tail_match;
 table.recursive_tail_find = table.deep_tail_find;
 
 
+--[[!
+	@return Devuelve una copia superficial de la tabla pasada como argumento.
+	@note No se copian las subtablas, solo las referencias a estas.
+]]
+function table.shallow_copy(t) 
+	local copy = {};
+	for index, value in pairs(t) do 
+		copy[index] = value;
+	end;
+	return copy;
+end;
+
+--[[!
+	@return Devuelve una copia profunda de la tabla pasada como argumento.
+	@note No se copian referencias de las subtablas, si no que se copian estas.
+]]
+function table.deep_copy(t) 
+	local function deep_copy(dst, src) 
+		for index, value in pairs(src) do 
+			if type(value) ~= "table" then 
+				dst[index] = value;
+			else
+				dst[index] = deep_copy({}, value); 
+			end;
+		end;
+		return dst;
+	end;
+	return deep_copy({}, t); 
+end;
