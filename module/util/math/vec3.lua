@@ -168,16 +168,16 @@ function vec3:projection(v)
 end;
 
 
---[[! Vector bidimensional cuyas componentes son 0s ]]
+--[[! Vector tridimensional cuyas componentes son 0s ]]
 vec3.zero = vec3(0, 0, 0);
 
---[[ Vector bidimensional que es el eje X ]]
+--[[ Vector tridimensional que es el eje X ]]
 vec3.x_axis = vec3(1, 0, 0);
 
---[[ Vector bidimensional que es el eje Y ]]
+--[[ Vector tridimensional que es el eje Y ]]
 vec3.y_axis = vec3(0, 1, 0);
 
---[[ Vector bidimensional que es el eje Z ]]
+--[[ Vector tridimensional que es el eje Z ]]
 vec3.z_axis = vec3(0, 0, 1);
 
 
