@@ -403,11 +403,11 @@ function dxListRender(component,cpx,cpy,cpg, alphaFactor)
 		if ( id*itemMultiply*itemMultiplyHeight - itemSorter <= coh+itemHeight ) and (id*itemMultiply*itemMultiplyHeight - itemSorter >=0) then
 			setElementData(item,"shown",true)
 			local back = "ListBox1STColor"	
-			if ( (id % 2) == 0) then back ="ListBox2NDColor" end
+			-- if ( (id % 2) == 0) then back ="ListBox2NDColor" end
 			if ( getElementData(item,"clicked") ) then back ="ListBoxClickedColor" end
 			local itemMax = math.max((id-1)*itemMultiply*itemMultiplyHeight-itemSorter,0)
 			local itemShow = (cpyyy+coh)-(cpyyy+itemMax)
-			itemShow = math.min(itemShow,itemHeight)-3
+			itemShow = math.min(itemShow,itemHeight)-3+1
 			dxDrawImageSection(cpxx+1,cpyyy+itemMax,cw-2,itemShow,
 				getElementData(cTheme,back..":X"),getElementData(cTheme,back..":Y"),
 				getElementData(cTheme,back..":Width"),getElementData(cTheme,back..":Height"),
