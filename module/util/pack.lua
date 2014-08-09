@@ -72,3 +72,48 @@ function reversehalfpack(n, ...)
 	local args = {...};
 	return invertargs(halfpack(#args-n, invertargs(...)));
 end;
+
+--[[!
+	Empaqueta los argumentos en diferentes grupos(tablas) de tamaño n. 
+	@param n Es el tamaño del grupo, mayor o igual que 1.
+	@param ... Es una lista con los argumentos a empaquetar
+	@return Devuelve una lista de tablas donde cada una de estas contiene n elementos.
+	La primera tabla contiene el 1º argumento, el 2º, 3º, hasta el nº argumento. La segunda,
+	el n+1º, n+2º, 2nº, ... 
+	Si la lista de argumentos es vacía, se develve nil. Si la lista de argumentos tiene un 
+	número de elementos que no es múltiplo de n, el último grupo devuelto no tendrá n elementos;
+	Tendrá los elementos restantes que faltan por empaquetar (que no se han tomado en los otros grupos)
+	Si el número de argumentos pasados como argumento es menor o igual que n, el valor de retorno es igual que
+	pack(...)
+]]
+function makegroups(n, ...)
+	assert(n > 0, "Bad argument to makegroups");
+	local args = pack(...);
+	
+	local groups = {};
+	for i=1,#args / n,1 do 
+		groups[#groups+1] = {};
+	end;
+	if (#args % n) ~= 0 then 
+		groups[#groups+1] = {};
+	end;
+	
+	for i=1,#args,1 do 
+		local j = math.floor((i-1)/n)+1;
+		local group = groups[j];
+		group[#group+1] = args[i];
+	end;	
+	
+	return unpack(groups);
+end;
+
+--[[!
+	Empaqueta los argumentos por pares de elementos.
+	Es igual que makegroups con el argumento n igual a 2.
+	@param ... Es una lista de argumentos a empaquetar por pares.
+	@return Devuelve una lista de tablas con los argumentos empaquetados.
+	@see makegroups
+]]
+function makepairs(...)
+	return makegroups(2, ...);
+end;
