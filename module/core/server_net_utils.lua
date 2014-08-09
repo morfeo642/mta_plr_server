@@ -16,7 +16,7 @@
 	
 	-- Como podemos comprobar si en el cuerpo de la función hubo un aserto o algún error?
 	__client[gePlayerFromName("juan")].foo(
-		function(success, ...)
+		function(client, success, ...)
 			local args = {...};
 			if success then -- La ejecución es satisfactoria.
 				-- La tabla {...} contedrá los valores de retorno de la función.
@@ -55,24 +55,26 @@ __server = {};
 
 --[[ Tabla auxiliar para los callbacks del servidor
  ]]
-local __server_callbacks = {__callback = {}, __count = {}};
+local __server_callbacks = {};
+local __callback = {};
+local __count = {};
 setmetatable(__server_callbacks, 
 	{
 		__newindex = 
 			function(t, index, value) 
-				if not t.__count[index] then 
-					t.__count[index] = 1;
-					t.__callback[index] = value;
+				if not __count[index] then 
+					__count[index] = 1;
+					__callback[index] = value;
 				else 
-					t.__count[index] = t.__count[index] + 1;
+					__count[index] = __count[index] + 1;
 				end;
 			end,
 		__index =
 			function(t, index)
 				-- "usamos" el callback una vez.
-				t.__count[index] = t.__count[index] - 1; 
-				local callback = t.__callback[index];
-				if t.__count[index] == 0 then t.__count[index] = nil; t.__callback[index] = nil; end;
+				__count[index] = __count[index] - 1; 
+				local callback = __callback[index];
+				if __count[index] == 0 then __count[index] = nil; __callback[index] = nil; end;
 				return callback;
 			end
 	});
@@ -105,10 +107,10 @@ setmetatable(__client,
 											assert((type(funcCallback) == "function") or (funcCallback == nil));
 											-- Registramos el callback.
 											if not funcCallback then 
-												triggerClientEvent(client, "onServerCallClientFunction", root, index, nil, ...);
+												triggerClientEvent(client, "onServerCallClientFunction", resourceRoot, index, nil, ...);
 											else 
 												__server_callbacks[tostring(funcCallback)] = funcCallback;
-												triggerClientEvent(client, "onServerCallClientFunction", root, index, tostring(funcCallback), ...);
+												triggerClientEvent(client, "onServerCallClientFunction", resourceRoot, index, tostring(funcCallback), ...);
 											end;
 										end;
 								end
@@ -128,11 +130,11 @@ setmetatable(__all_clients,
 					function(funcCallback, ...)
 						assert((type(funcCallback) == "function") or (funcCallback == nil));
 						if not funcCallback then 
-							triggerClientEvent(root, "onServerCallClientFunction", root, index, nil, ...);
+							triggerClientEvent(root, "onServerCallClientFunction", resourceRoot, index, nil, ...);
 						else 
 							-- Necesitamos registrar el callback tantas veces como jugadores haya.
 							for i=1,#getElementsByType("player", root),1 do __server_callbacks[tostring(funcCallback)] = funcCallback; end;
-							triggerClientEvent(root, "onServerCallClientFunction", root, index, tostring(funcCallback), ...);
+							triggerClientEvent(root, "onServerCallClientFunction", resourceRoot, index, tostring(funcCallback), ...);
 						end;
 					end;
 			end
@@ -164,7 +166,7 @@ end;
 
 --[[ Que hacemos cuando el cliente quiere invocar una de los métodos del servidor ? ]]
 addEvent("onClientCallServerFunction", true);
-addEventHandler("onClientCallServerFunction", root,
+addEventHandler("onClientCallServerFunction", resourceRoot,
 	function(func, funcCallback, ...)
 		-- El evento fue invocado por un cliente ? ...
 		if client then 
@@ -173,7 +175,7 @@ addEventHandler("onClientCallServerFunction", root,
 				pcall(call_func, func, ...);
 			else 
 				-- invocar el método y devolver una respuesta.
-				triggerClientEvent(client, "onClientCallServerFunctionResponse", root, funcCallback, pcall(call_func, func, ...));
+				triggerClientEvent(client, "onClientCallServerFunctionResponse", resourceRoot, funcCallback, pcall(call_func, func, ...));
 			end;
 		end;
 	end);
@@ -181,7 +183,7 @@ addEventHandler("onClientCallServerFunction", root,
 --[[ Que hacemos cuando el cliente nos envía la respuesta después de haber invocado alguno de sus 
 métodos? ]]
 addEvent("onServerCallClientFunctionResponse", true);
-addEventHandler("onServerCallClientFunctionResponse", root,
+addEventHandler("onServerCallClientFunctionResponse", resourceRoot,
 	function(funcCallback, ...) 
 		if client then 
 			__server_callbacks[funcCallback](client, ...);
@@ -190,7 +192,7 @@ addEventHandler("onServerCallClientFunctionResponse", root,
 
 --[[ Que hacemos cuando el cliente quiere invocar una función de otro cliente... ]]
 addEvent("onClientCallRemoteClientFunction", true);
-addEventHandler("onClientCallRemoteClientFunction", root,
+addEventHandler("onClientCallRemoteClientFunction", resourceRoot,
 	function(remoteClient, func, funcCallback, ...)
 		if not client then return; end;
 		local sourceClient = client;
@@ -200,7 +202,7 @@ addEventHandler("onClientCallRemoteClientFunction", root,
 		else 
 			__client[remoteClient][func](
 				function(remoteClient, ...)
-					triggerClientEvent(sourceClient, "onClientCallRemoteClientFunctionResponse", root, remoteClient, funcCallback, ...);
+					triggerClientEvent(sourceClient, "onClientCallRemoteClientFunctionResponse", resourceRoot, remoteClient, funcCallback, ...);
 				end, ...);
 		end;
 	end);
