@@ -1,24 +1,4 @@
 
--- Funciones auxiliares.
-local function _getPlayerConfigData(sourceResource, player, configDataName)
-	local configDataValue = getAccountData(getPlayerAccount(player), getResourceName(sourceResource) .. ":" .. configDataName);
-	if not configDataValue then 	
-		return nil;
-	end;
-	local dataType;
-	dataType, configDataValue = configDataValue:match("(%a)(.+)");
-	
-	-- que tipo de dato es ? 
-	if dataType == "n" then 
-		configDataValue = tonumber(configDataValue);
-	elseif dataType == "b" then 
-		configDataValue = (configDataValue == "true");
-	elseif dataType == "t" then
-		configDataValue = table.fromJSON(configDataValue);
-	end;
-	return configDataValue;
-end; 
-
 --[[!
 	Establece el valor de una variable en la configuración del usuario.
 	Esta configuración se guardará en la cuenta del usuario, y por tanto, no será
@@ -62,7 +42,22 @@ end;
 function getPlayerConfigData(player, configDataName)
 	checkArgumentsTypes("setPlayerConfigData", 2, 1, player, "player", configDataName, "string");
 	
-	return _getPlayerConfigData(sourceResource, player, configDataName);
+	local configDataValue = getAccountData(getPlayerAccount(player), getResourceName(sourceResource) .. ":" .. configDataName);
+	if not configDataValue then 	
+		return nil;
+	end;
+	local dataType;
+	dataType, configDataValue = configDataValue:match("(%a)(.+)");
+	
+	-- que tipo de dato es ? 
+	if dataType == "n" then 
+		configDataValue = tonumber(configDataValue);
+	elseif dataType == "b" then 
+		configDataValue = (configDataValue == "true");
+	elseif dataType == "t" then
+		configDataValue = table.fromJSON(configDataValue);
+	end;
+	return configDataValue;
 end;
 
 
