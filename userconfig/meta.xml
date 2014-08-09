@@ -16,7 +16,6 @@
 	<export function="__get" type="client"/>
 	
 	<export function="setPlayerConfigData" type="server" />
-	<export function="getClientConfigData" type="client" />
 	<export function="getClientLocalConfigData" type="client" />
 	<export function="getPlayerConfigData" type="server" />
 	<export function="setClientLocalConfigData" type="client" />
