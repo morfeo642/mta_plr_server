@@ -25,6 +25,12 @@ function dxDestroyElement(dxElement)
 	if (isElement(dxElement)) then
 		triggerEvent("onClientDXDestroy",dxElement)
 		if not (wasEventCancelled()) then
+			-- destroy as well children, and trigger onClientDXDestroy for each component..
+			for _, child in ipairs(getElementChildren(dxElement)) do 
+				if dxIsElement(child) then 
+					dxDestroyElement(child);
+				end;
+			end;
 			destroyElement(dxElement)
 			return true;
 		end
