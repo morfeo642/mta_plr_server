@@ -78,6 +78,7 @@ function dxCreateLabel(x,y,width,height,text, relative, parent,color,font,scale,
 	setElementData(label,"height",height)
 	setElementData(label,"text",text)
 	setElementData(label,"visible",true)
+	setElementData(label, "color", color);
 	setElementData(label,"colorcoded",colorCoded)
 	setElementData(label,"hover",false)
 	setElementData(label,"scale",scale)
