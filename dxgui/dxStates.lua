@@ -225,14 +225,14 @@ function dxRefreshClickStates(container,button,state,absoluteX,absoluteY,doubleC
 		for i,_i in ipairs(tableClickers) do
 			if (doubleClick) then 
 				triggerEvent("onClientDXDoubleClick",clickedElements[i],button,absoluteX,absoluteY)
-				if not wasEventCancelled() then
+				if (not wasEventCancelled()) and isElement(clickedElements[i]) then
 					setElementData(clickedElements[i],"clicked",true)
 				end
 			end
 			
 			if not (doubleClick) then 
 				triggerEvent("onClientDXClick",clickedElements[i],button,state,absoluteX,absoluteY)
-				if not wasEventCancelled() then
+				if (not wasEventCancelled()) and isElement(clickedElements[i]) then
 					setElementData(clickedElements[i],"clicked",true)
 				end
 			end
