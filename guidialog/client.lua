@@ -58,7 +58,7 @@ function createMessageDialog(x, y, title, text, relative, dialogType, dialogOpti
 	dialogType, dialogOptions = parseOptionalArguments(dialogType, "info", dialogOptions, "ok");
 	
 	-- Establecemos unas dimensiones fijas para la ventana del diálogo.
-	local width, height = 0.27, 0.2;
+	local width, height = 0.37, 0.23;
 	local aspectRatio = width / height;
 	
 	-- Que opciones hay para el diálogo ?
@@ -132,7 +132,7 @@ function createInputDialog(x, y, title, text, relative, dialogOptions, masked, m
 	dialogOptions = parseOptionalArguments(dialogOptions, "ok");
 	
 	-- Establecemos unas dimensiones fijas para la ventana del diálogo.
-	local width, height = 0.28, 0.2;
+	local width, height = 0.38, 0.23;
 	local aspectRatio = width / height;
 	
 	-- Que opciones hay para el diálogo ? 
