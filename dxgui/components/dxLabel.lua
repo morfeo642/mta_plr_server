@@ -26,7 +26,8 @@
 	@param scale Es la escala del texto. 
 	@param alignX Indica el tipo de alineación sobre el eje X del texto (left, right o center), por defecto left
 	@param alignY Indica el tipo de alineación sobre el eje Y del text (top, center, bottom), por defecto top
-	@param colorCoded Indica si bién se usa códigos de colores dentro del texto de la etiqueta.
+	@param colorCoded Indica si bién se usa códigos de colores dentro del texto de la etiqueta. Si está establecido a true, todo el texto estará 
+	forzado a ir en una línea (los caracteres que no entren en está línea no se muestran)
 ]]
 function dxCreateLabel(x,y,width,height,text, relative, parent,color,font,scale,alignX,alignY,colorCoded)
 	-- check arguments.
@@ -188,22 +189,23 @@ function dxLabelRender(component,cpx,cpy,cpg, alphaFactor)
 	else
 		textWidth = dxGetTextWidth(title,scale,font)
 	end
-	if textWidth > tw then
-		while textWidth>tw do
-			title = title:sub(1,title:len()-1)
-			if (dxGetColorCoded(component)) then
-				textWidth = dxGetTextWidth(title:gsub("#%x%x%x%x%x%x",""),scale,font)
-			else
-				textWidth = dxGetTextWidth(title,scale,font)
-			end
-		end
-	end
+
 	local alignX,alignY = dxLabelGetHorizontalAlign(component),
 		dxLabelGetVerticalAlign(component)
 	
 	if (dxGetColorCoded(component)) then
+		if textWidth > tw then
+			while textWidth>tw do
+				title = title:sub(1,title:len()-1)
+				if (dxGetColorCoded(component)) then
+					textWidth = dxGetTextWidth(title:gsub("#%x%x%x%x%x%x",""),scale,font)
+				else
+					textWidth = dxGetTextWidth(title,scale,font)
+				end
+			end
+		end
 		dxDrawColorText(title,textX,textY,textX+textWidth,textY+ch,color,scale,font,alignX,alignY,true,true,cpg)
 	else
-		dxDrawText(title,textX,textY,textX+textWidth,textY+ch,color,scale,font,alignX,alignY,true,true,cpg)
+		dxDrawText(title,textX,textY,textX+cw,textY+ch,color,scale,font,alignX,alignY,true,true,cpg)
 	end
 end
