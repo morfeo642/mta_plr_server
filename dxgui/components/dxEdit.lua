@@ -264,7 +264,7 @@ function dxEditSetMaxLength(dxElement,maxlen)
 		setElementData(dxElement, "text", text);
 	end;
 	
-	setElementData(dxElement,"maxlength",maxlength)
+	setElementData(dxElement,"maxlength",maxlen)
 	triggerEvent("onClientDXPropertyChanged",dxElement,"maxlength",maxlen)
 end
 
@@ -387,8 +387,8 @@ addEventHandler("onClientCharacter", root,
 		local text = getElementData(clickedEditBox, "text");
 		local maxLength = getElementData(clickedEditBox, "maxlength");
 		local font = getElementData(clickedEditBox, "font");
-		
-		if (maxLength ~= -1) and (text:len() == maxLength) then return; end;
+
+		if (maxLength ~= -1) and (text:len() >= maxLength) then return; end;
 		
 		if caret == 0 then caret = caret + 1; end;
 		
