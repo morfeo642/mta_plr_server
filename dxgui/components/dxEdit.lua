@@ -107,7 +107,7 @@ function dxCreateEdit(x,y,width,height,text,relative,parent,color,font,theme)
 			lastClickedEditBox = source;
 			local function removeEditBoxInput()
 				-- lose input
-				if not getElementData(lastClickedEditBox, "clicked") then 
+				if (not isElement(lastClickedEditBox)) or (not getElementData(lastClickedEditBox, "clicked")) then 
 					guiSetInputEnabled(false);
 				end;
 				removeEventHandler("onClientClick", root, removeEditBoxInput);
