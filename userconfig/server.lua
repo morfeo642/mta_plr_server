@@ -1,18 +1,18 @@
 
 --[[!
-	Establece el valor de una variable en la configuración del usuario.
-	Esta configuración se guardará en la cuenta del usuario, y por tanto, no será
+	Establece el valor de una variable de configuración en una cuenta
+	Esta configuración se guardará en la cuenta de un usuario, y por tanto, no será
 	accesible directamente por el cliente. 
-	@param player Es el jugador del que se quiere cambiar su configuración.
+	@param account Es una cuenta donde se guardará la variable de configuración.
 	@param configDataName Es el nombre de la variable de configuración
 	@param configDataValue Es el nuevo valor de la variable, nil para borrar la variable de la cuenta.
 	El valor puede ser un número, booleano, string o una tabla que sea convertible a string mediante table.toJSON
 	
 	@note La configuración será privada para cada recurso para evitar conflictos de nombres.
 ]]
-function setPlayerConfigData(player, configDataName, configDataValue)
-	checkArgumentsTypes("setPlayerConfigData", 2, 1, player, "player", configDataName, "string");
-	checkOptionalArgumentType("setPlayerConfigData", 2, configDataValue, 3, "boolean", "string", "number", "table");
+function setAccountConfigData(account, configDataName, configDataValue)
+	checkArgumentsTypes("setAccountConfigData", 2, 2, configDataName, "string");
+	checkOptionalArgumentType("setAccountConfigData", 2, configDataValue, 3, "boolean", "string", "number", "table");
 	local preffix;
 	if configDataValue ~= nil then preffix = type(configDataValue):sub(1,1); end;
 
@@ -28,21 +28,21 @@ function setPlayerConfigData(player, configDataName, configDataValue)
 	configDataName = getResourceName(sourceResource) .. ":" .. configDataName;
 		
 	if configDataValue then 
-		setAccountData(getPlayerAccount(player), configDataName, preffix .. configDataValue);
+		setAccountData(account, configDataName, preffix .. configDataValue);
 	else
-		setAccountData(getPlayerAccount(player), configDataName, false);
+		setAccountData(account, configDataName, false);
 	end;	
 end;
 
 --[[!
-	@return Devuelve el valor de una variable de configuración de un jugador (nil si no existe)
-	@param player Es el jugador
+	@return Devuelve el valor de una variable de configuración de una cuenta (nil si no existe)
+	@param account Es la cuenta.
 	@param configDataName Es el nombre de la variable de configuración.
 ]]
-function getPlayerConfigData(player, configDataName)
-	checkArgumentsTypes("setPlayerConfigData", 2, 1, player, "player", configDataName, "string");
+function getAccountConfigData(account, configDataName)
+	checkArgumentsTypes("getAccountConfigData", 2, 2, configDataName, "string");
 	
-	local configDataValue = getAccountData(getPlayerAccount(player), getResourceName(sourceResource) .. ":" .. configDataName);
+	local configDataValue = getAccountData(account, getResourceName(sourceResource) .. ":" .. configDataName);
 	if not configDataValue then 	
 		return nil;
 	end;
@@ -58,6 +58,26 @@ function getPlayerConfigData(player, configDataName)
 		configDataValue = table.fromJSON(configDataValue);
 	end;
 	return configDataValue;
+end;
+
+--[[!
+	Es igual que setAccountConfigData pero la variable de configuración se guardará en la cuenta actual
+	del jugador tomado como argumento.
+	@see setAccountConfigData
+]]
+function setPlayerConfigData(player, ...)
+	checkArgumentsTypes("setPlayerConfigData", 2, 1, player, "player");
+	setAccountConfigData(getPlayerAccount(player), ...);
+end;
+
+--[[!
+	Es igual que getAccountConfigData pero la variable de configuración se consulta en la cuenta actual
+	del jugador pasado como argumento
+	@see getAccountConfigData
+]]	
+function getPlayerConfigData(player, ...)
+	checkArgumentsTypes("setPlayerConfigData", 2, 1, player, "player");
+	return getAccountConfigData(getPlayerAccount(player), ...);
 end;
 
 

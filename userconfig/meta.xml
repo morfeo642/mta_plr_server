@@ -19,4 +19,6 @@
 	<export function="getClientLocalConfigData" type="client" />
 	<export function="getPlayerConfigData" type="server" />
 	<export function="setClientLocalConfigData" type="client" />
+	<export function="setAccountConfigData" type="server" />
+	<export function="getAccountConfigData" type="server" />
 </meta>
