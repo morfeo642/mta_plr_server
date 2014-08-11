@@ -145,15 +145,6 @@ function guiListSetTitleShow(...) return exports.dxgui:dxListSetTitleShow(...) e
 function guiListGetTitleShow(...) return exports.dxgui:dxListGetTitleShow(...) end
 function guiListRender(...) return exports.dxgui:dxListRender(...) end
 
--- ComboBox = ListBox, por cuestiones de compatibilidad...
-guiCreateComboBox = guiCreateList
-guiComboBoxAddItem = guiListAddRow
-guiComboBoxClear = guiListClear
-guiComboBoxSetSelectedItem = guiListSetSelectedItem
-guiComboBoxGetSelectedItem = guiListGetSelectedItem
-guiComboBoxAddItem = guiListAddRow
-guiComboBoxRemoveItem = guiListRemoveRow
-
 -- EditBox
 function guiCreateEdit(...) return exports.dxgui:dxCreateEdit(...); end;
 function guiEditGetPlaceHolder(...) return exports.dxgui:dxEditGetPlaceHolder(...); end;
