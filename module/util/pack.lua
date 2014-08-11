@@ -69,8 +69,17 @@ end;
 	una tabla con los argumentos empaquetados. 
 ]]
 function reversehalfpack(n, ...)
-	local args = {...};
-	return invertargs(halfpack(#args-n, invertargs(...)));
+	local args = pack(...);
+	assert((type(n) == "number") and (n >= 1) and (n <= #args));
+	if n < #args then 
+		local packedArgs = {};
+		local unpackedArgs = {};
+		for i = 1,n,1 do unpackedArgs[i] = args[i]; end;
+		for i = n+1,#args,1 do packedArgs[i-n] = args[i]; end;
+		unpackedArgs[#unpackedArgs+1] = packedArgs;
+		return unpack(unpackedArgs);
+	end;
+	return args;
 end;
 
 --[[!
