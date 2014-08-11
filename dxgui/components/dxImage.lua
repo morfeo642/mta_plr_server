@@ -18,14 +18,14 @@
 	@param y Es la coordenada y de la posición de la imagen
 	@param width Es la anchura de la imágen
 	@param height Es la altura de la imagen
-	@param path Es la ruta del archivo que contiene la imagen a mostrar
+	@param pathOrTexture Es la ruta del archivo que contiene la imagen a mostrar, o bién, una textura.
 	@param relative Indica si la posición y las dimensiones son relativas al elemento que es padre de la imagen
 	@param parent Es el padre de esta imagen, por defecto es dxGetRootPane()
 	@param rotation Es la rotación de la imágen en grados sexagesimales, por defecto 0.
 ]]
-function dxCreateStaticImage(x,y,width,height,path,relative,parent,rotation)
+function dxCreateStaticImage(x,y,width,height,pathOrTexture,relative,parent,rotation)
 	-- check arguments
-	checkargs("dxCreateStaticImage", 1, "number", x, "number", y, "number", width, "number", height, "string", path, "boolean", relative);
+	checkargs("dxCreateStaticImage", 1, "number", x, "number", y, "number", width, "number", height, {"string", "texture"}, pathOrTexture, "boolean", relative);
 	checkoptionalcontainer("dxCreateStaticImage", 7, parent);
 	checkoptionalargs("dxCreateStaticImage", 8, "number", rotation);
 	
@@ -38,10 +38,12 @@ function dxCreateStaticImage(x,y,width,height,path,relative,parent,rotation)
 	if not rotation then
 		rotation = 0
 	end
-	path = getImagePath(sourceResource,path);
-	if not fileExists(path) then
-		return false
-	end
+	if type(pathOrTexture) == "string" then 
+		local path = pathOrTexture;
+		path = getImagePath(sourceResource,path);
+		assert(fileExists(path), "File " .. path .. " not exists");
+		pathOrTexture = path;
+	end;
 	
 	local image = createElement("dxStaticImage")
 	setElementParent(image,parent)
@@ -56,7 +58,7 @@ function dxCreateStaticImage(x,y,width,height,path,relative,parent,rotation)
 	setElementData(image,"Section:y",false)
 	setElementData(image,"Section:width",false)
 	setElementData(image,"Section:height",false)
-	setElementData(image,"image",path)
+	setElementData(image,"image",pathOrTexture)
 	setElementData(image,"visible",true)
 	setElementData(image,"hover",false)
 	setElementData(image,"parent",parent)
@@ -78,16 +80,16 @@ end
 	@param sectionY Es la coordenada y donde comienza la sección en la imagen en píxeles
 	@param sectionWidth Es la anchura de la sección en la imagen en píxeles.
 	@param sectionHeight Es la altura de la sección en la imagen en píxeles.
-	@param path Es la ruta de la imagen
+	@param pathOrTexture Es la ruta de la imagen o bien una textura.
 	@param relative Es un valor booleano indicando si la posición de la imagen y sus dimensiones deben ser relativas
 	al padre de este componente
 	@param parent Es el padre de este componente, por defecto, dxGetRootPane()
 	@param rotation Es la rotación de la sección de la imagen, por defecto, 0 (en grados sexagesimales)
 ]]
-function dxCreateStaticImageSection(x,y,width,height,sectionX,sectionY,sectionWidth,sectionHeight,path, relative, parent, rotation)
+function dxCreateStaticImageSection(x,y,width,height,sectionX,sectionY,sectionWidth,sectionHeight,pathOrTexture, relative, parent, rotation)
 	-- check arguments
 	checkargs("dxCreateStaticImageSection", 1, "number", x, "number", y, "number", width, "number", height, "number", sectionX,
-		"number", sectionY, "number", sectionWidth, "number", sectionHeight, "string", path, "boolean", relative);
+		"number", sectionY, "number", sectionWidth, "number", sectionHeight, {"string", "texture"}, path, "boolean", relative);
 	checkoptionalargs("dxCreateStaticImageSection", 12, "number", rotation);
 	
 	if not parent then
@@ -96,9 +98,12 @@ function dxCreateStaticImageSection(x,y,width,height,sectionX,sectionY,sectionWi
 	if not rotation then
 		rotation = 0
 	end
-	if not fileExists(path) then
-		return false
-	end
+	if type(pathOrTexture) == "string" then 
+		local path = pathOrTexture;
+		path = getImagePath(sourceResource,path);
+		assert(fileExists(path), "File " .. path .. " not exists");
+		pathOrTexture = path;
+	end;
 	
 	local image = createElement("dxStaticImage")
 	setElementParent(image,parent)
@@ -113,7 +118,7 @@ function dxCreateStaticImageSection(x,y,width,height,sectionX,sectionY,sectionWi
 	setElementData(image,"Section:y",sectionY)
 	setElementData(image,"Section:width",sectionWidth)
 	setElementData(image,"Section:height",sectionHeight)
-	setElementData(image,"image",path)
+	setElementData(image,"image",pathOrTexture)
 	setElementData(image,"visible",true)
 	setElementData(image,"hover",false)
 	setElementData(image,"parent",parent)
@@ -217,16 +222,21 @@ end
 
 -- // Render
 function dxStaticImageRender(component,cpx,cpy,cpg, alphaFactor)
-	local path = getElementData(component,"image")
+	local pathOrTexture = getElementData(component,"image")
 	local rotation = getElementData(component,"rotation")
 	local cx,cy = getElementData(component, "x"), getElementData(component, "y");
 	local cw,ch = getElementData(component, "width"), getElementData(component, "height");
 	local alpha = 255 * alphaFactor;
 	
+	if (type(pathOrTexture) ~= "string") and (not isElement(pathOrTexture)) then 
+		-- the image is a texture, and it was deleted, so we not render it...
+		return;
+	end;
+	
 	if (getElementData(component,"Section")) then
 		local sx,sy,sw,sh = getElementData(component,"Section:x"),getElementData(component,"Section:y"),getElementData(component,"Section:width"),getElementData(component,"Section:height")
-		dxDrawImageSection(cpx+cx,cpx+cy,cw,ch,sx,sy,sw,sh,path,rotation,0,0,tocolor(255,255,255,alpha),cpg)
+		dxDrawImageSection(cpx+cx,cpx+cy,cw,ch,sx,sy,sw,sh,pathOrTexture,rotation,0,0,tocolor(255,255,255,alpha),cpg)
 	else
-		dxDrawImage(cpx+cx,cpy+cy,cw,ch,path,rotation,0,0,tocolor(255,255,255,alpha),cpg)
+		dxDrawImage(cpx+cx,cpy+cy,cw,ch,pathOrTexture,rotation,0,0,tocolor(255,255,255,alpha),cpg)
 	end
 end
