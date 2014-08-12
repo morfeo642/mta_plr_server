@@ -222,7 +222,11 @@ function dxRefreshClickStates(container,button,state,absoluteX,absoluteY,doubleC
 				end
 			end
 		end
+		local overlapedClick = {};
 		for i,_i in ipairs(tableClickers) do
+			local parent = getElementParent(clickedElements[i]);
+			if overlapedClick[parent] then return; end;
+			overlapedClick[parent] = true;
 			if (doubleClick) then 
 				triggerEvent("onClientDXDoubleClick",clickedElements[i],button,absoluteX,absoluteY)
 				if (not wasEventCancelled()) and isElement(clickedElements[i]) then
