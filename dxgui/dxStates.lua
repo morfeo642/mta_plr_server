@@ -107,6 +107,7 @@ function dxRefreshStates(container)
 			end
 		end
 		for i,_i in ipairs(tableClickers) do
+			if elementFor[_i] then i = _i; end;
 			local element = elementFor[i]
 			local hover = getElementData(element,"hoverBefore")
 			local push = getElementData(element,"pushBefore")
@@ -224,6 +225,7 @@ function dxRefreshClickStates(container,button,state,absoluteX,absoluteY,doubleC
 		end
 		local overlapedClick = {};
 		for i,_i in ipairs(tableClickers) do
+			if clickedElements[_i] then i = _i; end;
 			local parent = getElementParent(clickedElements[i]);
 			if overlapedClick[parent] then return; end;
 			overlapedClick[parent] = true;
@@ -254,4 +256,7 @@ addEventHandler("onClientDoubleClick",getRootElement(),
 	function(button, absoluteX, absoluteY, worldX, worldY, worldZ, clickedWorld)
 		dxRefreshClickStates(dxGetRootPane(),button,false,absoluteX,absoluteY,true)
 	end)
-	
+addEventHandler("onClientDXClick", root,
+	function()
+		dxBringToFront(source);
+	end);	
