@@ -57,6 +57,12 @@ function createMessageDialog(x, y, title, text, relative, dialogType, dialogOpti
 	
 	dialogType, dialogOptions = parseOptionalArguments(dialogType, "info", dialogOptions, "ok");
 	
+	local screenWidth, screenHeight = guiGetScreenSize();
+	if not relative then 
+		x = x / screenWidth;
+		y = y / screenHeight;
+	end;
+	
 	-- Establecemos unas dimensiones fijas para la ventana del diálogo.
 	local width, height = 0.37, 0.23;
 	local aspectRatio = width / height;
@@ -65,7 +71,7 @@ function createMessageDialog(x, y, title, text, relative, dialogType, dialogOpti
 	dialogOptions = parseDialogOptions(dialogOptions);
 	
 	-- Creamos la ventana del diálogo.
-	local dialogWindow = guiCreateWindow(x, y, width, height, title, relative);
+	local dialogWindow = guiCreateWindow(x, y, width, height, title, false);
 	
 	-- Truco para que la ventana este asociada al recurso llamante.
 	setElementData(dialogWindow, "resource", sourceResource);

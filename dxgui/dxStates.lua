@@ -257,6 +257,7 @@ addEventHandler("onClientDoubleClick",getRootElement(),
 		dxRefreshClickStates(dxGetRootPane(),button,false,absoluteX,absoluteY,true)
 	end)
 addEventHandler("onClientDXClick", root,
-	function()
+	function(button, state)
+		if (button ~= "left") or (state ~= "down") then return; end;
 		dxBringToFront(source);
 	end);	
