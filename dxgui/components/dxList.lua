@@ -136,22 +136,22 @@ function dxListSetSelectedItem(dxElement,item)
 end
 
 --[[!                                    
-	Elimina una fila de la lista.
+	Elimina un item de la lista.
 ]]
-function dxListRemoveRow(dxElement)
+function dxListRemoveItem(dxElement)
 	-- check arguments.
-	checkargs("dxListRemoveRow", 1, "dxListItem", dxElement);
+	checkargs("dxListRemoveItem", 1, "dxListItem", dxElement);
 	
 	destroyElement(dxElement)
 end
 
 --[[!
-	Añade una fila a la lista
+	Añade un item a la lista
 ]]
-function dxListAddRow(dxElement,text,color,font,colorcoded)
+function dxListAddItem(dxElement,text,color,font,colorcoded)
 	-- check arguments.
-	checkargs("dxListAddRow", 1, "dxList", dxElement);
-	checkoptionalargs("dxListAddRow", 2, "string", text, "number", color, "string", font, "boolean", colorcoded);
+	checkargs("dxListAddItem", 1, "dxList", dxElement);
+	checkoptionalargs("dxListAddItem", 2, "string", text, "number", color, "string", font, "boolean", colorcoded);
 
 	if not text then
 		text = ""
@@ -173,6 +173,51 @@ function dxListAddRow(dxElement,text,color,font,colorcoded)
 	dxSetColorCoded(item,colorcoded)
 	return item
 end
+
+--[[!
+Añade un subitem a un item. 
+@param dxElement Será el item que contendrá el nuevo subitem. 
+@param text Es el texto que contendrá el subitem
+@param color Es el color del texto del subitem
+@param font Es la fuente de texto
+@param colorcoded Es un valor booleano indicando si se usarán códigos de colores.
+]]
+function dxListAddSubItem(dxElement, text, color, font, colorcoded)
+	-- check arguments
+	checkargs("dxListAddSubItem", 1, "dxListItem", dxElement);
+	checkoptionalargs("dxListAddItem", 2, "string", text, "number", color, "string", font, "boolean", colorcoded);
+
+	if not text then
+		text = ""
+	end
+	if not color then
+		color = tocolor(0,0,0,255)
+	end
+	if not font then
+		font = "default"
+	end
+	if colorcoded == nil then
+		colorcoded = false
+	end
+	local item = createElement("dxListItem")
+	setElementParent(item,dxElement)
+	dxSetText(item,text)
+	setElementData(item,"color",color)
+	setElementData(item,"font",font)
+	dxSetColorCoded(item,colorcoded)
+	return item
+end;
+
+--[[!
+Elimina subitems de un item especifico de una lista.
+@param dxElement Es un item de una lista.
+]]
+function dxListClearSubItems(dxElement)
+	checkargs("dxListClearSubItems", 1, "dxListItem", dxElement);
+	for _, subItem in ipairs(getElementChildren(dxElement)) do
+		destroyElement(subItem);
+	end;
+end;
 
 --[[!
 	@deprecated
@@ -321,6 +366,96 @@ function list__(button, absoluteX, absoluteY, worldX, worldY, worldZ, clickedWor
 		end
 	end
 end
+
+
+
+-- Esta tabla sirve para crear listas tontas (para asignar a los elementos un padre temporal sin eliminarlos)
+local dummyLists = {};
+
+-- Esta tabla tiene como indice una lista. Como valor una traza del camino seguido. (Se entiene por camino, al
+-- conjunto de items de esta misma lista que han sido clickeados hasta obtener la lista de subitems que ahora
+-- se muestran en la misma). El valor es nil si en la lista se muestran los items del nivel superior.
+local listItemTrace = {};
+
+addEventHandler("onClientDXDoubleClick", root,
+	function()
+		if (getElementType(source) ~= "dxListItem") or ((getElementChildrenCount(source) == 0) and (not getElementData(source, "isgobackitem"))) then return; end;
+		local clickedItem = source;
+		
+		-- obtenemos la lista a la que pertenece el item.
+		local list = getElementParent(clickedItem);
+		
+		if not getElementData(clickedItem, "isgobackitem") then 
+			local trace;
+			if not listItemTrace[list] then 
+				listItemTrace[list] = {};
+				trace = listItemTrace[list];
+			else
+				trace = listItemTrace[list];
+			end;
+			local parentItem;
+			if #trace > 0 then 
+				parentItem = trace[#trace];
+			else
+				parentItem = list;
+			end;
+			trace[#trace+1] = clickedItem;
+			
+			-- guardamos en un elemento auxiliar los elementos del nivel actual. 
+			local dummyList = createElement("dxDummyList");
+			for _, item in ipairs(getElementChildren(list)) do 
+				setElementParent(item, dummyList);
+			end;
+			dummyLists[parentItem] = dummyList;
+			
+			-- establecemos el elemento padre de los hijos del elemento clickeado a la propia lista.
+			-- también añadimos el elemento ".." para poder retroceder al nivel superior.
+			local goBackItem = dxListAddItem(list, "..", tocolor(255, 0, 0, 255), "default", true);
+			setElementData(goBackItem, "isgobackitem", true);
+			for _, item in ipairs(getElementChildren(clickedItem)) do 
+				setElementParent(item, list);
+			end;
+		else
+			-- eliminar el item ".."
+			destroyElement(clickedItem);
+				
+			local trace = listItemTrace[list];
+			local parentItem = trace[#trace];
+			trace[#trace] = nil;
+			-- los items que se muestran en la lista "vuelven" con su dueño. 
+			for _, item in ipairs(getElementChildren(list)) do 
+				setElementParent(item, parentItem);
+			end;
+			
+			-- obtenemos el item de nivel superior del item padre.
+			local upperItem;
+			if #trace > 0 then 
+				upperItem = trace[#trace]; 
+			else
+				upperItem = list;
+				listItemTrace[list] = nil;
+			end;
+			local dummyList = dummyLists[upperItem];
+			for _, item in ipairs(getElementChildren(dummyList)) do 
+				setElementParent(item, list);
+			end;
+			dummyLists[upperItem] = nil;
+		end;
+	end);
+	
+-- limpiamos variables auxiliares cuando las listas se borran...
+addEventHandler("onClientDXDestroy", root,
+	function() 
+		if getElementType(source) == "dxList" then 
+			listItemTrace[source] = nil;
+		end;
+		if ((getElementType(source) == "dxList") or (getElementType(source) == "dxListItem")) and isElement(dummyLists[source]) then 
+			destroyElement(dummyLists[source]);
+			dummyLists[source] = nil;
+		end;	
+	end);
+	
+	
 
 -- // Render
 function dxListRender(component,cpx,cpy,cpg, alphaFactor)

@@ -139,11 +139,13 @@ function guiListClear(...) return exports.dxgui:dxListClear(...) end
 function guiListGetSelectedItem(...) return exports.dxgui:dxListGetSelectedItem(...) end
 function guiListSetSelectedItem(...) return exports.dxgui:dxListSetSelectedItem(...) end
 function guiListGetItemCount(...) return exports.dxgui:dxListGetItemCount(...) end
-function guiListRemoveRow(...) return exports.dxgui:dxListRemoveRow(...) end
-function guiListAddRow(...) return exports.dxgui:dxListAddRow(...) end
+function guiListRemoveItem(...) return exports.dxgui:dxListRemoveItem(...) end
+function guiListAddItem(...) return exports.dxgui:dxListAddItem(...) end
 function guiListSetTitleShow(...) return exports.dxgui:dxListSetTitleShow(...) end
 function guiListGetTitleShow(...) return exports.dxgui:dxListGetTitleShow(...) end
 function guiListRender(...) return exports.dxgui:dxListRender(...) end
+function guiListAddSubItem(...) return exports.dxgui:dxListAddSubItem(...); end;
+function guiListClearSubItems(...) return exports.dxgui:dxListClearSubItems(...); end;
 
 -- EditBox
 function guiCreateEdit(...) return exports.dxgui:dxCreateEdit(...); end;

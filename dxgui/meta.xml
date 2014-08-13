@@ -180,11 +180,13 @@
 		<!-- Listbox -->
 			<export function="dxCreateList" type="client" />
 			<export function="dxListClear" type="client" />
+			<export function="dxListClearSubItems" type="client" />
 			<export function="dxListGetSelectedItem" type="client" />
 			<export function="dxListSetSelectedItem" type="client" />
 			<export function="dxListGetItemCount" type="client" />
-			<export function="dxListRemoveRow" type="client" />
-			<export function="dxListAddRow" type="client" />
+			<export function="dxListRemoveItem" type="client" />
+			<export function="dxListAddItem" type="client" />
+			<export function="dxListAddSubItem" type="client" />
 			<export function="dxListSetTitleShow" type="client" />
 			<export function="dxListGetTitleShow" type="client" />
 			<export function="dxListSetTitleVisible" type="client" />
