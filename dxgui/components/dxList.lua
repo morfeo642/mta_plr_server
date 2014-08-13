@@ -417,6 +417,7 @@ function dxListRender(component,cpx,cpy,cpg, alphaFactor)
 				funct = dxDrawColorText
 			end
 			local font__ = getElementData(item,"font")
+			local color = getElementData(item, "color");
 			local color__ = color;
 			if not font__ then
 				font__ = "default"
