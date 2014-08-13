@@ -166,7 +166,7 @@ function guiCreateDrawBoard(...) return exports.dxgui:dxCreateDrawBoard(...); en
 function guiDrawBoardGetTargetSize(...) return exports.dxgui:dxDrawBoardGetTargetSize(...); end;
 function guiDrawBoardSetTargetSize(...) return exports.dxgui:dxDrawBoardSetTargetSize(...); end;
 
-function guiDrawBoardAddHandler(drawBoard, handler) return addEventHandler("onClientDXDrawBoardRender", drawBoard, function(target) dxSetRenderTarget(target,true); handler(dxGetMaterialSize(target)); dxSetRenderTarget(); end);end;
+function guiDrawBoardAddHandler(drawBoard, handler) return addEventHandler("onClientDXDrawBoardRender", drawBoard, function(target) dxSetRenderTarget(target,true); handler(dxGetMaterialSize(target)); dxSetRenderTarget(); end, false);end;
 
 -- Cursor
 function setCursorColor(...) return exports.dxgui:dxSetCursorColor(...); end;
