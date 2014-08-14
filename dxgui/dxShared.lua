@@ -302,21 +302,8 @@ function getEmbeddedText(text, maxWidth, font, scale)
 	return "";
 end;
 
-function getTextWithoutColorCodes(text) 
-	if text:len() >= 7 then 
-		local i = 1;
-		local textWithinCodes = "";
-		while ((text:len() - i + 1) >= 7) do 
-			if text:sub(i, i+6):find("#%x%x%x%x%x%x") then 
-				i = i + 7; 
-			else 
-				textWithinCodes = textWithinCodes .. text:sub(i,i);
-				i = i + 1;
-			end;
-		end;
-		return textWithinCodes .. text:sub(i);
-	end; 
-	return text;
+function getTextWithoutColorCodes(text)
+	return text:gsub("#%x%x%x%x%x%x", "");
 end;
 
 function getSubColorCodedText(text, lastChar) 
