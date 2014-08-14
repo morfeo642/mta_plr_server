@@ -280,22 +280,13 @@ function dxWindowRender(element, alphaFactor)
 			getElementData(theme,"TitleBarTopRight"..clickedset..":images"),0,0,0,color,cpg)
 		local funct = dxDrawText
 		if (dxGetColorCoded(element)) then funct = dxDrawColorText end
-		local textWidth = 0
-		if (dxGetColorCoded(element)) then
-			textWidth = dxGetTextWidth(title:gsub("#%x%x%x%x%x%x", ""),1,font)
-		else
-			textWidth = dxGetTextWidth(title,1,font)
-		end
-		if textWidth > w-50 then
-			while textWidth>w-50 do
-				title = title:sub(1,title:len()-6).."..."
-				if (dxGetColorCoded(element)) then
-					textWidth = dxGetTextWidth(title:gsub("#%x%x%x%x%x%x", ""),1,font)
-				else
-					textWidth = dxGetTextWidth(title,1,font)
-				end
-			end
-		end
+
+		if (dxGetColorCoded(element)) then 
+			title = getEmbeddedColorCodedText(title, w - 50, font, 1);
+		else 
+			title = getEmbeddedText(title, w - 50, font, 1); 
+		end;
+		
 		funct(title,titlex+25,titley,titlex+25+w-50,titley+titleHeight,color,1,font,"center","center",true,false,cpg)
 	end
 	-- // Drawing Component Pane
