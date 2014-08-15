@@ -106,7 +106,8 @@ setmetatable(__remote_client,
 		__newindex = function() end,
 		__index = 
 			function(t, index)
-				assert(isElement(index) and (getElementType(index) == "player") and (index ~= localPlayer));
+				--assert(isElement(index) and (getElementType(index) == "player") and (index ~= localPlayer));
+				assert(isElement(index) and (getElementType(index) == "player"));
 				local remoteClient = index;
 				return 
 					setmetatable({},
@@ -120,11 +121,11 @@ setmetatable(__remote_client,
 										function(funcCallback, ...)
 											assert((type(funcCallback) == "function") or (funcCallback == nil));
 											if not funcCallback then 
-												triggerServerEvent("onClientCallRemoteClientFunction", resourceRoot, remoteClientFunc, nil, ...);
+												triggerServerEvent("onClientCallRemoteClientFunction", resourceRoot, remoteClient, remoteClientFunc, nil, ...);
 											else 
 												-- Registrar callback
 												__client_callbacks[tostring(funcCallback)] = funcCallback;
-												triggerServerEvent("onClientCallRemoteClientFunction", resourceRoot, remoteClientFunc, tostring(funcCallback), ...);
+												triggerServerEvent("onClientCallRemoteClientFunction", resourceRoot, remoteClient, remoteClientFunc, tostring(funcCallback), ...);
 											end;
 										end;
 								end
@@ -181,5 +182,5 @@ addEventHandler("onClientCallServerFunctionResponse", resourceRoot,
 addEvent("onClientCallRemoteClientFunctionResponse", true);
 addEventHandler("onClientCallRemoteClientFunctionResponse", resourceRoot,
 	function(remoteClient, funcCallback, ...)
-		__client_callbacks[funcCallback](remoteClient, ...);
+		__client_callbacks[funcCallback](...);
 	end);

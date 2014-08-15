@@ -186,7 +186,7 @@ addEvent("onServerCallClientFunctionResponse", true);
 addEventHandler("onServerCallClientFunctionResponse", resourceRoot,
 	function(funcCallback, ...) 
 		if client then 
-			__server_callbacks[funcCallback](client, ...);
+			__server_callbacks[funcCallback](...);
 		end;
 	end);
 
@@ -201,8 +201,8 @@ addEventHandler("onClientCallRemoteClientFunction", resourceRoot,
 			__client[remoteClient][func](nil, ...);
 		else 
 			__client[remoteClient][func](
-				function(remoteClient, ...)
-					triggerClientEvent(sourceClient, "onClientCallRemoteClientFunctionResponse", resourceRoot, remoteClient, funcCallback, ...);
+				function(...)
+					triggerClientEvent(sourceClient, "onClientCallRemoteClientFunctionResponse", resourceRoot, client, funcCallback, ...);
 				end, ...);
 		end;
 	end);
