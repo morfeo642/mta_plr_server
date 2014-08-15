@@ -291,47 +291,47 @@ function dxEditRender(component, cpx, cpy, cpg, alphaFactor)
 	dxDrawImageSection(x, y, _cornerSize, _cornerSize, 
 		getElementData(cTheme,"SButtonTopLeft:X"),getElementData(cTheme,"SButtonTopLeft:Y"),
 		getElementData(cTheme,"SButtonTopLeft:Width"),getElementData(cTheme,"SButtonTopLeft:Height"),
-		getElementData(cTheme,"SButtonTopLeft:images"),0,0,0,tocolor(255,255,255,alpha), cpg) 	
+		getElementData(cTheme,"SButtonTopLeft:images"),0,0,0,color, cpg) 	
 	
 	dxDrawImageSection(x, y+_cornerSize, _cornerSize, h-2*_cornerSize, 
 		getElementData(cTheme,"SButtonLeft:X"),getElementData(cTheme,"SButtonLeft:Y"),
 		getElementData(cTheme,"SButtonLeft:Width"),getElementData(cTheme,"SButtonLeft:Height"),
-		getElementData(cTheme,"SButtonLeft:images"),0,0,0,tocolor(255,255,255,alpha), cpg) 	
+		getElementData(cTheme,"SButtonLeft:images"),0,0,0,color, cpg) 	
 
 	dxDrawImageSection(x, y+h-_cornerSize, _cornerSize, _cornerSize, 
 		getElementData(cTheme,"SButtonBottomLeft:X"),getElementData(cTheme,"SButtonBottomLeft:Y"),
 		getElementData(cTheme,"SButtonBottomLeft:Width"),getElementData(cTheme,"SButtonBottomLeft:Height"),
-		getElementData(cTheme,"SButtonBottomLeft:images"),0,0,0,tocolor(255,255,255,alpha), cpg) 	
+		getElementData(cTheme,"SButtonBottomLeft:images"),0,0,0,color, cpg) 	
 
 	dxDrawImageSection(x+_cornerSize, y+h-_cornerSize, w-2*_cornerSize, _cornerSize, 
 		getElementData(cTheme,"SButtonBottom:X"),getElementData(cTheme,"SButtonBottom:Y"),
 		getElementData(cTheme,"SButtonBottom:Width"),getElementData(cTheme,"SButtonBottom:Height"),
-		getElementData(cTheme,"SButtonBottom:images"),0,0,0,tocolor(255,255,255,alpha), cpg) 	
+		getElementData(cTheme,"SButtonBottom:images"),0,0,0,color, cpg) 	
 
 	dxDrawImageSection(x+_cornerSize, y, w-2*_cornerSize, _cornerSize, 
 		getElementData(cTheme,"SButtonTop:X"),getElementData(cTheme,"SButtonTop:Y"),
 		getElementData(cTheme,"SButtonTop:Width"),getElementData(cTheme,"SButtonTop:Height"),
-		getElementData(cTheme,"SButtonTop:images"),0,0,0,tocolor(255,255,255,alpha), cpg) 
+		getElementData(cTheme,"SButtonTop:images"),0,0,0,color, cpg) 
 
 	dxDrawImageSection(x+w-_cornerSize, y, _cornerSize, _cornerSize, 
 		getElementData(cTheme,"SButtonTopRight:X"),getElementData(cTheme,"SButtonTopRight:Y"),
 		getElementData(cTheme,"SButtonTopRight:Width"),getElementData(cTheme,"SButtonTopRight:Height"),
-		getElementData(cTheme,"SButtonTopRight:images"),0,0,0,tocolor(255,255,255,alpha), cpg) 	
+		getElementData(cTheme,"SButtonTopRight:images"),0,0,0,color, cpg) 	
 
 	dxDrawImageSection(x+w-_cornerSize, y+h-_cornerSize, _cornerSize, _cornerSize, 
 		getElementData(cTheme,"SButtonBottomRight:X"),getElementData(cTheme,"SButtonBottomRight:Y"),
 		getElementData(cTheme,"SButtonBottomRight:Width"),getElementData(cTheme,"SButtonBottomRight:Height"),
-		getElementData(cTheme,"SButtonBottomRight:images"),0,0,0,tocolor(255,255,255,alpha), cpg) 		
+		getElementData(cTheme,"SButtonBottomRight:images"),0,0,0,color, cpg) 		
 
 	dxDrawImageSection(x+w-_cornerSize, y+_cornerSize, _cornerSize, h-2*_cornerSize, 
 		getElementData(cTheme,"SButtonRight:X"),getElementData(cTheme,"SButtonRight:Y"),
 		getElementData(cTheme,"SButtonRight:Width"),getElementData(cTheme,"SButtonRight:Height"),
-		getElementData(cTheme,"SButtonRight:images"),0,0,0,tocolor(255,255,255,alpha), cpg) 		
+		getElementData(cTheme,"SButtonRight:images"),0,0,0,color, cpg) 		
 
 	dxDrawImageSection(x+_cornerSize, y+_cornerSize, w-2*_cornerSize, h-2*_cornerSize, 
 		getElementData(cTheme,"SButtonCenter:X"),getElementData(cTheme,"SButtonCenter:Y"),
 		getElementData(cTheme,"SButtonCenter:Width"),getElementData(cTheme,"SButtonCenter:Height"),
-		getElementData(cTheme,"SButtonCenter:images"),0,0,0,tocolor(255,255,255,alpha), cpg) 			
+		getElementData(cTheme,"SButtonCenter:images"),0,0,0,color, cpg) 			
 	-- Draw top left rounded corner.
 	
 	
