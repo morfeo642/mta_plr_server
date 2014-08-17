@@ -382,3 +382,28 @@ function table.deep_copy(t)
 	end;
 	return deep_copy({}, t); 
 end;
+
+--[[!
+	Es un iterador que itera a través de una tabla pero que a diferencia del iterador pairs/next, se 
+	sigue un orden especifico para iterar sobre esta.
+	@param t Es la tabla.
+	@param keyComparator Es el comparador. Permite indicar el orden para iterar sobre la tabla. Es una 
+		función que acepta dos parámetros (dos indices a, b) y devuelve un valor booleano indicando si
+		se debe iterar antes sobre a que sobre b. El comparador por defecto es: function(a,b) return a<b; end;
+]]
+function opairs(t, keyComparator)
+	localizedAssert((type(t) == "table") and ((type(keyComparator) == "function") or (not keyComparator)), "Bad arguments to opairs", 2);
+	local aux = {};
+	for index, _ in pairs(t) do 
+		aux[#aux+1] = index;
+	end;
+	table.sort(aux, keyComparator);
+	local j = 0; 
+	local function opairs_it() 
+		j = j + 1;
+		if aux[j] ~= nil then 
+			return aux[j], t[aux[j]];
+		end;
+	end;
+	return opairs_it;
+end;
