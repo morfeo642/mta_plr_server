@@ -32,6 +32,8 @@
 	<file src="util/printutils.lua" />
 	<file src="util/groupids.lua" />
 	<file src="util/vehicleids.lua" />
+	<file src="util/eventutils.lua" />
+	<file src="util/interiors.lua" />
 	
 	<file src="util/math/vec2.lua" />
 	<file src="util/math/vec3.lua" />
