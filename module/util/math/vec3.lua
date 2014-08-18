@@ -147,6 +147,13 @@ function vec3:dot(v)
 end;
 
 --[[!
+@return Devuelve el producto vectorial de dos vectores.
+]]
+function vec3:cross(v) 
+	return vec3(self.y * v.z - self.z * v.y, self.x * v.z - self.z * v.x, self.x * v.y - self.y * v.x);
+end;
+
+--[[!
 @return Devuelve una interpoliación lineal de este vector con otro vector.
 @param v Otro vector 
 @param k El parámetro de interpolación lineal. [0, 1]
