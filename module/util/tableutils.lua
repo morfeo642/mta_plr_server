@@ -171,7 +171,7 @@ end;
 ]]
 function table.match(t, predicate)
 	local index, value = next(t, nil);
-	while index and (not predicate(value)) do 
+	while next(t, index) and (not predicate(value)) do 
 		index, value = next(t, index);
 	end;
 	if (not predicate(value)) then 
