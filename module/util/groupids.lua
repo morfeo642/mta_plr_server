@@ -9,6 +9,7 @@ loadModule("util/class");
 loadModule("util/math/range");
 loadModule("util/checkutils");
 loadModule("util/stringutils");
+loadModule("util/tableutils");
 
 
 --[[!
@@ -32,6 +33,15 @@ function groupIds:init(...)
 			self:addId(ids);
 		end;
 	end;
+end;
+
+--[[!
+	@return Devuelve una copia de este grupo de IDs
+]]
+function groupIds:clone() 
+	local aux = {};
+	aux.ranges = table.shallow_copy(self.ranges);
+	return setmetatable(aux, groupIds);
 end;
 
 --[[!
