@@ -455,6 +455,21 @@ addEventHandler("onClientDXDestroy", root,
 		end;	
 	end);
 	
+addEventHandler("onClientDXClick", root,
+	function() 
+		if (getElementType(source) == "dxList") or (getElementType(source) == "dxListItem") then
+			local list;
+			if getElementType(source) == "dxList" then 
+				list = source;
+			elseif getElementType(source) == "dxListItem" then 
+				list = getElementParent(source);
+			end;
+			-- llevar al frente el scrollbar..
+			if getElementData(list, "scrollbarVert") then 
+				dxBringToFront(getElementData(list, "scrollbarVert"));
+			end;
+		end;
+	end, true);
 	
 
 -- // Render
