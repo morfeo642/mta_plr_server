@@ -71,7 +71,7 @@ function createMessageDialog(x, y, title, text, relative, dialogType, dialogOpti
 	dialogOptions = parseDialogOptions(dialogOptions);
 	
 	-- Creamos la ventana del diálogo.
-	local dialogWindow = guiCreateWindow(x, y, width, height, title, false);
+	local dialogWindow = guiCreateWindow(x, y, width, height, title, true);
 	
 	-- Truco para que la ventana este asociada al recurso llamante.
 	setElementData(dialogWindow, "resource", sourceResource);
