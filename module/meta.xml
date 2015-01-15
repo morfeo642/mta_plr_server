@@ -4,8 +4,6 @@
 	<script src="export.lua" type="server" />
 	<script src="export.lua" type="client" />
 	
-	<script src="core/server_loader.lua" type="server" />
-	<script src="core/client_loader.lua" type="client" />
 	
 	<!-- Funciones exportadas -->
 	<!-- Devuelve el código del módulo. (Se pasa como argumento a la función, la ruta del módulo, relativa al directorio donde
@@ -16,7 +14,6 @@
 
 	<!-- Scripts para los clientes -->
 	<file src="core/client_net_utils.lua" />
-	<file src="core/client_loader.lua" />
 	<file src="core/share.lua" />
 
 	<file src="util/class.lua" />
