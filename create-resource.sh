@@ -38,12 +38,6 @@ echo "	<include resource=\"module\" />" >> meta.xml
 echo "	<!-- Scripts comunes para todos los recursos -->" >> meta.xml
 echo "  <script src=\"common/server.lua\" type=\"server\" />" >> meta.xml
 echo "	<script src=\"common/client.lua\" type=\"client\" />" >> meta.xml
-echo "	<!-- Funciones que deben ser exportadas explicitamente para que todos los " >> meta.xml
-echo "	modulos funcionen -->" >> meta.xml
-echo "	<export function=\"__set\" type=\"server\"/>" >> meta.xml
-echo "	<export function=\"__get\" type=\"server\"/>" >> meta.xml
-echo "	<export function=\"__set\" type=\"client\"/>" >> meta.xml
-echo "	<export function=\"__get\" type=\"client\"/>" >> meta.xml
 echo "</meta>" >> meta.xml
 
 
