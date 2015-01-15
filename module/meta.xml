@@ -1,7 +1,6 @@
 ﻿<meta>
 	<info name="module" author="platypus" version="1.0.0" description="Permite trabajar con módulos para reutilizar código" />
-	<include resource="dxgui" />
-	
+
 	<script src="export.lua" type="server" />
 	<script src="export.lua" type="client" />
 	
@@ -14,14 +13,10 @@
 	<export function="getModule" type="server" />
 	<export function="getModule" type="client" />
 
-	<!-- Funciones necesarias para que el módulo core/share funcione -->
-	<export function="__set" />
-	<export function="__get" />
 
 	<!-- Scripts para los clientes -->
 	<file src="core/client_net_utils.lua" />
 	<file src="core/client_loader.lua" />
-	<file src="core/gui.lua" />
 	<file src="core/share.lua" />
 
 	<file src="util/class.lua" />
