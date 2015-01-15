@@ -38,14 +38,3 @@ end;
 
 importModule = loadModule;
 
-
--- Ejecutamos los scripts esenciales.
-
-if getResourceState(getResourceFromName("module")) == "running" then 
-	loadModule("core/server_loader");
-else 
-	addEventHandler("onResourceStart", root,
-		function(theResource) 
-			if theResource == getResourceFromName("module") then loadModule("core/server_loader", _G); end;
-		end);
-end;
