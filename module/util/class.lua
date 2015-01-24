@@ -58,6 +58,7 @@ function class(BaseClass)
 			setmetatable(newInstance, t);
 			-- Inicializar la nueva instancia.
 			newInstance:init(...);
+			
 			return newInstance;
 		end;
 		
@@ -94,7 +95,7 @@ function class(BaseClass)
 	-- Comprobar si un objeto hereda de una clase.
 	newClass.isinstanceof =
 		function(this, otherClass)
-			assert(type(otherClass) == "table");
+			localizedAssert(type(otherClass) == "table", "Invalid class", 2);
 			local theClass = newClass;
 			while (theClass ~= otherClass) and theClass.__base do 
 				theClass = theClass.__base;
