@@ -37,8 +37,10 @@
 	\endcode
 ]]
 
+loadModule("util/assertutils");
+
 function class(BaseClass)
-	assert((type(BaseClass) == "table") or (BaseClass == nil));
+	localizedAssert((type(BaseClass) == "table") or (BaseClass == nil), "Invalid base class", 2);
 	local newClass = {};
 	local newClassMetatable = {};
 	
@@ -55,21 +57,28 @@ function class(BaseClass)
 			local newInstance = {};
 			setmetatable(newInstance, t);
 			-- Inicializar la nueva instancia.
-			newInstance:init(...); 
+			newInstance:init(...);
 			return newInstance;
 		end;
 		
 	-- Inicializador de una instancia de la clase por defecto.
-	newClass.init = 
-		function(this, ...)
-			--Inicializar la superclase (si hereda de alguna)
-			pcall(newClass.super);	
-		end;
+	if not newClass.__base then 
+		newClass.init = 
+			function(this, ...)
+				
+			end;
+	else 
+		newClass.init = 
+			function(this, ...)
+				--Inicializar la superclase (si hereda de alguna)
+				newClass.super();
+			end;
+	end;
 	
 	-- Inicializador de superclase.
 	newClass.super = 
 		function(this, ...)
-			local baseClass = assert(newClass.__base);
+			local baseClass = localizedAssert(newClass.__base, "There is no superclass", 2);
 			baseClass.init(this, ...);
 		end;
 	-- Clonador de instancias por defecto.
