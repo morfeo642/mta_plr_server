@@ -2,6 +2,7 @@
 
 -- require 'tableutils';
 loadModule("util/tableutils");
+loadModule("util/checkutils");
 
 --[[!
 	\file
@@ -38,24 +39,25 @@ loadModule("util/tableutils");
 	\endcode
 ]]
 
-function wpairs(text, delimiters, ...) 
-	if not delimiters then 
-		delimiters = ' ';
-	else 
-		delimiters = delimiters .. table.concat({...});
-	end;
-
+function wpairs(text, delimiters) 
+	checkArgumentType("wpairs", 2, text, 1, "string");
+	checkOptionalArgument("wpairs", 2, delimiters, 2, "string");
+	delimiters = parseOptionalArguments(delimiters, ' ');
+	
 	return string.gmatch(text, "[^" .. delimiters .. "]+");		
 end;
 
 --[[!
 	Igual que wpairs, solo que se itera de derecha a izquierda.
 ]]
-function rwpairs(text, delimiters, ...)
+function rwpairs(text, delimiters)
+	checkArgumentType("rwpairs", 2, text, 1, "string");
+	checkOptionalArgumentType("rwpairs", 2, delimiters, 2, "string");
+
 	-- separar las palabras y meterlas en una tabla auxiliar.
 	local words = {};
 	local i = 0;
-	for word in wpairs(text, delimiters, ...) do 
+	for word in wpairs(text, delimiters) do 
 		i = i + 1;
 		words[i] = word;
 	end; 

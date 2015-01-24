@@ -5,6 +5,8 @@
 	inversa a unpack: toma una serie de parámetros y los empaqueta en una tabla.
 ]]
 
+loadModule("util/assertutils");
+
 --[[!
 	Empaqueta varios valores en una tabla. 
 	@param ... Los valores a empaquetar.
@@ -26,7 +28,7 @@ end;
 ]]
 function halfpack(n, ...)
 	local args = pack(...);
-	assert((type(n) == "number") and (n >= 1) and (n <= #args));
+	localizedAssert((type(n) == "number") and (n >= 1) and (n <= #args), "Bad arguments passed", 2);
 	if n < #args then 
 		local packedArgs = {};
 		local unpackedArgs = {};
@@ -70,7 +72,7 @@ end;
 ]]
 function reversehalfpack(n, ...)
 	local args = pack(...);
-	assert((type(n) == "number") and (n >= 1) and (n <= #args));
+	localizedAssert((type(n) == "number") and (n >= 1) and (n <= #args), "Bad arguments passed", 2);
 	if n < #args then 
 		local packedArgs = {};
 		local unpackedArgs = {};
@@ -96,7 +98,7 @@ end;
 	pack(...)
 ]]
 function makegroups(n, ...)
-	assert(n > 0, "Bad argument to makegroups");
+	localizedAssert(n > 0, "Bad arguments passed", 2);
 	local args = pack(...);
 	
 	local groups = {};
