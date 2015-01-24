@@ -206,3 +206,18 @@ function checkArgumentRegularExpression(funcname, level, value, argnum, expr)
 end;
 
 
+--[[!
+	Comprueba si un valor hace referencia a una entidad (elemento), vehiculo, jugador, ...
+	@param funcname Es el nombre de la función.
+	@param level Especifíca la posición del error en la pila de llamadas
+	@param value Es la cadena de caracteres
+	@param argnum Es el cardinal del argumento
+	@param expr Es la expresión regular.
+]]
+function checkIsElement(funcname, level, value, argnum)
+	localizedAssert((type(funcname) == "string") and (type(level) == "number") and (type(argnum) == "number") and (argnum > 0),
+		"Bad arguments to \"checkIsElement\"", level);
+	if not isElement(value) then
+		error("Argument mismatch in function \"" .. funcname .. "\" at argument " .. argnum .. "; element expected, but got " .. tostring(value), level+1);
+	end;
+end;
