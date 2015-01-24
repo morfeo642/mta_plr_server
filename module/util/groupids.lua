@@ -7,6 +7,7 @@
 
 loadModule("util/class");
 loadModule("util/math/range");
+loadModule("util/assertutils");
 loadModule("util/checkutils");
 loadModule("util/stringutils");
 loadModule("util/tableutils");
@@ -70,7 +71,7 @@ function groupIds.fromString(str, symbols)
 			local id = tonumber(token:match("(%d+)"));
 			group:addId(id);
 		else 
-			localizedAssert(symbols and symbols[token], "Failed to parse group IDs; " .. token .. " is not a valid ID our group of IDs", 2);
+			localizedAssert(symbols and symbols[token], "Failed to parse group IDs; " .. token .. " is not a valid ID or group of IDs", 2);
 			group = group + symbols[token];
 		end;
 	end;
