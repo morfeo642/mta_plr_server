@@ -27,6 +27,7 @@ function loadModule(modulePath, environment)
 		setfenv(chunk, environment); 
 		__modules[modulePath] = environment;
 		
+		local success;
 		success, msg = pcall(chunk);
 		if not success then error("Failed to load module \"" .. modulePath .. "\"; " .. msg, 2); end;
 		
