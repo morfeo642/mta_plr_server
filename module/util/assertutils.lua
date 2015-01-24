@@ -14,8 +14,15 @@
 ]]
 function localizedAssert(condition, msg, level) 
 	if not condition then
-		if (not msg) and level then msg = "";
-		elseif not level then level=1; end;
+		if ((msg ~= nil) and (type(msg) ~= "string")) or ((level ~= nil) and ((type(level) ~= "number") or (level < 1))) then
+			error("Bad arguments to localizedAssert", 2);
+		end;
+		if msg == nil then 
+			msg = "Assertion failed";
+		end;
+		if level == nil then 
+			level = 1;
+		end;
 		error(msg, level+1);
 	end;	
 	return condition;
