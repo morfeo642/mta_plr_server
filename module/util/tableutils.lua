@@ -13,6 +13,7 @@ loadModule("util/checkutils");
 	y vamos en dirección opuesta.
 ]]
 function ripairs(t) 
+	checkArgumentType("ripairs", 2, t, 1, "table");
 	if #t == 0 then
 		return function() end, nil, nil;
 	end;
@@ -40,6 +41,8 @@ end;
 	@note tdpairs = "tree deep pairs"
 ]] 
 function tdpairs(t)
+	checkArgumentType("tdpairs", 2, t, 1, "table");
+	
 	-- Devolver un iterador tonto si no hay elementos.
 	if #t == 0 then 
 		return function() end, nil, nil;
@@ -107,6 +110,8 @@ end;
 	@note tdlpairs = "tree deep leaf pairs"
 ]]
 function tdlpairs(t)
+	checkArgumentType("tdlpairs", 2, t, 1, "table");
+	
 	-- Devolver un iterador tonto si no hay elementos.
 	if #t == 0 then 
 		return function() end, nil, nil;
@@ -170,6 +175,8 @@ end;
 	Igual que table.find solo que devuelve el primer elemento "v" tal que predicate(v) == true.
 ]]
 function table.match(t, predicate)
+	checkArgumentsTypes("table.match", 2, 1, t, "table", predicate, "function");
+	
 	local index, value = next(t, nil);
 	while next(t, index) and (not predicate(value)) do 
 		index, value = next(t, index);
@@ -188,6 +195,8 @@ los elementos no está definido, y por consiguiente, si existieran varias coinci
 definido cual sería la primera)
 ]]
 function table.find(t, ...)
+	checkArgumentType("table.find", 2, t, 1, "table");
+	
 	local values = {...};
 	if #values > 1 then 
 		return table.match(t, function(value) return table.find(values, value); end);
@@ -204,6 +213,8 @@ para acceder al elemento desde la raíz o nil si no ha habido coincidencias.
 buscados en la tabla.
 ]]
 function table.deep_match(t, predicate)
+	checkArgumentsTypes("table.deep_match", 2, 1, t, "table", predicate, "function");
+
 	local it, s, index_trace = tdpairs(t);
 	local value;
 	index_trace, value = it(s, index_trace);
@@ -225,6 +236,8 @@ table.recursive_match = table.deep_match;
 	Igual que table.find solo que la búsqueda es recursiva (para la búsqueda, se usa la funcion table.deep_match)
 ]]
 function table.deep_find(t, ...)
+	checkArgumentType("table.deep_find", 2, t, 1, "table");
+	
 	local values = {...};
 	if #values > 1 then 
 		return table.deep_match(t, function(value) return table.find(values, value); end);
@@ -245,6 +258,8 @@ table.recursive_find = table.deep_find;
 	@note Se usa, en vez del iterador tdpairs, el iterador tdlpairs.
 ]]
 function table.deep_tail_match(t, predicate)
+	checkArgumentsTypes("table.deep_tail_match", 2, 1, t, "table", predicate, "function");
+
 	local it, s, index_trace = tdlpairs(t);
 	local value;
 	index_trace, value = it(s, index_trace);
@@ -258,6 +273,8 @@ function table.deep_tail_match(t, predicate)
 end;
 
 function table.deep_tail_find(t, ...)
+	checkArgumentType("table.deep_tail_find", 2, t, 1, "table");
+
 	local values = {...};
 	if #values > 1 then 
 		return table.deep_tail_match(t, function(value) return table.find(values, value); end);
@@ -358,6 +375,8 @@ end;
 	@note No se copian las subtablas, solo las referencias a estas.
 ]]
 function table.shallow_copy(t) 
+	checkArgumentType("table.shallow_copy", 2, t, 1, "table");
+
 	local copy = {};
 	for index, value in pairs(t) do 
 		copy[index] = value;
@@ -370,6 +389,8 @@ end;
 	@note No se copian referencias de las subtablas, si no que se copian estas.
 ]]
 function table.deep_copy(t) 
+	checkArgumentType("table.deep_copy", 2, t, 1, "table");
+
 	local function deep_copy(dst, src) 
 		for index, value in pairs(src) do 
 			if type(value) ~= "table" then 
@@ -389,10 +410,30 @@ end;
 	@param t Es la tabla.
 	@param keyComparator Es el comparador. Permite indicar el orden para iterar sobre la tabla. Es una 
 		función que acepta dos parámetros (dos indices a, b) y devuelve un valor booleano indicando si
-		se debe iterar antes sobre a que sobre b. El comparador por defecto es: function(a,b) return a<b; end;
+		se debe iterar antes sobre a que sobre b. El comparador por defecto es: 
+		\code
+		function(a,b) 
+			if(type(a)~=type(b)) then
+				return type(a) < type(b);
+			end;
+			return a<b;
+		end;
+		\endcode
+	@note Notese que los indices pueden tener un tipo distinto y no siempre podrán comparase mediante
+	los operadores aritméticos
 ]]
 function opairs(t, keyComparator)
-	localizedAssert((type(t) == "table") and ((type(keyComparator) == "function") or (not keyComparator)), "Bad arguments to opairs", 2);
+	local function defaultKeyComparator(a,b)
+		if (type(a)~=type(b)) then 
+			return type(a)<type(b);
+		end;
+		return a<b;
+	end
+
+	checkArgumentType("opairs", 2, t, 1, "table");
+	checkOptionalArgumentType("opairs", 2, keyComparator, 2, "function");;
+	keyComparator = parseOptionalArguments(keyComparator, defaultKeyComparator);
+	
 	local aux = {};
 	for index, _ in pairs(t) do 
 		aux[#aux+1] = index;

@@ -1,4 +1,4 @@
-
+ 
 
 --[[!
 	\file
@@ -72,7 +72,7 @@ end;
 de un escalar
 ]]
 function vec3.__div(v, k)
-	assert(k ~= 0);
+	localizedAssert(k ~= 0, "Division by zero", 2);
 	return vec3(v.x / k, v.y / k, v.z / k);
 end;
 
@@ -124,7 +124,7 @@ del vector.
 ]]
 function vec3:normalize()
 	local m = self:module();
-	assert(m ~= 0); 
+	localizedAssert(m ~= 0, "Division by zero", 2); 
 	m = 1 / m;
 	self.x = self.x * m;
 	self.y = self.y * m;
@@ -161,7 +161,7 @@ end;
 el rango [0, 1]
 ]]
 function vec3:lerp(v, k)
-	assert((k >= 0) and (k <= 1));
+	localizedAssert((k >= 0) and (k <= 1), "Linear interpolation parameter must be in the range [0,1]", 2);
 	return (self * (1 - k)) + (v * k);
 end;
 
@@ -170,7 +170,7 @@ end;
 ]]
 function vec3:projection(v)
 	local m = v:squareModule();
-	assert(m ~= 0);
+	localizedAssert(m ~= 0, "Division by zero", 2);
 	return v * (v:dot(self) / m);
 end;
 

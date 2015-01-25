@@ -6,6 +6,7 @@
 ]]
 
 loadModule("util/class");
+loadModule("util/assertutils");
 
 
 --[[! Esta clase representa un vector bidimensional ]]
@@ -70,7 +71,7 @@ end;
 de un escalar
 ]]
 function vec2.__div(v, k)
-	assert(k ~= 0);
+	localizedAssert(k ~= 0, "Division by zero", 2);
 	return vec2(v.x / k, v.y / k);
 end;
 
@@ -122,7 +123,7 @@ del vector.
 ]]
 function vec2:normalize()
 	local m = self:module();
-	assert(m ~= 0); 
+	localizedAssert(m ~= 0, "Division by zero", 2); 
 	m = 1 / m;
 	self.x = self.x * m;
 	self.y = self.y * m;
@@ -151,7 +152,7 @@ end;
 el rango [0, 1]
 ]]
 function vec2:lerp(v, k)
-	assert((k >= 0) and (k <= 1));
+	localizedAssert((k >= 0) and (k <= 1), "Lineal interpolation parameter should be in the range [0,1]", 2);
 	return (self * (1 - k)) + (v * k);
 end;
 
@@ -160,7 +161,7 @@ end;
 ]]
 function vec2:projection(v)
 	local m = v:squareModule();
-	assert(m ~= 0);
+	localizedAssert(m ~= 0, "Division by zero", 2);
 	return v * (v:dot(self) / m);
 end;
 

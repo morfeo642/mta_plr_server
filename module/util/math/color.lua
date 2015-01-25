@@ -5,7 +5,7 @@
 ]]
 
 loadModule("util/class");
-
+loadModule("util/assertutils");
 
 local function clamp(value, minValue, maxValue)
 	return math.max(minValue, math.min(value, maxValue)); 
@@ -172,7 +172,7 @@ Divide las componentes del color por un escalar. Las componentes luego
 se clampean al rango [0, 1]
 ]]
 function color.__div(c, k)
-	assert(k ~= 0);
+	localizedAssert(k ~= 0, "Division by zero", 2);
 	return c * (1 / k);
 end;
 
