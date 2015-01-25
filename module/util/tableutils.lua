@@ -431,7 +431,7 @@ function opairs(t, keyComparator)
 	end
 
 	checkArgumentType("opairs", 2, t, 1, "table");
-	checkOptionalArgumentType("opairs", 2, keyComparator, 2, "function");;
+	checkOptionalArgumentType("opairs", 2, keyComparator, 2, "function");
 	keyComparator = parseOptionalArguments(keyComparator, defaultKeyComparator);
 	
 	local aux = {};
