@@ -40,191 +40,221 @@ end;
 	@note Como pairs, el orden en que se analizan los elementos en el mismo nivel, no está definido.
 	@note tdpairs = "tree deep pairs"
 ]] 
+
 function tdpairs(t)
 	checkArgumentType("tdpairs", 2, t, 1, "table");
 	
-	-- Devolver un iterador tonto si no hay elementos.
-	if #t == 0 then 
-		return function() end, nil, nil;
-	end;
+	local function tdpairs_it(trace, _index_trace)
+		--[[ Copiamos la traza, debido a que después esta va a ser modificada y
+		retornada como el siguiente indice; Simulamos que la traza es un valor,
+		cuando en verdad, es una tabla. Esto es debido a que las tablas se pasan
+		como referencia y no como valor ]]
+		index_trace = table.shallow_copy(_index_trace);
 	
-	local function tdpairs_it(trace, index_trace) 
-		-- Obtener el anterior elemento de la tabla que se estaba
-		-- analizando.
-		local t = trace[#trace];
-		local index = index_trace[#index_trace];
-		local value = t[index];
+		--[[ Obtenemos el índice del anterior elemento iterado, y el nivel 
+		actual. ]]
+		local level = trace[#trace];
+		local prev_index;
 		
-		-- El anterior elemento era una tabla no vacía ? 
-		if (type(value) == "table") and next(value, nil) then 
-			-- Descender de nivel.
-			trace[#trace+1] = value;
-			local index, value = next(value, nil);
-			index_trace[#index_trace+1] = index;
-			return index_trace, value;
+		if #index_trace == #trace then 
+			prev_index = index_trace[#index_trace];
+			
+			--[[ Si el anterior elemento era una tabla, descender un
+			nivel]]
+			if type(level[prev_index]) == "table" then
+				trace[#trace+1] = level[prev_index];
+				return tdpairs_it(trace, index_trace);
+			end;
+		else
+			prev_index = nil;
 		end;
 		
-		-- Tabla acabada ? 
-		if not next(t, index) then 
-			if #trace > 1 then 
-				-- Subir de nivel.
-				
-				local level = trace[#trace];
-				trace[#trace] = nil;
-				index_trace[#index_trace] = nil;
-				while (#trace > 1) and (not next(trace[#trace], index_trace[#index_trace])) do
-					level = trace[#trace];
-					trace[#trace] = nil;
-					index_trace[#index_trace] = nil;
-				end;
-				--return nil;
-				local index, value = next(trace[#trace], index_trace[#index_trace]);
-				if index then 
-					index_trace[#index_trace] = index;
-					return index_trace, value;
-				end;
-				return nil;
-			end;
-			return nil;
-		end; 
-		
-		index, value = next(t, index);
-		if index then
-			if #index_trace == 0 then 
-				index_trace[1] = index;
+		if next(level, prev_index) ~= nil then 
+			local index, value = next(level, prev_index);
+			if #index_trace < #trace then 
+				index_trace[#index_trace+1] = index;
 			else
 				index_trace[#index_trace] = index;
 			end;
+			
 			return index_trace, value;
-		end; 
-		return nil;
-	end; 
+			
+		else
+			--[[Si no hay ningún elemento más en el nivel actual, subimos
+			un nivel, y terminamos la iteración en el caso de que el nivel actual
+			sea el primer nivel]]
+			
+			if #trace > 1 then 		
+				if #index_trace == #trace then 
+					index_trace[#index_trace] = nil;
+				end;
+				trace[#trace] = nil;
+				
+				while (#trace > 1) and (next(trace[#trace], index_trace[#index_trace]) == nil) do 
+					trace[#trace] = nil;
+					index_trace[#index_trace] = nil;
+				end;
+				local index, value = next(trace[#trace], index_trace[#index_trace]);
+				if index ~= nil then 
+					index_trace[#index_trace] = index;
+					return index_trace, value;
+				end;
+			end;
+		end;
+	end;
 	return tdpairs_it, {t}, {};
 end;
 
-
 --[[!
 	Igual que tdpairs, solo que las tablas que poseen elementos se iteran pero no se muestran en el resultado.
-	(Al iterar, solo aparecerán las hojas del árbol (Elementos que no son tablas o tablas vacías)). Las tablas no vacías
+	(Al iterar, solo aparecerán las hojas del árbol (Elementos que no son tablas o tablas vacíass)). Las tablas no vacías
 	no saldrán, pero si se iterará sobre los elementos contenidos por dichas tablas.
 	@note tdlpairs = "tree deep leaf pairs"
 ]]
 function tdlpairs(t)
 	checkArgumentType("tdlpairs", 2, t, 1, "table");
+
+	local function tdlpairs_it(trace, _index_trace)
+		index_trace = table.shallow_copy(_index_trace);
 	
-	-- Devolver un iterador tonto si no hay elementos.
-	if #t == 0 then 
-		return function() end, nil, nil;
-	end;
-	
-	local function tdlpairs_it(trace, index_trace) 
-		-- Obtener el anterior elemento de la tabla que se estaba
-		-- analizando.
-		local t = trace[#trace];
-		local index = index_trace[#index_trace];
-		local value = t[index];
+		--[[ Obtenemos el índice del anterior elemento iterado, y el nivel 
+		actual. ]]
+		local level = trace[#trace];
+		local prev_index;
 		
-		-- Tabla acabada ? 
-		if not next(t, index) then 
-			if #trace > 1 then 
-				-- Subir de nivel.
-				
-				local level = trace[#trace];
-				trace[#trace] = nil;
-				index_trace[#index_trace] = nil;
-				while (#trace > 1) and (not next(trace[#trace], index_trace[#index_trace])) do
-					level = trace[#trace];
-					trace[#trace] = nil;
-					index_trace[#index_trace] = nil;
-				end;
-				--return nil;
-				local index, value = next(trace[#trace], index_trace[#index_trace]);
-				if index then 
-					index_trace[#index_trace] = index;
-					return index_trace, value;
-				end;
-				return nil;
+		if #index_trace == #trace then 
+			prev_index = index_trace[#index_trace];
+			
+			--[[ Si el anterior elemento era una tabla, descender un
+			nivel]]
+			if type(level[prev_index]) == "table" then
+				trace[#trace+1] = level[prev_index];
+				return tdlpairs_it(trace, index_trace);
 			end;
-			return nil;
-		end; 
+		else
+			prev_index = nil;
+		end;
 		
-		index, value = next(t, index);
-		if index then
-			if #index_trace == 0 then 
-				index_trace[1] = index;
+		if next(level, prev_index) ~= nil then 
+			local index, value = next(level, prev_index);
+			if #index_trace < #trace then 
+				index_trace[#index_trace+1] = index;
 			else
 				index_trace[#index_trace] = index;
 			end;
-			-- El anterior elemento era una tabla no vacía ? 
-			if (type(value) == "table") and next(value, nil) then 
-				-- Descender de nivel.
-				trace[#trace+1] = value;
-				local index, value = next(value, nil);
-				index_trace[#index_trace+1] = index;
-				return index_trace, value;
+			
+			--[[
+			Si el elemento nuevo es una tabla, está no saldrá en el resultado,
+			e iremos al "siguiente resultado"
+			]]
+			if (type(value) == "table") and (next(value,nil) ~= nil) then 
+				return tdlpairs_it(trace, index_trace);
 			end;
+			
 			return index_trace, value;
-		end; 
-		return nil;
-	end; 
+			
+		else
+			--[[Si no hay ningún elemento más en el nivel actual, subimos
+			un nivel, y terminamos la iteración en el caso de que el nivel actual
+			sea el primer nivel]]
+			
+			if #trace > 1 then 		
+				if #index_trace == #trace then 
+					index_trace[#index_trace] = nil;
+				end;
+				trace[#trace] = nil;
+				
+				while (#trace > 1) and (next(trace[#trace], index_trace[#index_trace]) == nil) do 
+					trace[#trace] = nil;
+					index_trace[#index_trace] = nil;
+				end;
+				local index, value = next(trace[#trace], index_trace[#index_trace]);
+				if index ~= nil then 
+					index_trace[#index_trace] = index;
+					--[[ Vamos al siguiente resultado, "saltandonos" la tabla ]]
+					if type(value) == "table" then 
+						return tdlpairs_it(trace, index_trace);
+					end;
+					return index_trace, value;
+				end;
+			end;
+		end;
+	end;
 	return tdlpairs_it, {t}, {};
 end;
 
 
 --[[!
-	Igual que table.find solo que devuelve el primer elemento "v" tal que predicate(v) == true.
+	Esta función comprueba si hay algún elemento que pueda ser extraído iterando sobre la tabla
+	indicada mediante el iterador devuelto por la función f, que satisfaga el predicado, es decir,
+	un elemento v, tal que predicate(v) se evalue a true.
+	@param t Es la tabla donde se desea realizar la busqueda.
+	@param predicate Es el predicado que debe satisfacer algún elemento de la secuencia para que
+	pueda ser solución de la busqueda.
+	@param f Es la función que devuelve el iterador que permite acceder a la secuencia de elementos.
+	
+	@return Devuelve un índice, el cual puede usarse para acceder a uno de los elementos encontrados,
+	que satisface el predicado
+]]
+function table.match_with(t, predicate, f)
+	checkArgumentsTypes("table.match_with", 2, 1, t, "table", predicate, "function", f, "function");
+	
+	local it, s, var = f(t);
+	
+	local index, value = it(s, var);
+	if index ~= nil then 
+		local next_index, next_value = it(s, index);
+		while (next_index ~= nil) and (not predicate(value)) do 
+			index = next_index;
+			value = next_value;
+			next_index, next_value = it(s, index);
+		end;
+		if predicate(value) then 
+			return index;
+		end;
+	end;
+end;
+
+--[[!
+	Es table.match_with, pero el predicate será una función tal que devuelva cierto, en
+	caso de que el valor sea alguno de los elementos en la lista de parámetros (...)
+]]
+function table.find_with(t, f, ...) 
+	checkArgumentsTypes("table.find_with", 2, 1, t, "table", predicate, "function");
+	
+	local values = {...};
+	if #values > 1 then 
+		return table.match_with(t, function(value) return table.find(values, value) ~= nil; end, f);
+	end;
+	return table.match_with(t, function(value) return value == values[1]; end, f);
+end;
+
+
+--[[!
+	Es table.match_with, con f = pairs
 ]]
 function table.match(t, predicate)
 	checkArgumentsTypes("table.match", 2, 1, t, "table", predicate, "function");
 	
-	local index, value = next(t, nil);
-	while next(t, index) and (not predicate(value)) do 
-		index, value = next(t, index);
-	end;
-	if (not predicate(value)) then 
-		return nil;
-	end;
-	return index;
+	return table.match_with(t, predicate, pairs);
 end;
 
---[[! Busca en una tabla uno o varios valores indicados como argumentos. 
-Devuelve la primera coincidencia del valor en la tabla (La clave mediante la cual 
-se obtiene el valor) o nil, si la busqueda no fue exitosa.
-@note Se usa el iterador next para buscar el elemento. (El orden en el que se itera sobre
-los elementos no está definido, y por consiguiente, si existieran varias coincidencias, no está 
-definido cual sería la primera)
+--[[! Es table.find_with con f = pairs
 ]]
 function table.find(t, ...)
 	checkArgumentType("table.find", 2, t, 1, "table");
 	
-	local values = {...};
-	if #values > 1 then 
-		return table.match(t, function(value) return table.find(values, value); end);
-	end;
-	return table.match(t, function(value) return value == values[1]; end);
+	return table.find_with(t, pairs, ...);
 end;
 
 
---[[! Igual que table.match, solo que la busqueda es recursiva; Si se encuentra una tabla, se buscará también
-en esta tabla los valores (si la tabla no es en sí una ocurrencia) 
-Si se encuentra algún valor, es decir, si predicate(value) == true, la función devuelve la traza de índices que es necesaria
-para acceder al elemento desde la raíz o nil si no ha habido coincidencias.
-@note Se usa el iterador tdpairs, luego no se garantiza el orden en el que aparecen las ocurrencias de los valores
-buscados en la tabla.
+--[[! 
+	Es table.match_with con f = tdpairs 
 ]]
 function table.deep_match(t, predicate)
 	checkArgumentsTypes("table.deep_match", 2, 1, t, "table", predicate, "function");
 
-	local it, s, index_trace = tdpairs(t);
-	local value;
-	index_trace, value = it(s, index_trace);
-	while index_trace and (not predicate(value)) do 
-		index_trace, value = it(s, index_trace);
-	end;
-	if (not predicate(value)) then 
-		return nil;
-	end;
-	return index_trace;
+	return table.match_with(t, predicate, tdpairs);
 end;
 
 --[[!
@@ -233,16 +263,12 @@ end;
 table.recursive_match = table.deep_match;
 
 --[[!
-	Igual que table.find solo que la búsqueda es recursiva (para la búsqueda, se usa la funcion table.deep_match)
+	Es table.find_with con f = tdpairs
 ]]
 function table.deep_find(t, ...)
 	checkArgumentType("table.deep_find", 2, t, 1, "table");
 	
-	local values = {...};
-	if #values > 1 then 
-		return table.deep_match(t, function(value) return table.find(values, value); end);
-	end;
-	return table.deep_match(t, function(value) return value == values[1]; end);
+	return table.find_with(t, tdpairs, ...);
 end;
 
 --[[!
@@ -253,33 +279,21 @@ table.recursive_find = table.deep_find;
 
 
 --[[!
-	Igual que table.deep_match solo que no se consideran las ocurrencias de los valores que son tablas no vacías.
-	Se busca dentro de las tablas no vacías pero estas no se consideran como solución para la búsqueda. 
-	@note Se usa, en vez del iterador tdpairs, el iterador tdlpairs.
+	Es table.match_with con f = tdlpairs
 ]]
 function table.deep_tail_match(t, predicate)
 	checkArgumentsTypes("table.deep_tail_match", 2, 1, t, "table", predicate, "function");
 
-	local it, s, index_trace = tdlpairs(t);
-	local value;
-	index_trace, value = it(s, index_trace);
-	while index_trace and (not predicate(value)) do 
-		index_trace, value = it(s, index_trace);
-	end;
-	if (not predicate(value)) then 
-		return nil;
-	end;
-	return index_trace;
+	return table.match_with(t, predicate, tdlpairs);
 end;
 
+--[[!
+	Es table.find_with con f = tdlpairs
+]]
 function table.deep_tail_find(t, ...)
 	checkArgumentType("table.deep_tail_find", 2, t, 1, "table");
 
-	local values = {...};
-	if #values > 1 then 
-		return table.deep_tail_match(t, function(value) return table.find(values, value); end);
-	end;
-	return table.deep_tail_match(t, function(value) return value == values[1]; end);
+	return table.find_with(t, tdlpairs, ...);
 end;
 
 --[[!
@@ -291,6 +305,7 @@ table.recursive_tail_match = table.deep_tail_match;
 	table.recursive_tail_find es un alias de tail.deep_tail_find
 ]]
 table.recursive_tail_find = table.deep_tail_find;
+
 
 
 table.toJSON = function(t) 
