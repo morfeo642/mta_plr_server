@@ -21,7 +21,7 @@ local function loadLocalConfigDataFromXMLFile(resource)
 						configDataValue = nil;
 					end;
 				elseif configDataType == "table" then 
-					configDataValue = table.fromJSON(configDataValue);
+					configDataValue = table.fromJSONX(configDataValue);
 					if not configDataValue then 
 						configDataValue = nil;
 					end;
@@ -52,7 +52,7 @@ local function saveLocalConfigDataToXMLFile(resource, configData)
 			if (configDataType == "number") or (configDataType == "boolean") then 
 				configDataValue = tostring(configDataValue);
 			elseif configDataType == "table" then 
-				configDataValue = table.toJSON(configDataValue);
+				configDataValue = table.toJSONX(configDataValue);
 			end;
 			local node = xmlCreateChild(parent, configDataType);
 			xmlNodeSetAttribute(node, "name", configDataName);
@@ -75,12 +75,12 @@ local configDataChanged = {};
 	Establece el valor de una variable de configuración local del cliente. 
 	@param configDataName Es el nombre del dato.
 	@param configDataValue Es el nuevo valor del dato. Nil para borrarlo. Puede ser un valor booleano, numero, string o tabla (siempre 
-	que sea convertible a string mediante table.toJSON)
+	que sea convertible a string mediante table.toJSONX)
 ]]
 function setClientLocalConfigData(configDataName, configDataValue)
 	checkArgumentType("setClientLocalConfigData", 2, configDataName, 1, "string");
 	checkOptionalArgumentType("setClientLocalConfigData", 2, configDataValue, 2, "string", "number", "boolean", "table");
-	localizedAssert((type(configDataValue) ~= "table") or table.toJSON(configDataValue));
+	localizedAssert((type(configDataValue) ~= "table") or table.toJSONX(configDataValue));
 	
 	-- si la configuración local no se ha cargado todavía, leer del fichero XML del recurso.
 	if not configData[sourceResource] then 
@@ -117,8 +117,8 @@ end;
 addEventHandler("onClientResourceStart", resourceRoot,	
 	function() 
 		-- cargamos los módulos necesarios.
-		loadModule("util/checkutils", _G);
-		loadModule("util/tableutils", _G);
+		loadModule("util/checkutils");
+		loadModule("util/tableutils");
 	end);
 	
 addEventHandler("onClientResourceStop", root,

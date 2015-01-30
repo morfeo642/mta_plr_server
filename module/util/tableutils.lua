@@ -308,7 +308,7 @@ table.recursive_tail_find = table.deep_tail_find;
 
 
 
-table.toJSON = function(t) 
+table.toJSONX = function(t) 
 	local function _toJSON(t, level) 
 		local function parsePair(index, value, level)
 			local indexType = type(index);
@@ -343,7 +343,7 @@ table.toJSON = function(t)
 	return _toJSON(t, 2);
 end;
 
-table.fromJSON = function(str) 
+table.fromJSONX = function(str) 
 	local function _fromJSON(str)
 		local function stringToValue(value)
 			local valueType, value = value:match("(%a)(.+)");

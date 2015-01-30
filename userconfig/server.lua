@@ -6,7 +6,7 @@
 	@param account Es una cuenta donde se guardará la variable de configuración.
 	@param configDataName Es el nombre de la variable de configuración
 	@param configDataValue Es el nuevo valor de la variable, nil para borrar la variable de la cuenta.
-	El valor puede ser un número, booleano, string o una tabla que sea convertible a string mediante table.toJSON
+	El valor puede ser un número, booleano, string o una tabla que sea convertible a string mediante table.toJSONX
 	
 	@note La configuración será privada para cada recurso para evitar conflictos de nombres.
 ]]
@@ -18,7 +18,7 @@ function setAccountConfigData(account, configDataName, configDataValue)
 
 	if type(configDataValue) == "table" then 	
 		local validTable;
-		validTable, configDataValue = pcall(table.toJSON, configDataValue);
+		validTable, configDataValue = pcall(table.toJSONX, configDataValue);
 		localizedAssert(validTable, "Bad table passed to setPlayerConfigData", 2);
 	elseif (type(configDataValue) == "number") or (type(configDataValue) == "boolean") then 
 		configDataValue = tostring(configDataValue);
@@ -55,7 +55,7 @@ function getAccountConfigData(account, configDataName)
 	elseif dataType == "b" then 
 		configDataValue = (configDataValue == "true");
 	elseif dataType == "t" then
-		configDataValue = table.fromJSON(configDataValue);
+		configDataValue = table.fromJSONX(configDataValue);
 	end;
 	return configDataValue;
 end;
@@ -84,7 +84,7 @@ end;
 addEventHandler("onResourceStart", resourceRoot,
 	function() 
 		-- cargamos los módulos necesarios
-		loadModule("util/checkutils", _G);
-		loadModule("util/tableutils", _G);
+		loadModule("util/checkutils");
+		loadModule("util/tableutils");
 	end);
 	
