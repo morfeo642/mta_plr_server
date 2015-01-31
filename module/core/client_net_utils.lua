@@ -35,6 +35,8 @@
 	\endcode
 ]]
 
+loadModule("util/assertutils");
+
 --[[! Esta tabla guarda todas las funciones que puede ser llamadas por el servidor ]]
 __client = {};
 
@@ -83,7 +85,7 @@ setmetatable(__server,
 				local serverFunc = index;
 				return 
 					function(funcCallback, ...)
-						assert((type(funcCallback) == "function") or (funcCallback == nil));
+						localizedAssert((type(funcCallback) == "function") or (funcCallback == nil), 2, "Invalid arguments");
 						if not funcCallback then 
 							-- invocar método del servidor.
 							triggerServerEvent("onClientCallServerFunction", resourceRoot, serverFunc, nil, ...);
@@ -106,8 +108,8 @@ setmetatable(__remote_client,
 		__newindex = function() end,
 		__index = 
 			function(t, index)
-				--assert(isElement(index) and (getElementType(index) == "player") and (index ~= localPlayer));
-				assert(isElement(index) and (getElementType(index) == "player"));
+				localizedAssert(isElement(index) and (getElementType(index) == "player") and (index ~= localPlayer), 2, "Invalid remote client");
+				--localizedAssert(isElement(index) and (getElementType(index) == "player"), 2, "Invalid remote client");
 				local remoteClient = index;
 				return 
 					setmetatable({},
@@ -119,7 +121,7 @@ setmetatable(__remote_client,
 									local remoteClientFunc = index;
 									return 
 										function(funcCallback, ...)
-											assert((type(funcCallback) == "function") or (funcCallback == nil));
+											localizedAssert((type(funcCallback) == "function") or (funcCallback == nil),2, "Invalid arguments");
 											if not funcCallback then 
 												triggerServerEvent("onClientCallRemoteClientFunction", resourceRoot, remoteClient, remoteClientFunc, nil, ...);
 											else 

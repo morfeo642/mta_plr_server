@@ -47,6 +47,8 @@
 	\endcode
 ]]
 
+loadModule("util/assertutils");
+
 --[[! Esta es una tabla que contendrá las funciones que los clientes
 podrán invocar remotamente. Se puede realizar lo siguiente para que los clientes
 puedan acceder a cualquier función del servidor: __server = _G ]]
@@ -92,7 +94,7 @@ setmetatable(__client,
 		__newindex = function() end,
 		__index = 
 			function(t, index)
-				assert(isElement(index) and (getElementType(index) == "player"));
+				localizedAssert(isElement(index) and (getElementType(index) == "player"), 2, "Not a valid client");
 				local client = index;
 				-- Devuelve una tabla auxiliar para acceder a las funciones del cliente.
 				return 
@@ -104,7 +106,7 @@ setmetatable(__client,
 								function(t, index)
 									return 
 										function(funcCallback, ...)
-											assert((type(funcCallback) == "function") or (funcCallback == nil));
+											localizedAssert((type(funcCallback) == "function") or (funcCallback == nil), 2, "Invalid arguments");
 											-- Registramos el callback.
 											if not funcCallback then 
 												triggerClientEvent(client, "onServerCallClientFunction", resourceRoot, index, nil, ...);
@@ -128,7 +130,7 @@ setmetatable(__all_clients,
 			function(t, index) 
 				return
 					function(funcCallback, ...)
-						assert((type(funcCallback) == "function") or (funcCallback == nil));
+						localizedAssert((type(funcCallback) == "function") or (funcCallback == nil), 2, "Invalid arguments");
 						if not funcCallback then 
 							triggerClientEvent(root, "onServerCallClientFunction", resourceRoot, index, nil, ...);
 						else 
