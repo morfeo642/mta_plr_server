@@ -49,7 +49,7 @@ function tdpairs(t)
 		retornada como el siguiente indice; Simulamos que la traza es un valor,
 		cuando en verdad, es una tabla. Esto es debido a que las tablas se pasan
 		como referencia y no como valor ]]
-		index_trace = table.shallow_copy(_index_trace);
+		index_trace = table.shallowCopy(_index_trace);
 	
 		--[[ Obtenemos el índice del anterior elemento iterado, y el nivel 
 		actual. ]]
@@ -115,7 +115,7 @@ function tdlpairs(t)
 	checkArgumentType("tdlpairs", 2, t, 1, "table");
 
 	local function tdlpairs_it(trace, _index_trace)
-		index_trace = table.shallow_copy(_index_trace);
+		index_trace = table.shallowCopy(_index_trace);
 	
 		--[[ Obtenemos el índice del anterior elemento iterado, y el nivel 
 		actual. ]]
@@ -196,8 +196,8 @@ end;
 	@return Devuelve un índice, el cual puede usarse para acceder a uno de los elementos encontrados,
 	que satisface el predicado
 ]]
-function table.match_with(t, predicate, f)
-	checkArgumentsTypes("table.match_with", 2, 1, t, "table", predicate, "function", f, "function");
+function table.matchWith(t, predicate, f)
+	checkArgumentsTypes("table.matchWith", 2, 1, t, "table", predicate, "function", f, "function");
 	
 	local it, s, var = f(t);
 	
@@ -216,95 +216,95 @@ function table.match_with(t, predicate, f)
 end;
 
 --[[!
-	Es table.match_with, pero el predicate será una función tal que devuelva cierto, en
+	Es table.matchWith, pero el predicate será una función tal que devuelva cierto, en
 	caso de que el valor sea alguno de los elementos en la lista de parámetros (...)
 ]]
-function table.find_with(t, f, ...) 
-	checkArgumentsTypes("table.find_with", 2, 1, t, "table", predicate, "function");
+function table.findWith(t, f, ...) 
+	checkArgumentsTypes("table.findWith", 2, 1, t, "table", predicate, "function");
 	
 	local values = {...};
 	if #values > 1 then 
-		return table.match_with(t, function(value) return table.find(values, value) ~= nil; end, f);
+		return table.matchWith(t, function(value) return table.find(values, value) ~= nil; end, f);
 	end;
-	return table.match_with(t, function(value) return value == values[1]; end, f);
+	return table.matchWith(t, function(value) return value == values[1]; end, f);
 end;
 
 
 --[[!
-	Es table.match_with, con f = pairs
+	Es table.matchWith, con f = pairs
 ]]
 function table.match(t, predicate)
 	checkArgumentsTypes("table.match", 2, 1, t, "table", predicate, "function");
 	
-	return table.match_with(t, predicate, pairs);
+	return table.matchWith(t, predicate, pairs);
 end;
 
---[[! Es table.find_with con f = pairs
+--[[! Es table.findWith con f = pairs
 ]]
 function table.find(t, ...)
 	checkArgumentType("table.find", 2, t, 1, "table");
 	
-	return table.find_with(t, pairs, ...);
+	return table.findWith(t, pairs, ...);
 end;
 
 
 --[[! 
-	Es table.match_with con f = tdpairs 
+	Es table.matchWith con f = tdpairs 
 ]]
-function table.deep_match(t, predicate)
-	checkArgumentsTypes("table.deep_match", 2, 1, t, "table", predicate, "function");
+function table.deepMatch(t, predicate)
+	checkArgumentsTypes("table.deepMatch", 2, 1, t, "table", predicate, "function");
 
-	return table.match_with(t, predicate, tdpairs);
+	return table.matchWith(t, predicate, tdpairs);
 end;
 
 --[[!
-	table.recursive_match es un alias de table.deep_match
+	table.recursiveMatch es un alias de table.deepMatch
 ]]
-table.recursive_match = table.deep_match;
+table.recursiveMatch = table.deepMatch;
 
 --[[!
-	Es table.find_with con f = tdpairs
+	Es table.findWith con f = tdpairs
 ]]
-function table.deep_find(t, ...)
-	checkArgumentType("table.deep_find", 2, t, 1, "table");
+function table.deepFind(t, ...)
+	checkArgumentType("table.deepFind", 2, t, 1, "table");
 	
-	return table.find_with(t, tdpairs, ...);
+	return table.findWith(t, tdpairs, ...);
 end;
 
 --[[!
-	table.recursive_find es un alias de table.deep_find
+	table.recursiveFind es un alias de table.deepFind
 ]]
-table.recursive_find = table.deep_find;
+table.recursiveFind = table.deepFind;
 
 
 
 --[[!
-	Es table.match_with con f = tdlpairs
+	Es table.matchWith con f = tdlpairs
 ]]
-function table.deep_tail_match(t, predicate)
-	checkArgumentsTypes("table.deep_tail_match", 2, 1, t, "table", predicate, "function");
+function table.deepTailMatch(t, predicate)
+	checkArgumentsTypes("table.deepTailMatch", 2, 1, t, "table", predicate, "function");
 
-	return table.match_with(t, predicate, tdlpairs);
+	return table.matchWith(t, predicate, tdlpairs);
 end;
 
 --[[!
-	Es table.find_with con f = tdlpairs
+	Es table.findWith con f = tdlpairs
 ]]
-function table.deep_tail_find(t, ...)
-	checkArgumentType("table.deep_tail_find", 2, t, 1, "table");
+function table.deepTailFind(t, ...)
+	checkArgumentType("table.deepTailFind", 2, t, 1, "table");
 
-	return table.find_with(t, tdlpairs, ...);
+	return table.findWith(t, tdlpairs, ...);
 end;
 
 --[[!
-	table.recursive_tail_match es un alias de table.deep_tail_match
+	table.recursiveTailMatch es un alias de table.deepTailMatch
 ]]
-table.recursive_tail_match = table.deep_tail_match;
+table.recursiveTailMatch = table.deepTailMatch;
 
 --[[
-	table.recursive_tail_find es un alias de tail.deep_tail_find
+	table.recursiveTailFind es un alias de tail.deepTailFind
 ]]
-table.recursive_tail_find = table.deep_tail_find;
+table.recursiveTailFind = table.deepTailFind;
 
 
 
@@ -389,8 +389,8 @@ end;
 	@return Devuelve una copia superficial de la tabla pasada como argumento.
 	@note No se copian las subtablas, solo las referencias a estas.
 ]]
-function table.shallow_copy(t) 
-	checkArgumentType("table.shallow_copy", 2, t, 1, "table");
+function table.shallowCopy(t) 
+	checkArgumentType("table.shallowCopy", 2, t, 1, "table");
 
 	local copy = {};
 	for index, value in pairs(t) do 
@@ -403,8 +403,8 @@ end;
 	@return Devuelve una copia profunda de la tabla pasada como argumento.
 	@note No se copian referencias de las subtablas, si no que se copian estas.
 ]]
-function table.deep_copy(t) 
-	checkArgumentType("table.deep_copy", 2, t, 1, "table");
+function table.deepCopy(t) 
+	checkArgumentType("table.deepCopy", 2, t, 1, "table");
 
 	local function deep_copy(dst, src) 
 		for index, value in pairs(src) do 
