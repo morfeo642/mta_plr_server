@@ -21,7 +21,7 @@ a cargar.
 ]]
 function getModule(moduleName)
 	-- comprobar que se intenta acceder realmente al código de un módulo.
-	assert((type(moduleName) == "string") and (moduleName:len() > 0) and (not moduleName:match("[^0-9,a-z,A-Z,/,_]+")));
+	assert(type(moduleName) == "string");
 
 	local file = assert(fileOpen(moduleName .. ".lua"), "Module \"" .. moduleName .. "\" not exists");
 	-- leer el código.
@@ -32,26 +32,15 @@ function getModule(moduleName)
 	return code;
 end;
 
-local __modules = {};
 
-function loadModule(modulePath, environment)
-	if not __modules[modulePath] then  
-		if not environment then 
-			environment = _G;
-		end;
-		local code = getModule(modulePath);
-		local chunk, msg = loadstring(code, nil, "t", environment);
-		if not chunk then error("Failed to load script \"" .. modulePath .. ".lua\"; " .. msg, 2); end;
-		setfenv(chunk, environment); 
-		__modules[modulePath] = environment;
-		
-		local success;
-		success, msg = pcall(chunk);
-		if not success then error("Failed to load module \"" .. modulePath .. "\"; " .. msg, 2); end;
-		
-		return environment;
-	end;
-	return __modules[modulePath];
+
+--[[!
+@return Devuelve el código que debe ser ejecutado tanto en la parte del cliente como en la parte del servidor antes de ejecutar
+cualquier otro script, para todos los recursos (De esta forma, el resto de scripts podrán usar los módulos facilitados por este recurso)
+]]
+function getStartupCode()
+	local file = assert(fileOpen("startup.lua"), "Couldn`t load startup code");
+	local startupCode = fileRead(file, fileGetSize(file));
+	fileClose(file);
+	return startupCode;
 end;
-
-importModule = loadModule;

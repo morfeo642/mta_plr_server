@@ -11,8 +11,13 @@
 	<export function="getModule" type="server" />
 	<export function="getModule" type="client" />
 
+	<!-- Devuelve el código que debe ser ejecutado en todos los recursos -->
+	<export function="getStartupCode" type="server" />
+	<export function="getStartupCode" type="client" />
 
 	<!-- Scripts para los clientes -->
+	<file src="startup.lua" />
+	
 	<file src="core/client_net_utils.lua" />
 	<file src="core/share.lua" />
 
