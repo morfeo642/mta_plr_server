@@ -1,8 +1,8 @@
 
 --[[!
 	\file
-	\brief Este script debe ser incluido en todos los recursos que requieran usar alguno de los
-	módulos que proporciona el recurso module. 
+	\brief Este script debe ser incluido en todos los recursos en la parte del cliente
+	que requieran usar alguno de los módulos que proporciona el recurso module. 
 ]]
 
 function loadStartupCode() 

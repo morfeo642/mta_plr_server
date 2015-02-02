@@ -7,6 +7,12 @@
 
 loadModule("util/checkutils");
 
+
+local __old_table = _G.table;
+_G.table = nil;
+
+table = {};
+
 --[[!
 	Es un iterador para iterar sobre los elementos de una tabla de derecha a
 	izquierda. Es igual que ipairs solo que iteramos comenzando desde el final
@@ -463,3 +469,20 @@ function opairs(t, keyComparator)
 	end;
 	return opairs_it;
 end;
+
+
+
+setmetatable(table, 
+	{
+		__index = __old_table,
+		__newindex = 
+			function(_, index, value) 
+				__old_table[index] = value;
+			end 
+	});
+	
+	
+__release_callback = 
+	function()
+		_G.table = __old_table;
+	end;
