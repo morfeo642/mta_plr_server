@@ -7,10 +7,7 @@
 
 loadModule("util/checkutils");
 
-
 local __old_table = _G.table;
-_G.table = nil;
-
 table = {};
 
 --[[!
@@ -226,7 +223,7 @@ end;
 	caso de que el valor sea alguno de los elementos en la lista de parámetros (...)
 ]]
 function table.findWith(t, f, ...) 
-	checkArgumentsTypes("table.findWith", 2, 1, t, "table", predicate, "function");
+	checkArgumentsTypes("table.findWith", 2, 1, t, "table", f, "function");
 	
 	local values = {...};
 	if #values > 1 then 
@@ -249,7 +246,7 @@ end;
 ]]
 function table.find(t, ...)
 	checkArgumentType("table.find", 2, t, 1, "table");
-	
+
 	return table.findWith(t, pairs, ...);
 end;
 
@@ -474,15 +471,9 @@ end;
 
 setmetatable(table, 
 	{
-		__index = __old_table,
-		__newindex = 
-			function(_, index, value) 
+		__index = __old_table, 
+		__newindex =
+			function(t, index, value) 
 				__old_table[index] = value;
-			end 
+			end
 	});
-	
-	
-__release_callback = 
-	function()
-		_G.table = __old_table;
-	end;

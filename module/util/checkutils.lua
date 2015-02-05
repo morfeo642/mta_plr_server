@@ -21,11 +21,17 @@ importModule("util/assertutils");
 ]]
 function checkArgumentValue(funcname, level, value, argnum, ...) 
 	localizedAssert((type(funcname) == "string") and (type(level) == "number") and (type(argnum) == "number") and (argnum > 0), "Bad arguments to \"checkArgumentValue\"", level);
-	if not table.find({...}, value) then 
-		local args = {...};
-		for i=1,#args,1 do args[i] = tostring(args[i]); end;
-		error("Argument mismatch in function \"" .. funcname .. "\" at argument " .. argnum .. "; value " .. table.concat(args, " or ") .. " expected, but got " .. tostring(value), level+1);
+	local args = {...};
+	if #args == 1 then 
+		if args[1] == value then 
+			return; 
+		end;
+	elseif table.find(args, value) then 
+			return;
 	end;
+
+	for i=1,#args,1 do args[i] = tostring(args[i]); end;
+	error("Argument mismatch in function \"" .. funcname .. "\" at argument " .. argnum .. "; value " .. table.concat(args, " or ") .. " expected, but got " .. tostring(value), level+1);
 end;
 
 --[[!
@@ -47,12 +53,19 @@ function checkArgumentType(funcname, level, value, argnum, ...)
 	else
 		valueType = type(value);
 	end;
-	
-	if not table.find({...}, valueType) then 
-		local args = {...};
-		for i,j in pairs(args) do args[i] = tostring(j); end;
-		error("Argument mismatch in function \"" .. funcname .. "\" at argument " .. argnum .. "; type " .. table.concat(args, " or ") .. " expected, but got " .. valueType , level+1);
+
+	local args = {...};
+	if #args == 1 then 
+		if args[1] == valueType then 
+			return; 
+		end;
+	elseif table.find(args, valueType) then 
+		return;
 	end;
+
+	for i,j in pairs(args) do args[i] = tostring(j); end;
+	error("Argument mismatch in function \"" .. funcname .. "\" at argument " .. argnum .. "; type " .. table.concat(args, " or ") .. " expected, but got " .. valueType , level+1);
+
 end;
 
 --[[!
