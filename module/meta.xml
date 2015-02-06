@@ -18,8 +18,8 @@
 	<!-- Scripts para los clientes -->
 	<file src="startup.lua" />
 	
-	<file src="core/client_net_utils.lua" />
-	<file src="core/share.lua" />
+	<file src="protocol/net/client.lua" />
+	<file src="protocol/rsc/share.lua" />
 
 	<file src="util/class.lua" />
 	<file src="util/stringutils.lua" />
