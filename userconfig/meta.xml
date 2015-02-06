@@ -8,12 +8,6 @@
 	<script src="common/client.lua" type="client" />
 	<script src="server.lua" type="server" />
 	<script src="client.lua" type="client" />
-	<!-- Funciones que deben ser exportadas explicitamente para que todos los 
-	modulos funcionen -->
-	<export function="__set" type="server"/>
-	<export function="__get" type="server"/>
-	<export function="__set" type="client"/>
-	<export function="__get" type="client"/>
 	
 	<export function="setPlayerConfigData" type="server" />
 	<export function="getClientLocalConfigData" type="client" />
