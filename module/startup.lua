@@ -32,6 +32,10 @@ local module_caller = false;
 --[[ Debemos incorporar un mecanismo de forma que el script de un módulo no puede liberar módulos (solo podrá cargarlos) ]] 
 local unload_locked = false;
 
+--[[!
+	Carga un nuevo módulo sobre el recurso actual.
+	@param modulePath Es el nombre del módulo.
+]]
 function loadModule(modulePath)
 	local function getChunk() 
 		local code = call(getResourceFromName("module"), "getModule", modulePath);
@@ -104,6 +108,10 @@ function loadModule(modulePath)
 	end;
 end;
 
+--[[!
+	Libera un módulo previamente cargado mediante el método loadModule.
+	@param modulePath Es el nombre del módulo que se quiere liberar.
+]]
 function unloadModule(modulePath)
 	--[[ Un módulo no puede liberar otros módulos, solo cargarlos ]]
 	assert(not unload_locked);
@@ -147,7 +155,9 @@ function unloadModule(modulePath)
 	end;
 end;
 
-
+--[[!
+	@return Devuelve una lista con todos los módulos cargados directamente por el usuario.
+]]
 function getUserLoadedModules()
 	local modules = {};
 	for module, module_loaded in pairs(loaded) do 
@@ -158,6 +168,10 @@ function getUserLoadedModules()
 	return modules;
 end;
 
+--[[!
+	@return Devuelve una lista con todos los módulos cargados directamente (por el usuario), e
+	indirectamente (como dependencias de otros módulos)
+]]
 function getAllLoadedModules() 
 	local modules = {};
 	for module, _ in pairs(shared_count) do 
@@ -243,7 +257,12 @@ setmetatable(environments,
 	});
 
 
+--[[! Es un alias de loadModule ]]
 importModule = loadModule;
+
+--[[! Es un alias de unloadModule ]] 
 freeModule = unloadModule;
+
+--[[! Es un alias de unloadModule ]] 
 releaseModule = unloadModule;
 
