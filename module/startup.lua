@@ -53,7 +53,7 @@ function loadModule(modulePath)
 	end;
 	
 	-- Un módulo no puede cargarse a si mismo.
-	assert(module_caller ~= modulePath);
+	assert(module_caller ~= modulePath, modulePath .. " module tried to load itself");
 
 	-- No hacemos nada si el usuario es el que carga el módulo, y ya lo ha cargado
 	-- con anterioridad.
@@ -114,7 +114,7 @@ end;
 ]]
 function unloadModule(modulePath)
 	--[[ Un módulo no puede liberar otros módulos, solo cargarlos ]]
-	assert(not unload_locked);
+	assert(not unload_locked, module_caller .. " tried to release " .. modulePath .. " module");
 
 	--[[ No hacemos nada si el módulo es liberado por el usuario y ya lo ha 
 	liberado con anterioridad o bién, el usuario nunca lo cargó ]]
