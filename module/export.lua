@@ -5,6 +5,8 @@
 ]]
 
 
+local moduleCode = {};
+
 --[[!
 @param moduleName Es el nombre del módulo a cargar. 
 @return Devuelve el código del móudulo en formato de cadena de caracteres (string) y no
@@ -22,25 +24,28 @@ a cargar.
 function getModule(moduleName)
 	-- comprobar que se intenta acceder realmente al código de un módulo.
 	assert(type(moduleName) == "string");
-
-	local file = assert(fileOpen(moduleName .. ".lua"), "Module \"" .. moduleName .. "\" not exists");
-	-- leer el código.
-	local code = fileRead(file, fileGetSize(file));
 	
-	fileClose(file);
+	if not moduleCode[moduleName] then 
+		-- El código del módulo aún no se ha cargado; Lo leemos del disco (script)
+		local file = assert(fileOpen(moduleName .. ".lua"), "Module \"" .. moduleName .. "\" not exists");
+		moduleCode[moduleName] = fileRead(file, fileGetSize(file));
+		fileClose(file);
+	end;
 	
-	return code;
+	return moduleCode[moduleName];
 end;
 
 
+
+-- Cargamos el código desde el fichero.
+local file = assert(fileOpen("startup.lua"), "Couldn`t load startup code");
+local startupCode = fileRead(file, fileGetSize(file));
+fileClose(file);
 
 --[[!
 @return Devuelve el código que debe ser ejecutado tanto en la parte del cliente como en la parte del servidor antes de ejecutar
 cualquier otro script, para todos los recursos (De esta forma, el resto de scripts podrán usar los módulos facilitados por este recurso)
 ]]
 function getStartupCode()
-	local file = assert(fileOpen("startup.lua"), "Couldn`t load startup code");
-	local startupCode = fileRead(file, fileGetSize(file));
-	fileClose(file);
 	return startupCode;
 end;
