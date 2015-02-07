@@ -19,7 +19,6 @@
 	<file src="startup.lua" />
 	
 	<file src="protocol/net/client.lua" />
-	<file src="protocol/rsc/share.lua" />
 
 	<file src="util/class.lua" />
 	<file src="util/stringutils.lua" />
