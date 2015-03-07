@@ -36,7 +36,7 @@ local unload_locked = false;
 	Carga un nuevo módulo sobre el recurso actual.
 	@param modulePath Es el nombre del módulo.
 ]]
-function loadModule(modulePath)
+function _loadModule(modulePath)
 	local function getChunk() 
 		local code = call(getResourceFromName("module"), "getModule", modulePath);
 		if not code then error("Failed to get script \"" .. modulePath .. ".lua\"", 3); end;
@@ -112,7 +112,7 @@ end;
 	Libera un módulo previamente cargado mediante el método loadModule.
 	@param modulePath Es el nombre del módulo que se quiere liberar.
 ]]
-function unloadModule(modulePath)
+function _unloadModule(modulePath)
 	--[[ Un módulo no puede liberar otros módulos, solo cargarlos ]]
 	assert(not unload_locked, module_caller .. " tried to release " .. modulePath .. " module");
 
@@ -256,6 +256,52 @@ setmetatable(environments,
 			__index = __environments
 	});
 
+--[[!
+	Esta función carga varios módulos. 
+	@param ... Es una lista de rutas de módulos a cargar.
+	Es equivalente a una llamada a _loadModule() por cada uno de los elementos de la lista
+	Primero se carga el módulo1, luego el módulo2, ...
+	\code
+	loadModule("util/math/vec2", "util/checkutils", "util/print");
+	loadModule({"util/math/vec2", "util/checkutils", "util/print"});
+	\endcode
+]]
+function loadModule(...)
+	local args = {...};
+	for _, value in ipairs(args) do 
+		assert((type(value) == "string") or (type(value) == "table"), "Bad arguments to loadModule");
+
+		if type(value) == "table" then 
+			loadModule(unpack(value));
+		else
+			_loadModule(value);
+		end;
+	end;;
+end;
+
+--[[!
+	Esta función libera varios módulos.
+	@param ... Es una lista de rutas de módulos a liberar.
+	Es equivalente a una llamada a _unloadModule() por cada uno de los elementos de la lista
+	Primero se libera el módulo1, luego el módulo2, ...
+	\code
+	unloadModule("util/eventutils", "util/interiors");
+	unloadModule({"util/eventutils", "util/interiors"});
+	\endcode
+]]
+function unloadModule(...)	
+	local args = {...};
+	for _, value in ipairs(args) do 
+		assert((type(value) == "string") or (type(value) == "table"), "Bad arguments to unloadModule");
+
+		if type(value) == "table" then 
+			unloadModule(unpack(value));
+		else
+			_unloadModule(value);
+		end;
+	end;
+end;
+	
 
 --[[! Es un alias de loadModule ]]
 importModule = loadModule;
@@ -265,4 +311,5 @@ freeModule = unloadModule;
 
 --[[! Es un alias de unloadModule ]] 
 releaseModule = unloadModule;
+
 
