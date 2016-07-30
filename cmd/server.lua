@@ -7,6 +7,11 @@ local envs = {};
 
 -- Comandos de terminal para ejecutar código LUA 
 local function luaInterpreter(playerSource, _, ...) 
+
+	local accountname = getAccountName(getPlayerAccount(playerSource));
+    if not isObjectInACLGroup( "user." .. accountname, aclGetGroup ( "Admin" ) ) then
+		return;
+    end
 	local function chatPrint(...)
 		local args = {...};
 		if #args == 0 then 
