@@ -1,0 +1,29 @@
+--[[!
+	\file
+	\brief Este script debe ser incluido en todos los recursos en la parte del servidor
+	que requieran usar alguno de los módulos que proporciona el recurso module. 
+]]
+
+
+function loadStartupCode() 
+	local code = call(getResourceFromName("module"), "getStartupCode");
+	
+	local chunk, msg = loadstring(code);
+	if not chunk then error("Failed to load startup script: " .. msg); end;
+	setfenv(chunk, _G);
+	
+	local success;
+	success, msg = pcall(chunk);
+	if not success then error("Failed to execute startup script: " .. msg); end;
+end;
+
+if getResourceState(getResourceFromName("module")) == "running" then 
+	loadStartupCode();
+else
+	addEventHandler("onResourceStart", root,
+		function(resourceStarted) 
+			if getResourceFromName("module") == resourceStarted then 
+				loadStartupCode();
+			end;
+		end);
+end;

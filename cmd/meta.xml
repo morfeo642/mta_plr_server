@@ -1,0 +1,12 @@
+<!-- Este es un recurso para el juego MTA:SA -->
+<meta>
+	<info name="cmd" author="victor" version="1.0.0" description="Utilidad para ejecutar codigo LUA dentro del cliente MTA" />
+  <!-- Todos los recursos dependerán del recurso module -->
+	<include resource="module" />
+	<!-- Scripts comunes para todos los recursos -->
+	<script src="common/server.lua" type="server" />
+	<script src="common/client.lua" type="client" />
+	
+	<script src="server.lua" type="server" />
+	<script src="client.lua" type="client" />
+</meta>
