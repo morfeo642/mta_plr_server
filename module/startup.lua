@@ -276,7 +276,7 @@ function loadModule(...)
 		else
 			_loadModule(value);
 		end;
-	end;;
+	end;
 end;
 
 --[[!
